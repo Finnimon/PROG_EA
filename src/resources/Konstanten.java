@@ -30,6 +30,9 @@ public interface Konstanten
     int ACHT=8;
     
     
+    int ZEHN=10;
+    
+    
     int ELF = 11;
     
     
@@ -43,5 +46,8 @@ public interface Konstanten
     
     
     int UNBEKANNT = Konstanten.MINUSEINS;
+    
+    
+    int ERLAUBTE_ANZAHL_LEERE_WERTE_IN_CSVRECORDS=5;
     
 }

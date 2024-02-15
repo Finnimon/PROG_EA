@@ -29,9 +29,11 @@ public class CSVParser extends Parser//todo https://datatracker.ietf.org/doc/htm
     }
     
     
-    public ArrayList<CSVRecord> parse(Path path)
+    public ArrayList<CSVRecord> parse(File file,boolean removeHeader)
     {
-        ArrayList<String> cSV = MyIO.dateiZeilenweiseEinlesen(path.toFile());
+        ArrayList<String> cSV = MyIO.dateiZeilenweiseEinlesen(file);
+        if(removeHeader) cSV.removeFirst();
+        
         ArrayList<CSVRecord> cSVRecords = new ArrayList<>();
         for (int i = 0; i < cSV.size(); i++)
         {
@@ -50,7 +52,7 @@ public class CSVParser extends Parser//todo https://datatracker.ietf.org/doc/htm
                     cSVRecord = new CSVRecord((stringBuilder.append(cSV.get(i+1)).toString()),SEPERATOR,ZEILENLAENGE);
                     cSV.remove(i+1);
                 }
-                catch (RecordShortException ex)
+                catch (Exception ex)
                 {
                     continue;
                 }

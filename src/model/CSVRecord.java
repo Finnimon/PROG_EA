@@ -7,36 +7,43 @@ import java.util.Arrays;
 
 public class CSVRecord
 {
+    //    private final char delimiter;
+    //    private final int zeilenlaenge;
+    private static final String REGEX_SKIP = "\"";
     private ArrayList<String> record;
-//    private final char delimiter;
-//    private final int zeilenlaenge;
-    private static final String REGEX_SKIP ="\"";
+    
+    
     public CSVRecord(String zeile, String seperator, int zeilenlaenge) throws RecordShortException
     {
-//        this.seperator=seperator;
-//        this.zeilenlaenge=zeilenlaenge;
+        //        this.seperator=seperator;
+        //        this.zeilenlaenge=zeilenlaenge;
         
-        ArrayList<String> record=new ArrayList<>(Arrays.asList( zeile.split(seperator)));
-        if (record.size()==zeilenlaenge) return;
-        
-        if (record.size()>zeilenlaenge)
+        ArrayList<String> record = new ArrayList<>(Arrays.asList(zeile.split(seperator)));
+        if (record.size() == zeilenlaenge)
         {
-            StringBuilder stringBuilder=new StringBuilder();
+            setRecord(record);
+            
+            return;
+        }
+        
+        if (record.size() > zeilenlaenge)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
             String wert;
-            for (int i = 0; i <= record.size() ; i++)
+            for (int i = 0; i < record.size(); i++)
             {
-                if ((wert=record.get(i)).startsWith(REGEX_SKIP))
+                if ((wert = record.get(i)).startsWith(REGEX_SKIP))
                 {
                     stringBuilder.append(wert);
                     
                     stringBuilder.append(seperator);
-                    stringBuilder.append(record.get(i+1));
-                    wert=stringBuilder.toString();
+                    stringBuilder.append(record.get(i + 1));
+                    wert = stringBuilder.toString();
                     
-                    record.remove(i+1);
+                    record.remove(i + 1);
                     if (wert.endsWith(REGEX_SKIP))
                     {
-                        wert.replace(REGEX_SKIP,Strings.EMPTY);
+                        wert.replace(REGEX_SKIP, Strings.EMPTY);
                         
                         continue;
                     }
@@ -44,13 +51,18 @@ public class CSVRecord
                     {
                         i--;
                     }
-                    record.set(i,wert);
+                    record.set(i, wert);
                 }
             }
         }
         
-        if(record.size()!=zeilenlaenge) throw new RecordShortException();
+        if (record.size() != zeilenlaenge)
+        {
+            throw new RecordShortException();
+        }
         
+        
+        setRecord(record);
     }
     
     
@@ -65,15 +77,31 @@ public class CSVRecord
         this.record = record;
     }
     
-//
-//    public char getDelimiter()
-//    {
-//        return delimiter;
-//    }
-//
-//
-//    public int getZeilenlaenge()
-//    {
-//        return zeilenlaenge;
-//    }
+    
+    
+    //
+    //    public char getDelimiter()
+    //    {
+    //        return delimiter;
+    //    }
+    //
+    //
+    //    public int getZeilenlaenge()
+    //    {
+    //        return zeilenlaenge;
+    //    }
+    
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String wert : getRecord())
+        {
+            stringBuilder.append(wert);
+            stringBuilder.append(Strings.SEMIKOLON);
+        }
+       
+        return  stringBuilder.deleteCharAt(stringBuilder.length()-1).toString();
+    }
 }

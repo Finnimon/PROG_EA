@@ -1,6 +1,6 @@
 package utility;
 
-import control.KatasterController;
+import Services.KatasterServices;
 import model.Kataster;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
@@ -135,7 +135,7 @@ public class MyIO
     {
         try
         {
-            return Parser.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+            return Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
         }
         catch (Exception e)
         {
@@ -147,11 +147,13 @@ public class MyIO
     
     public static void fragenStellenBeantworten(Kataster kataster)
     {
-        //todo rekursiv
-        fragenAnbieten();
-        int fragenWahl = fragenWahlEinlesen();
-        KatasterController.frageBeantworten(kataster, fragenWahl);
-        
+        int fragenWahl=Konstanten.EINS;
+        while (fragenWahl!=0)
+        {
+            fragenAnbieten();
+            fragenWahl = fragenWahlEinlesen();
+            KatasterServices.frageBeantworten(kataster, fragenWahl);
+        }
     }
     
     

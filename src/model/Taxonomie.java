@@ -1,6 +1,6 @@
 package model;
 
-import control.BaumController;
+import Services.BaumServices;
 import resources.Konstanten;
 import resources.Strings;
 
@@ -9,56 +9,56 @@ import java.util.List;
 public class Taxonomie
 {
     //todo nicht abkürzen
-    private final String speziesBot;
+    private final String artBotanisch;
     
-    private final String speziesDt;
+    private final String artDeutsch;
     
-    private final String gattungBot;
+    private final String gattungBotanisch;
     
-    private final String gattungDt;
+    private final String gattungDeutsch;
     
     
     
-    public Taxonomie(String speziesBot, String speziesDt, String gattungBot, String gattungDt)
+    public Taxonomie(String artBotanisch, String artDeutsch, String gattungBotanisch, String gattungDeutsch)
     {
-        this.speziesBot = speziesBot;
-        this.speziesDt = speziesDt;
-        this.gattungBot = gattungBot;
-        this.gattungDt = gattungDt;
+        this.artBotanisch = artBotanisch;
+        this.artDeutsch = artDeutsch;
+        this.gattungBotanisch = gattungBotanisch;
+        this.gattungDeutsch = gattungDeutsch;
     }
     
     
     public Taxonomie(List<String> zeileSublist)
     {
-        this.speziesDt=BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(0));
-        this.speziesBot=BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.EINS));
-        this.gattungDt=BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.ZWEI));
-        this.gattungBot=BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.DREI));
+        this.artDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(0));
+        this.artBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.EINS));
+        this.gattungDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.ZWEI));
+        this.gattungBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.DREI));
     }
     
     
     
-    public String getSpeziesBot()
+    public String getArtBotanisch()
     {
-        return speziesBot;
+        return artBotanisch;
     }
     
     
-    public String getSpeziesDt()
+    public String getArtDeutsch()
     {
-        return speziesDt;
+        return artDeutsch;
     }
     
     
-    public String getGattungBot()
+    public String getGattungBotanisch()
     {
-        return gattungBot;
+        return gattungBotanisch;
     }
     
     
-    public String getGattungDt()
+    public String getGattungDeutsch()
     {
-        return gattungDt;
+        return gattungDeutsch;
     }
     
     
@@ -71,15 +71,15 @@ public class Taxonomie
         
         stringBuilder.append(Strings.BAUMART);
         stringBuilder.append(Strings.TABULATOR);
-        stringBuilder.append(getSpeziesDt());
+        stringBuilder.append(getArtDeutsch());
         stringBuilder.append(Strings.SCHRAEGSTRICH);
-        stringBuilder.append(getSpeziesBot());
+        stringBuilder.append(getArtBotanisch());
         stringBuilder.append(Strings.CRLF);
         stringBuilder.append(Strings.GATTUNG);
         stringBuilder.append(Strings.TABULATOR);
-        stringBuilder.append(getGattungDt());
+        stringBuilder.append(getGattungDeutsch());
         stringBuilder.append(Strings.SCHRAEGSTRICH);
-        stringBuilder.append(getGattungBot());
+        stringBuilder.append(getGattungBotanisch());
 
         
         

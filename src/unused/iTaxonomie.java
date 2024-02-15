@@ -1,6 +1,6 @@
 //package model;
 //
-//import control.BaumController;
+//import Services.BaumServices;
 //import resources.Konstanten;
 //
 //import java.util.List;
@@ -34,10 +34,10 @@
 //
 //    public default void setTaxonomie(List<String> zeileSublist)
 //    {
-//        this.speziesDt(BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(0)));
-//        this.speziesBot(BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.EINS)));
-//        this.gattungDt(BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.ZWEI)));
-//        this.gattungBot(BaumController.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.DREI)));
+//        this.speziesDt(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(0)));
+//        this.speziesBot(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.EINS)));
+//        this.gattungDt(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.ZWEI)));
+//        this.gattungBot(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.DREI)));
 //    }
 //
 //

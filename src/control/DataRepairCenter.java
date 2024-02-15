@@ -21,7 +21,7 @@ public class DataRepairCenter
             
             Baum baum = baeume.get(key);
             
-            String artBotanisch=baum.getTaxonomie().getSpeziesBot();
+            String artBotanisch=baum.getTaxonomie().getArtBotanisch();
             try
             {
                 spezifischeBaeume= sortierterKataster.get(artBotanisch);

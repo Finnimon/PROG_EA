@@ -13,15 +13,16 @@ public class Kataster
     private HashMap<Integer, Baum> kataster;
     
     
-    public Kataster(ArrayList<ArrayList<String>> cSV)
+    public Kataster(ArrayList<CSVRecord> cSV)
     {
         HashMap<Integer, Baum> baeume = new HashMap<>();
-        for (ArrayList<String> werte : cSV)
+        for (CSVRecord cSVRecord : cSV)
         {
+            ArrayList<String> record=cSVRecord.getRecord();
             try
             {
                 //keep first remove next
-                baeume.putIfAbsent(Integer.parseInt(werte.getFirst()), new Baum(werte.subList(Konstanten.EINS, Konstanten.ZWOELF)));
+                baeume.putIfAbsent(Integer.parseInt(record.getFirst()), Baum.create(record.subList(Konstanten.EINS, Konstanten.ZWOELF)));
             }
             catch (Exception e)
             {

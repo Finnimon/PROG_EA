@@ -18,7 +18,7 @@ public interface Strings
     
     String UNBEKANNT = "Unbekannt";
     
-    //todo empty strings in bäumen=u
+    //todo empty strings in bäumen=u?
     //    String UNBEKANNT_AUSGESCHRIEBEN="Unbekannt";
     
     String CRLF = "\r\n";
@@ -51,7 +51,7 @@ public interface Strings
     String BEZIRK = "Bezirk:";
     
     
-    String BAUMART = "Baumart (Deutsch/Botanisch):";
+    String BAUMART = "Art (Deutsch/Botanisch):";
     
     
     String GATTUNG = "Gattung (Deutsch/Botanisch):";
