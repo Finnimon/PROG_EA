@@ -28,14 +28,16 @@ public class KatasterServices
     
     
     //endregion
-    //todo for question hashmap of with key string bezirk... and int counter
+    //todo find largest value in hashmap and comparator
     
     
-    public static boolean frageBeantworten(Kataster kataster, int fragenWahl)
+    //todo frage beantworten gives back just the Answer string
+    public static String frageBeantworten(Kataster kataster, int fragenWahl)
     {
+        //todo messages
         int key;
-        boolean bool = false;
         StringBuilder stringBuilder = new StringBuilder();
+        
         if (INDEX_BEZIRK_MIT_GROESZTEM_BAUM <= fragenWahl && fragenWahl <= INDEX_ALTER_VERGLEICHEN)
         {
             key = extremstenBaumFinden(kataster, fragenWahl);
@@ -50,8 +52,8 @@ public class KatasterServices
             stringBuilder.append(haeufigsteGattungBezirkZaehlen(kataster, fragenWahl));
         }
         
-        MyIO.printLn(stringBuilder.toString());
-        return bool;
+        
+        return stringBuilder.toString();
     }
     
     
@@ -110,7 +112,7 @@ public class KatasterServices
         return set.size();
     }
     
-    
+    //todo yikes
     public static String haeufigsteGattungBezirkZaehlen(Kataster kataster, int fragenIndex)
     {
         HashMap<Integer, Baum> baeume = kataster.getKataster();
@@ -168,7 +170,7 @@ public class KatasterServices
     }
     
     
-//    public static int keyDesGroesztenValueFinden(Kataster kataster, Comparator comparator)
+//todo    public static int keyDesGroesztenValueFinden(Kataster kataster, Comparator comparator)
 //    {
 //        return
 //                Collections.max(kataster.getKataster().entrySet(),(entry1,entry2)->entry1..compareTo
