@@ -33,6 +33,12 @@ public class Kataster
         setKataster(baeume);
     }
     
+    
+    public Kataster(HashMap<Integer,Baum> baeume)
+    {
+        setKataster(baeume);
+    }
+    
     //Maybe important for regression except hash instead of arraylist of baum
     //    public Kataster(ArrayList<ArrayList<String>> werte)
     //    {

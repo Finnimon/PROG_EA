@@ -12,7 +12,7 @@ public class KatasterDataRepairCenter
     //region [Attribut]
     
     
-    private HashMap<String, HashMap<Integer, Baum>> sortierterKataster;
+    private HashMap<String, HashMap<Integer, Baum>> sortierteBaeume;
     
     
     //endregion
@@ -21,7 +21,7 @@ public class KatasterDataRepairCenter
     
     public KatasterDataRepairCenter(Kataster kataster)
     {
-        setSortierterKataster(katasterSortieren(kataster));
+        setSortierteBaeume(katasterSortieren(kataster));
     }
     
     
@@ -58,22 +58,40 @@ public class KatasterDataRepairCenter
     
     
     //endregion
+    //region [Methoden]
+    
+    
+    //endregion
     //region[GetSet]
     
     
-    public HashMap<String, HashMap<Integer, Baum>> getSortierterKataster()
+    public HashMap<String, HashMap<Integer, Baum>> getSortierteBaeume()
     {
-        return sortierterKataster;
+        return sortierteBaeume;
     }
     
     
-    private void setSortierterKataster(HashMap<String, HashMap<Integer, Baum>> sortierterKataster)
+    private void setSortierteBaeume(HashMap<String, HashMap<Integer, Baum>> sortierteBaeume)
     {
-        this.sortierterKataster = sortierterKataster;
+        this.sortierteBaeume = sortierteBaeume;
     }
-
+    
+    
+    public Kataster getReparierterKataster()
+    {
+        HashMap<Integer, Baum> reparierteBaume = new HashMap<>();
+        
+        for (HashMap<Integer, Baum> spezifischeBaeume : getSortierteBaeume().values())
+        {
+            reparierteBaume.putAll(spezifischeBaeume);
+        }
+        
+        
+        return new Kataster(reparierteBaume);
+    }
+    
     
     //endregion
     
-
+    
 }
