@@ -13,6 +13,7 @@ public class KatasterDataRepairCenter
     
     
     private HashMap<String, HashMap<Integer, Baum>> sortierteBaeume;
+    private boolean istRepariert;
     
     
     //endregion
@@ -27,6 +28,13 @@ public class KatasterDataRepairCenter
     
     //endregion
     //region [Initialisierung]
+    
+    
+    //todo init
+    private void initialisieren()
+    {
+    
+    }
     
     
     private HashMap<String, HashMap<Integer, Baum>> katasterSortieren(Kataster kataster)
@@ -61,11 +69,27 @@ public class KatasterDataRepairCenter
     //region [Methoden]
     
     
+    
+    
+    
     //endregion
     //region[GetSet]
     
     
-    public HashMap<String, HashMap<Integer, Baum>> getSortierteBaeume()
+    
+    private boolean getIstRepariert()
+    {
+        return this.istRepariert;
+    }
+    
+    
+    private void setIstRepariert(boolean istRepariert)
+    {
+        this.istRepariert=istRepariert;
+    }
+    
+    
+    private HashMap<String, HashMap<Integer, Baum>> getSortierteBaeume()
     {
         return sortierteBaeume;
     }
@@ -77,8 +101,10 @@ public class KatasterDataRepairCenter
     }
     
     
-    public Kataster getReparierterKataster()
+    public Kataster getReparierterKataster()throws Exception //todo custom
     {
+        if(!getIstRepariert()) throw new Exception();
+        
         HashMap<Integer, Baum> reparierteBaume = new HashMap<>();
         
         for (HashMap<Integer, Baum> spezifischeBaeume : getSortierteBaeume().values())

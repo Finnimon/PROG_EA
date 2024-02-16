@@ -1,4 +1,4 @@
-package model;
+package utility;
 
 public class ElementFaultyException extends Exception
 {

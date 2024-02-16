@@ -1,6 +1,7 @@
 package model;
 
 import resources.Strings;
+import utility.RecordShortException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

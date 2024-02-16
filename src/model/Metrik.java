@@ -1,28 +1,29 @@
 package model;
 
 import Services.BaumServices;
-import Services.KatasterServices;
-import resources.Konstanten;
 import resources.Strings;
+import utility.ElementFaultyException;
 import utility.Parser;
+
+import java.util.ArrayList;
 import java.util.List;
 
-public class Metrik
+public class Metrik implements iRepairable
 {
     
     
     //region [Konstanten]
     
     
-    private final int INDEX_PFLANZJAHR=0;
+    private final int INDEX_PFLANZJAHR = 0;
     
-    private final int INDEX_STANDALTER=1;
+    private final int INDEX_STANDALTER = 1;
     
-    private final int INDEX_KRONEMETER=2;
+    private final int INDEX_KRONEMETER = 2;
     
-    private final int INDEX_UMFANG_ZENTIMETER=3;
+    private final int INDEX_UMFANG_ZENTIMETER = 3;
     
-    private final int INDEX_HOEHE_METER=4;
+    private final int INDEX_HOEHE_METER = 4;
     
     
     //endregion
@@ -46,8 +47,8 @@ public class Metrik
     
     public Metrik(List<String> werte) throws ElementFaultyException
     {
-        setAlter( Parser.parseInt(werte.get(INDEX_PFLANZJAHR)),Parser.parseInt(werte.get(INDEX_STANDALTER)));
-        setKroneMeter( Parser.parseFloat(werte.get(INDEX_KRONEMETER)));
+        setAlter(Parser.parseInt(werte.get(INDEX_PFLANZJAHR)), Parser.parseInt(werte.get(INDEX_STANDALTER)));
+        setKroneMeter(Parser.parseFloat(werte.get(INDEX_KRONEMETER)));
         setUmfangZentimeter(Parser.parseFloat(werte.get(INDEX_UMFANG_ZENTIMETER)));
         setHoeheMeter(Parser.parseFloat(werte.get(INDEX_HOEHE_METER)));
     }
@@ -117,34 +118,80 @@ public class Metrik
     
     public void setAlter(int pflanzJahr, int standAlter) throws ElementFaultyException
     {//todo!!!!!!!!!!!!!!
-//        if((boolean standalterBekannt=BaumServices.bekanntheitPruefen(pflanzJahr))&&BaumServices.bekanntheitPruefen(standAlter))
-//        {
-//            setAlter(KatasterServices.JAHR_DER_ERHEBUNG,0);
-//        }
-//        else if ()
-//        {
-//
-//        }
-        if(pflanzJahr>standAlter)
+        //        if((boolean standalterBekannt=BaumServices.bekanntheitPruefen(pflanzJahr))&&BaumServices.bekanntheitPruefen(standAlter))
+        //        {
+        //            setAlter(KatasterServices.JAHR_DER_ERHEBUNG,0);
+        //        }
+        //        else if ()
+        //        {
+        //
+        //        }
+        if (pflanzJahr > standAlter)
         {
             setPflanzJahr(pflanzJahr);
             setStandAlter(standAlter);
         }
         else
         {
-        setStandAlter(pflanzJahr);
-        setPflanzJahr(standAlter);
+            setStandAlter(pflanzJahr);
+            setPflanzJahr(standAlter);
         }
-//        else
-//        {
-//            throw new ElementFaultyException();
-//        }
-
+        //        else
+        //        {
+        //            throw new ElementFaultyException();
+        //        }
+        
     }
     
     
     //endregion
     //region [Overrides]
+    
+    
+    @Override
+    public ArrayList<Float> getRepairables()
+    {
+        //Indize nicht notwendig nur zur verdeutlichung
+        ArrayList<Float> repairables = new ArrayList<>();
+        repairables.add(INDEX_PFLANZJAHR, (float) getPflanzJahr());
+        repairables.add(INDEX_STANDALTER, (float) getStandAlter());
+        repairables.add(INDEX_KRONEMETER, getKroneMeter());
+        repairables.add(INDEX_UMFANG_ZENTIMETER, getUmfangZentimeter());
+        repairables.add(INDEX_HOEHE_METER, getHoeheMeter());
+        
+        
+        return repairables;
+    }
+    
+    
+    @Override
+    public void setRepairables(ArrayList<Float> reparierte)
+    {
+        if (!BaumServices.bekanntheitPruefen(getPflanzJahr()))
+        {
+            setPflanzJahr(Math.round(reparierte.get(INDEX_PFLANZJAHR)));
+        }
+        
+        if (!BaumServices.bekanntheitPruefen(getStandAlter()))
+        {
+            setStandAlter(Math.round(reparierte.get(INDEX_STANDALTER)));
+        }
+        
+        if (!BaumServices.bekanntheitPruefen(getKroneMeter()))
+        {
+            setKroneMeter(reparierte.get(INDEX_KRONEMETER));
+        }
+        
+        if (!BaumServices.bekanntheitPruefen(getKroneMeter()))
+        {
+            setUmfangZentimeter(reparierte.get(INDEX_UMFANG_ZENTIMETER));
+        }
+        
+        if (!BaumServices.bekanntheitPruefen(getHoeheMeter()))
+        {
+            setHoeheMeter(reparierte.get(INDEX_HOEHE_METER));
+        }
+    }
     
     
     @Override

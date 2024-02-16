@@ -1,4 +1,4 @@
-package model;
+package utility;
 
 public class RecordShortException extends Exception
 {
