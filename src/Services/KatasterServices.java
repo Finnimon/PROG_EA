@@ -32,7 +32,7 @@ public class KatasterServices
     
     
     //todo frage beantworten gives back just the Answer string
-    public static String frageBeantworten(Kataster kataster, int fragenWahl)
+    public static String frageAntwortErmitteln(Kataster kataster, int fragenWahl)
     {
         //todo messages
         int key;
@@ -52,7 +52,7 @@ public class KatasterServices
             stringBuilder.append(haeufigsteGattungBezirkZaehlen(kataster, fragenWahl));
         }
         
-        
+        MyIO.printLn(stringBuilder.toString());
         return stringBuilder.toString();
     }
     
@@ -169,13 +169,10 @@ public class KatasterServices
         return attribut;
     }
     
-    
-//todo    public static int keyDesGroesztenValueFinden(Kataster kataster, Comparator comparator)
-//    {
-//        return
-//                Collections.max(kataster.getKataster().entrySet(),(entry1,entry2)->entry1..compareTo
-//                        )
-//    }
+    public static int keyDesGroesztenValueFinden(Kataster kataster, KatasterEntryComparator katasterEntryComparator)
+    {
+        return Collections.max(kataster.getKataster().entrySet(),katasterEntryComparator).getKey();
+    }
     
     
 }

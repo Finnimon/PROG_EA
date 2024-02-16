@@ -152,7 +152,7 @@ public class MyIO
         {
             fragenAnbieten();
             fragenWahl = fragenWahlEinlesen();
-            KatasterServices.frageBeantworten(kataster, fragenWahl);
+            KatasterServices.frageAntwortErmitteln(kataster, fragenWahl);
         }
     }
     

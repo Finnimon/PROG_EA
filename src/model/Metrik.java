@@ -126,15 +126,15 @@ public class Metrik implements iRepairable
         //        {
         //
         //        }
-        if (pflanzJahr > standAlter)
-        {
-            setPflanzJahr(pflanzJahr);
-            setStandAlter(standAlter);
-        }
-        else
+        if (standAlter>pflanzJahr&&BaumServices.bekanntheitPruefen(pflanzJahr))
         {
             setStandAlter(pflanzJahr);
             setPflanzJahr(standAlter);
+        }
+        else
+        {
+            setPflanzJahr(pflanzJahr);
+            setStandAlter(standAlter);
         }
         //        else
         //        {

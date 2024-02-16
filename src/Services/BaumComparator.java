@@ -4,6 +4,7 @@ import model.Baum;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Map;
 
 public class BaumComparator implements Comparator<Baum>
 {
@@ -26,7 +27,7 @@ public class BaumComparator implements Comparator<Baum>
     //region[Konstruktor]
     
     
-    public BaumComparator(int attributIndex)
+    public BaumComparator(int attributIndex) throws IllegalArgumentException
     {
         this.attributIndex = attributIndex;
         
@@ -41,7 +42,7 @@ public class BaumComparator implements Comparator<Baum>
     //region [Get]
     
     
-    public int getAttributIndex()
+    private int getAttributIndex()
     {
         return attributIndex;
     }
