@@ -1,5 +1,7 @@
-package Services;
+package utility;
 
+import Services.BaumServices;
+import Services.KatasterServices;
 import model.Baum;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;

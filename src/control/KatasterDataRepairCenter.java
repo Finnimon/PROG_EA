@@ -1,7 +1,7 @@
 package control;
 
 import model.Baum;
-import model.Kataster;
+import model.BaumKataster;
 
 import java.util.HashMap;
 
@@ -20,9 +20,9 @@ public class KatasterDataRepairCenter
     //region [Konstruktor]
     
     
-    public KatasterDataRepairCenter(Kataster kataster)
+    public KatasterDataRepairCenter(BaumKataster baumKataster)
     {
-        setSortierteBaeume(katasterSortieren(kataster));
+        setSortierteBaeume(katasterSortieren(baumKataster));
     }
     
     
@@ -37,10 +37,10 @@ public class KatasterDataRepairCenter
     }
     
     
-    private HashMap<String, HashMap<Integer, Baum>> katasterSortieren(Kataster kataster)
+    private HashMap<String, HashMap<Integer, Baum>> katasterSortieren(BaumKataster baumKataster)
     {
         HashMap<String, HashMap<Integer, Baum>> sortierterKataster = new HashMap<>();
-        HashMap<Integer, Baum> baeume = kataster.getKataster();
+        HashMap<Integer, Baum> baeume = baumKataster.getBaumKataster();
         
         for (int key : baeume.keySet())
         {
@@ -101,7 +101,7 @@ public class KatasterDataRepairCenter
     }
     
     
-    public Kataster getReparierterKataster()throws Exception //todo custom
+    public BaumKataster getReparierterKataster()throws Exception //todo custom
     {
         if(!getIstRepariert()) throw new Exception();
         
@@ -113,7 +113,7 @@ public class KatasterDataRepairCenter
         }
         
         
-        return new Kataster(reparierteBaume);
+        return new BaumKataster(reparierteBaume);
     }
     
     

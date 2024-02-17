@@ -3,11 +3,12 @@ package utility;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Core
 {
-    public static int keyDesGroesztenWertInHashMapFinden(HashMap hashMap, Comparator comparator)
+    public static String keyStringDesGroesztenWertIntegerInHashMapFinden(HashMap<String,Integer> hashMap)
     {
-        Collections.max(hashMap.entrySet(),comparator).getKey();
+        return Collections.max(hashMap.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
 }

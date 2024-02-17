@@ -1,10 +1,12 @@
 package Services;
 
 import model.Baum;
-import model.Kataster;
+import model.BaumKataster;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
 import resources.Strings;
+import utility.BaumKatasterEntryComparator;
+import utility.Core;
 import utility.MyIO;
 
 import java.util.*;
@@ -32,7 +34,7 @@ public class KatasterServices
     
     
     //todo frage beantworten gives back just the Answer string
-    public static String frageAntwortErmitteln(Kataster kataster, int fragenWahl)
+    public static String frageAntwortErmitteln(BaumKataster baumKataster, int fragenWahl)
     {
         //todo messages
         int key;
@@ -40,16 +42,16 @@ public class KatasterServices
         
         if (INDEX_BEZIRK_MIT_GROESZTEM_BAUM <= fragenWahl && fragenWahl <= INDEX_ALTER_VERGLEICHEN)
         {
-            key = extremstenBaumFinden(kataster, fragenWahl);
-            stringBuilder.append(kataster.getKataster().get(key).toString());
+            key = keyDesGroesztenValueFinden(baumKataster, fragenWahl);
+            stringBuilder.append(baumKataster.getBaumKataster().get(key).toString());
         }
         else if (INDEX_BAUMARTEN_ZAEHLEN <= fragenWahl && fragenWahl <= INDEX_GATTUNGEN_ZAEHLEN)
         {
-            stringBuilder.append(baumArtenGattungenZaehlen(kataster, fragenWahl));
+            stringBuilder.append(baumArtenGattungenZaehlen(baumKataster, fragenWahl));
         }
         else if (INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN <= fragenWahl && fragenWahl <= INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
         {
-            stringBuilder.append(haeufigsteGattungBezirkZaehlen(kataster, fragenWahl));
+            stringBuilder.append(haeufigsteGattungBezirkZaehlen(baumKataster, fragenWahl));
         }
         
         MyIO.printLn(stringBuilder.toString());
@@ -57,31 +59,11 @@ public class KatasterServices
     }
     
     
-    public static int extremstenBaumFinden(Kataster kataster, int attribut)
-    {
-        //• Welche Gattung wächst am höchsten? avg
-        //• Welche Gattung hat den größten Umfang? avg
-        HashMap<Integer, Baum> baeume = kataster.getKataster();
-        int keyGroeszterBaum = Konstanten.EINS; //could be any integer needs to be initialized for the first comparison
-        BaumComparator baumComparator=new BaumComparator(attribut);
-        for (Integer key : baeume.keySet())
-        {
-            if (baumComparator.compare((baeume.get(keyGroeszterBaum)),baeume.get(key)) < 0)
-            {
-                keyGroeszterBaum = key;
-            }
-        }
-        
-        
-        return keyGroeszterBaum;
-    }
-    
-    
-    public static int baumArtenGattungenZaehlen(@NotNull Kataster kataster, int attribut)
+    public static int baumArtenGattungenZaehlen(@NotNull BaumKataster baumKataster, int attribut)
     {
         HashSet<String> set = new HashSet<>();
         
-        HashMap<Integer, Baum> baeume = kataster.getKataster();
+        HashMap<Integer, Baum> baeume = baumKataster.getBaumKataster();
         String string;
         
         //if ausserhalb der for schleife da so trotz redundantem code eine wiederholte abfrage des if vermieden wird
@@ -112,10 +94,11 @@ public class KatasterServices
         return set.size();
     }
     
+    
     //todo yikes
-    public static String haeufigsteGattungBezirkZaehlen(Kataster kataster, int fragenIndex)
+    public static String haeufigsteGattungBezirkZaehlen(BaumKataster baumKataster, int fragenIndex)
     {
-        HashMap<Integer, Baum> baeume = kataster.getKataster();
+        HashMap<Integer, Baum> baeume = baumKataster.getBaumKataster();
         HashMap<String, Integer> hashMap = new HashMap<>();
         
         String attribut = new String();
@@ -161,17 +144,32 @@ public class KatasterServices
             }
             else if (hashMap.get(key) > hashMap.get(attribut))
             {
-                attribut=key;
+                attribut = key;
             }
         }
         
         
-        return attribut;
+        return Core.keyStringDesGroesztenWertIntegerInHashMapFinden(hashMap);
     }
     
-    public static int keyDesGroesztenValueFinden(Kataster kataster, KatasterEntryComparator katasterEntryComparator)
+    
+    public static int keyDesGroesztenValueFinden(BaumKataster baumKataster, int attribut) throws IllegalArgumentException
     {
-        return Collections.max(kataster.getKataster().entrySet(),katasterEntryComparator).getKey();
+        return Collections.max(baumKataster.getBaumKataster().entrySet(), new BaumKatasterEntryComparator(attribut)).getKey();
+    }
+    
+    
+    private HashMap<String, ArrayList<Baum>> baeumeSortieren(HashMap<String, ArrayList<Baum>> baeume)
+    {
+        
+        ArrayList<Baum> spezifischeBaeume;
+        for (String key : baeume.keySet())
+        {
+            Collections.sort(spezifischeBaeume = baeume.get(key));
+            baeume.put(key, spezifischeBaeume);
+        }
+        
+        return baeume;
     }
     
     

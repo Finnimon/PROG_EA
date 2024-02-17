@@ -1,7 +1,7 @@
 package utility;
 
 import Services.KatasterServices;
-import model.Kataster;
+import model.BaumKataster;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
 import resources.Strings;
@@ -93,14 +93,11 @@ public class MyIO
     }
     
     
-    public static File dateipfadValidieren(String dateipfad) throws FileNotFoundException
+    public static File dateipfadValidieren(String dateipfad)
     {
         //todo exception
         File file = new File(dateipfad);
-        if (!file.canRead())
-        {
-            throw new FileNotFoundException(file.getName());
-        }
+        assert file.canRead();
         return file;
     }
     
@@ -145,14 +142,14 @@ public class MyIO
     }
     
     
-    public static void fragenStellenBeantworten(Kataster kataster)
+    public static void fragenStellenBeantworten(BaumKataster baumKataster)
     {
         int fragenWahl=Konstanten.EINS;
         while (fragenWahl!=0)
         {
             fragenAnbieten();
             fragenWahl = fragenWahlEinlesen();
-            KatasterServices.frageAntwortErmitteln(kataster, fragenWahl);
+            KatasterServices.frageAntwortErmitteln(baumKataster, fragenWahl);
         }
     }
     

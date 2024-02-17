@@ -1,11 +1,11 @@
-package Services;
+package utility;
 
 import model.Baum;
 
 import java.util.Comparator;
 import java.util.Map;
 
-public class KatasterEntryComparator implements Comparator<Map.Entry<Integer, Baum>>
+public class BaumKatasterEntryComparator implements Comparator<Map.Entry<Integer, Baum>>
 {
     
     
@@ -19,7 +19,7 @@ public class KatasterEntryComparator implements Comparator<Map.Entry<Integer, Ba
     //region [Konstruktor]
     
     
-    public KatasterEntryComparator(int attribut)throws IllegalArgumentException
+    public BaumKatasterEntryComparator(int attribut)throws IllegalArgumentException
     {
         this.baumComparator=new BaumComparator(attribut);
     }

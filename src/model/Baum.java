@@ -1,9 +1,6 @@
 package model;
 
 
-//region[Imports]
-
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
@@ -12,8 +9,6 @@ import utility.ElementFaultyException;
 
 import java.util.List;
 
-
-//endregion
 
 
 public class Baum implements Comparable<Baum>
@@ -140,6 +135,7 @@ public class Baum implements Comparable<Baum>
     @Override
     public int compareTo(@NotNull Baum o)
     {
+        //todo voll scheiße
         Metrik thisMetrik;
         Metrik otherMetrik;
         float comparator;
@@ -148,7 +144,6 @@ public class Baum implements Comparable<Baum>
         }
         else if ((comparator = thisMetrik.getUmfangZentimeter() - otherMetrik.getUmfangZentimeter()) != 0)
         {
-        
         }
         else if ((comparator = thisMetrik.getKroneMeter() - otherMetrik.getKroneMeter()) != 0)
         {
