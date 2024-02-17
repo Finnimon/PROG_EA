@@ -65,7 +65,24 @@ public class BaumKataster implements iRepairableStatistic
     
     
     //endregion
+    //region [Overrides]
     
+    
+    @Override
+    public HashMap<Integer, ArrayList<Float>> getRepairables()
+    {
+        return null;
+    }
+    
+    
+    @Override
+    public void setRepairables(HashMap<Integer, ArrayList<Float>> reparierte)
+    {
+    
+    }
+    
+    
+    //endregion
     
     
 }
