@@ -1,8 +1,10 @@
 package model;
 
 import Services.BaumServices;
+import Services.KatasterServices;
+import resources.Konstanten;
 import resources.Strings;
-import utility.ElementFaultyException;
+import utility.BaumComparator;
 import utility.Parser;
 import utility.iRepairable;
 
@@ -16,13 +18,29 @@ public class Metrik implements iRepairable
     //region [Konstanten]
     
     
+    private final static float MAXIMUM_PERMISSABLE_STANDALTER = Konstanten.AELTESTER_BAUM_BERLINS_ALTER;
+    
+    
+    private final static float MAXIMUM_PERMISSABLE_KRONE_METER = Konstanten.GROESZTER_KRONEN_DURCHMESSER_DEUTSCHLANDS;
+    
+    
+    private final static float MAXIMUM_PERMISSABLE_UMFANG_ZENTIMETER = Konstanten.DICKSTER_BAUM_BERLINS_UMFANG_ZENTIMETER;
+    
+    
+    private final static float MAXIMUM_PERMISSABLE_HOEHE = Konstanten.HOECHSTER_BAUM_BERLINS_HOEHE;
+    
+    
     private final int INDEX_PFLANZJAHR = 0;
+    
     
     private final int INDEX_STANDALTER = 1;
     
+    
     private final int INDEX_KRONEMETER = 2;
     
+    
     private final int INDEX_UMFANG_ZENTIMETER = 3;
+    
     
     private final int INDEX_HOEHE_METER = 4;
     
@@ -46,7 +64,7 @@ public class Metrik implements iRepairable
     //region[Konstruktor]
     
     
-    public Metrik(List<String> werte) throws ElementFaultyException
+    public Metrik(List<String> werte)
     {
         setAlter(Parser.parseInt(werte.get(INDEX_PFLANZJAHR)), Parser.parseInt(werte.get(INDEX_STANDALTER)));
         setKroneMeter(Parser.parseFloat(werte.get(INDEX_KRONEMETER)));
@@ -57,6 +75,76 @@ public class Metrik implements iRepairable
     
     //endregion
     //region [GetSet]
+    
+    
+    public ArrayList<Float> getPermissableMaxima()
+    {
+        ArrayList<Float> permissableMaximums = new ArrayList<>();
+        
+        permissableMaximums.add((float) KatasterServices.JAHR_DER_ERHEBUNG);
+        permissableMaximums.add(MAXIMUM_PERMISSABLE_STANDALTER);
+        permissableMaximums.add(MAXIMUM_PERMISSABLE_KRONE_METER);
+        permissableMaximums.add(MAXIMUM_PERMISSABLE_UMFANG_ZENTIMETER);
+        permissableMaximums.add(MAXIMUM_PERMISSABLE_HOEHE);
+        
+        
+        return permissableMaximums;
+    }
+    
+    
+    public float getAtrributNachBaumComparatorIndex(int attributIndex)
+    {
+        if (attributIndex == BaumComparator.INDEX_ALTER)
+        {
+            return getStandAlter();
+        }
+        else if (attributIndex == BaumComparator.INDEX_KRONE_METER)
+        {
+            return getKroneMeter();
+        }
+        else if (attributIndex == BaumComparator.INDEX_UMFANG_ZENTIMETER)
+        {
+            return getUmfangZentimeter();
+        }
+        else if (attributIndex == BaumComparator.INDEX_HOEHE_METER)
+        {
+            return getHoeheMeter();
+        }
+        
+        
+        throw new IllegalArgumentException();
+    }
+    
+    
+    public void setAttributNachIndex(int attributIndex, float attribut)
+    {
+        if (attributIndex == INDEX_PFLANZJAHR)
+        {
+            setPflanzJahr(Math.round(attribut));
+        }
+        else if (attributIndex == INDEX_STANDALTER)
+        {
+            setStandAlter(Math.round(attribut));
+        }
+        else if (attributIndex == INDEX_KRONEMETER)
+        {
+            setKroneMeter(attribut);
+        }
+        else if (attributIndex == INDEX_UMFANG_ZENTIMETER)
+        {
+            setUmfangZentimeter(attribut);
+        }
+        else if (attributIndex == INDEX_HOEHE_METER)
+        {
+            setHoeheMeter(attribut);
+        }
+        else
+        {//todo messages Exceptions
+            throw new IllegalArgumentException("Illegaler attributIndex");
+        }
+    }
+    
+    
     public int getPflanzJahr()
     {
         return pflanzJahr;
@@ -117,17 +205,9 @@ public class Metrik implements iRepairable
     }
     
     
-    public void setAlter(int pflanzJahr, int standAlter) throws ElementFaultyException
+    public void setAlter(int pflanzJahr, int standAlter)
     {//todo!!!!!!!!!!!!!!
-        //        if((boolean standalterBekannt=BaumServices.bekanntheitPruefen(pflanzJahr))&&BaumServices.bekanntheitPruefen(standAlter))
-        //        {
-        //            setAlter(KatasterServices.JAHR_DER_ERHEBUNG,0);
-        //        }
-        //        else if ()
-        //        {
-        //
-        //        }
-        if (standAlter>pflanzJahr&&BaumServices.bekanntheitPruefen(pflanzJahr))
+        if (standAlter > pflanzJahr && BaumServices.bekanntheitPruefen(pflanzJahr))
         {
             setStandAlter(pflanzJahr);
             setPflanzJahr(standAlter);
@@ -137,16 +217,18 @@ public class Metrik implements iRepairable
             setPflanzJahr(pflanzJahr);
             setStandAlter(standAlter);
         }
-        //        else
-        //        {
-        //            throw new ElementFaultyException();
-        //        }
-        
     }
     
     
     //endregion
     //region [Overrides]
+    
+    
+    public void setAlter(int standAlter)
+    {
+        setStandAlter(standAlter);
+        setPflanzJahr(KatasterServices.JAHR_DER_ERHEBUNG - standAlter);
+    }
     
     
     @Override
@@ -168,30 +250,11 @@ public class Metrik implements iRepairable
     @Override
     public void setRepairables(ArrayList<Float> reparierte)
     {
-        if (!BaumServices.bekanntheitPruefen(getPflanzJahr()))
-        {
-            setPflanzJahr(Math.round(reparierte.get(INDEX_PFLANZJAHR)));
-        }
-        
-        if (!BaumServices.bekanntheitPruefen(getStandAlter()))
-        {
-            setStandAlter(Math.round(reparierte.get(INDEX_STANDALTER)));
-        }
-        
-        if (!BaumServices.bekanntheitPruefen(getKroneMeter()))
-        {
-            setKroneMeter(reparierte.get(INDEX_KRONEMETER));
-        }
-        
-        if (!BaumServices.bekanntheitPruefen(getKroneMeter()))
-        {
-            setUmfangZentimeter(reparierte.get(INDEX_UMFANG_ZENTIMETER));
-        }
-        
-        if (!BaumServices.bekanntheitPruefen(getHoeheMeter()))
-        {
-            setHoeheMeter(reparierte.get(INDEX_HOEHE_METER));
-        }
+        setPflanzJahr(Math.round(reparierte.get(INDEX_PFLANZJAHR)));
+        setStandAlter(Math.round(reparierte.get(INDEX_STANDALTER)));
+        setKroneMeter(reparierte.get(INDEX_KRONEMETER));
+        setUmfangZentimeter(reparierte.get(INDEX_UMFANG_ZENTIMETER));
+        setHoeheMeter(reparierte.get(INDEX_HOEHE_METER));
     }
     
     

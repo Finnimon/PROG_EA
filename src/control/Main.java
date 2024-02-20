@@ -28,6 +28,12 @@ public class Main
         
         
         MyIO.printLn(Strings.AUSGABE_ERFOLGREICH_DATEI_GELESEN + cSVRecords.size(), true);
+        
+        for (CSVRecord csvRecord : cSVRecords)
+        {
+            MyIO.printLn(csvRecord.toString(), false);
+        }
+        
         //Because ObjectID ObjectName and Bezirk are always assigned a value
         // the defacto values that make up a tree are only nine in number therefore anything with that many can be disregarded
         cSVParser = CSVController.recordsOhneGenugWerteEntfernen(cSVParser, 7);
@@ -35,6 +41,15 @@ public class Main
         
         BaumKataster baumKataster = new BaumKataster(cSVRecords);
         MyIO.printLn(Strings.AUSGABE_ERZEUGTER_BAUM_INSTANZEN + baumKataster.getBaumKataster().keySet().size(), true);
+        
+        StatisticalDataRepairCenter statisticalDataRepairCenter = new StatisticalDataRepairCenter(baumKataster, Konstanten.UNBEKANNT);
+        statisticalDataRepairCenter.repair();
+        baumKataster = (BaumKataster) statisticalDataRepairCenter.getRepairableStatistic();
+        
+        KatasterDataRepairCenter katasterDataRepairCenter=new KatasterDataRepairCenter(baumKataster,3.5f);
+        katasterDataRepairCenter.alleExtremenEntriesVonBaumKatasterEntfernen();
+        baumKataster=katasterDataRepairCenter.getBaumKataster();
+        
         
         MyIO.fragenStellenBeantworten(baumKataster);
     }

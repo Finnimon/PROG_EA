@@ -35,7 +35,7 @@ public class KatasterServices
     
     //todo frage beantworten gives back just the Answer string
     public static String frageAntwortErmitteln(BaumKataster baumKataster, int fragenWahl)
-    {
+    {//todo alle fragen richtig gelesen?
         //todo messages
         int key;
         StringBuilder stringBuilder = new StringBuilder();

@@ -6,12 +6,14 @@ import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
 import resources.Strings;
 import utility.ElementFaultyException;
+import utility.iRepairable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 
-public class Baum implements Comparable<Baum>
+public class Baum implements Comparable<Baum>, iRepairable
 {
     
     
@@ -116,6 +118,13 @@ public class Baum implements Comparable<Baum>
     
     
     @Override
+    public  ArrayList<Float> getPermissableMaxima()
+    {
+        return getMetrik().getPermissableMaxima();
+    }
+    
+    
+    @Override
     public String toString()
     {
         StringBuilder stringBuilder = new StringBuilder(Strings.CRLF);
@@ -136,29 +145,23 @@ public class Baum implements Comparable<Baum>
     public int compareTo(@NotNull Baum o)
     {
         //todo voll scheiße
-        Metrik thisMetrik;
-        Metrik otherMetrik;
-        float comparator;
-        if ((comparator = (thisMetrik = getMetrik()).getHoeheMeter() - (otherMetrik = o.getMetrik()).getHoeheMeter()) != 0)
-        {
-        }
-        else if ((comparator = thisMetrik.getUmfangZentimeter() - otherMetrik.getUmfangZentimeter()) != 0)
-        {
-        }
-        else if ((comparator = thisMetrik.getKroneMeter() - otherMetrik.getKroneMeter()) != 0)
-        {
-        }
-        
-        if (comparator > 0)
-        {
-            return Konstanten.EINS;
-        }
-        else if (comparator < 0)
-        {
-            return Konstanten.MINUSEINS;
-        }
-        
         return 0;
+    }
+    
+    
+    @Override
+    public void setRepairables(ArrayList<Float> reparierte)
+    {
+        Metrik metrik;
+        (metrik=getMetrik()).setRepairables(reparierte);
+        setMetrik(metrik);
+    }
+    
+    
+    @Override
+    public ArrayList<Float> getRepairables()
+    {
+        return getMetrik().getRepairables();
     }
     
     

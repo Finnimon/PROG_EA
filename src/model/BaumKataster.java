@@ -1,11 +1,14 @@
 package model;
 
 import resources.Konstanten;
+import resources.Strings;
+import utility.iRepairable;
 import utility.iRepairableStatistic;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BaumKataster implements iRepairableStatistic
 {
@@ -26,7 +29,7 @@ public class BaumKataster implements iRepairableStatistic
         HashMap<Integer, Baum> baeume = new HashMap<>();
         for (CSVRecord cSVRecord : cSV)
         {
-            ArrayList<String> record=cSVRecord.getRecord();
+            ArrayList<String> record = cSVRecord.getRecord();
             try
             {
                 //keep first remove next
@@ -42,7 +45,18 @@ public class BaumKataster implements iRepairableStatistic
     }
     
     
-    public BaumKataster(HashMap<Integer,Baum> baeume)
+    public BaumKataster(List<Map.Entry<Integer, Baum>> list)
+    {
+        HashMap<Integer, Baum> baeumeHashMap = new HashMap<>();
+        for (Map.Entry<Integer, Baum> entry : list)
+        {
+            baeumeHashMap.put(entry.getKey(), entry.getValue());
+        }
+        setBaumKataster(baeumeHashMap);
+    }
+    
+    
+    public BaumKataster(HashMap<Integer, Baum> baeume)
     {
         setBaumKataster(baeume);
     }
@@ -69,16 +83,71 @@ public class BaumKataster implements iRepairableStatistic
     
     
     @Override
-    public HashMap<Integer, ArrayList<Float>> getRepairables()
+    public String toString()
     {
+        StringBuilder stringbuilder = new StringBuilder();
+        HashMap<Integer, Baum> baumHashMap = getBaumKataster();
+        
+        for (Integer key : baumHashMap.keySet())
+        {
+            stringbuilder.append(Strings.OBJEKT_ID);
+            stringbuilder.append(Strings.TABULATOR);
+            stringbuilder.append(key);
+            Baum baum = baumHashMap.get(key);
+            stringbuilder.append(baum.toString());
+        }
+        
+        return stringbuilder.toString();
+    }
+    
+    
+    @Override
+    public void put(Integer key, iRepairable repairableObject)
+    {
+        HashMap<Integer, Baum> baeumeHashMap = getBaumKataster();
+        baeumeHashMap.put(key, (Baum) repairableObject);
+        setBaumKataster(baeumeHashMap);
+    }
+    
+    
+    @Override
+    public ArrayList<Float> getPermissableMaxima()
+    {
+        for (Baum baum :getBaumKataster().values())
+        {
+            return baum.getPermissableMaxima();
+        }
         return null;
+    }
+    
+    
+    @Override
+    public HashMap<Integer, ArrayList<Float>> getRepairableFloats()
+    {
+        HashMap<Integer, Baum> baumKataster = getBaumKataster();
+        HashMap<Integer, ArrayList<Float>> repairables = new HashMap<>();
+        
+        for (Integer key : baumKataster.keySet())
+        {
+            repairables.put(key, baumKataster.get(key).getMetrik().getRepairables());
+        }
+        
+        return repairables;
     }
     
     
     @Override
     public void setRepairables(HashMap<Integer, ArrayList<Float>> reparierte)
     {
-    
+        HashMap<Integer, Baum> baumKataster = getBaumKataster();
+        
+        for (Integer key : baumKataster.keySet())
+        {
+            Baum baum = baumKataster.get(key);
+            baum.setRepairables(reparierte.get(key));
+            baumKataster.put(key, baum);
+        }
+        
     }
     
     

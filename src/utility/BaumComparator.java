@@ -6,7 +6,6 @@ import model.Baum;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Map;
 
 public class BaumComparator implements Comparator<Baum>
 {
@@ -16,6 +15,18 @@ public class BaumComparator implements Comparator<Baum>
     
     
     private static final Integer[] erlaubteAttributIndize = {1, 2, 3, 4};
+    
+    
+    public static final int INDEX_HOEHE_METER=KatasterServices.INDEX_BEZIRK_MIT_GROESZTEM_BAUM;
+    
+    
+    public static final int INDEX_KRONE_METER=KatasterServices.INDEX_KRONE_METER_VERGLEICHEN;
+    
+    
+    public static final int INDEX_UMFANG_ZENTIMETER=KatasterServices.INDEX_UMFANG_ZENTIMETER_VERGLEICHEN;
+    
+    
+    public static final int INDEX_ALTER=KatasterServices.INDEX_ALTER_VERGLEICHEN;
     
     
     //endregion
@@ -33,7 +44,7 @@ public class BaumComparator implements Comparator<Baum>
     {
         this.attributIndex = attributIndex;
         
-        if (Arrays.binarySearch(erlaubteAttributIndize, getAttributIndex()) < 0)
+        if (Arrays.binarySearch(getErlaubteAttributIndize(), getAttributIndex()) < 0)
         {
             throw new IllegalArgumentException();
         }
@@ -44,9 +55,15 @@ public class BaumComparator implements Comparator<Baum>
     //region [Get]
     
     
-    private int getAttributIndex()
+    public int getAttributIndex()
     {
         return attributIndex;
+    }
+    
+    
+    public static Integer[] getErlaubteAttributIndize()
+    {
+        return erlaubteAttributIndize;
     }
     
     
@@ -69,25 +86,9 @@ public class BaumComparator implements Comparator<Baum>
         {
             return 1;
         }
+        float[] floats={baum.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex()),otherBaum.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex())};
         
-        
-        if (getAttributIndex() == KatasterServices.INDEX_BEZIRK_MIT_GROESZTEM_BAUM)
-        {
-            return hoeheMeterVergleichen(baum, otherBaum);
-        }
-        else if (getAttributIndex() == KatasterServices.INDEX_UMFANG_ZENTIMETER_VERGLEICHEN)
-        {
-            return umfangZentimeterVergleichen(baum, otherBaum);
-        }
-        else if (getAttributIndex() == KatasterServices.INDEX_KRONE_METER_VERGLEICHEN)
-        {
-            return kroneMeterVergleichen(baum, otherBaum);
-        }
-        else
-        {
-            return alterVergleichen(baum, otherBaum);
-        }
-        
+        return wennBaumGroeszerIstVerhaeltnisZurueckgebenAnsonstenFloatVergleichen(floats[0],floats[1]);
     }
     
     
@@ -95,27 +96,44 @@ public class BaumComparator implements Comparator<Baum>
     //region[Methoden]
     
     
-    public static int alterVergleichen(@NotNull Baum baum, Baum otherBaum)
+    private float[] alterWerteZurueckgeben(@NotNull Baum baum, Baum otherBaum)
     {
-        return Integer.compare(BaumServices.bekanntesStandalterErmitteln(baum), BaumServices.bekanntesStandalterErmitteln(otherBaum));
+        float[] floats={BaumServices.bekanntesStandalterErmitteln(baum),BaumServices.bekanntesStandalterErmitteln(otherBaum)};
+        return floats;
     }
     
     
-    public static int hoeheMeterVergleichen(@NotNull Baum baum, @NotNull Baum otherBaum)
+    private float[] hoeheMeterWerteZurueckgeben(@NotNull Baum baum, @NotNull Baum otherBaum)
     {
-        return Float.compare(baum.getMetrik().getHoeheMeter(), otherBaum.getMetrik().getHoeheMeter());
+        return new float[]{baum.getMetrik().getHoeheMeter(),otherBaum.getMetrik().getHoeheMeter()};
     }
     
     
-    public static int kroneMeterVergleichen(@NotNull Baum baum, @NotNull Baum otherBaum)
+    private float[] kroneMeterWerteZurueckgeben(@NotNull Baum baum, @NotNull Baum otherBaum)
     {
-        return Float.compare(baum.getMetrik().getKroneMeter(), otherBaum.getMetrik().getKroneMeter());
+        float[] floats={baum.getMetrik().getKroneMeter(), otherBaum.getMetrik().getKroneMeter()};
+        return floats;
     }
     
     
-    public static int umfangZentimeterVergleichen(@NotNull Baum baum, @NotNull Baum otherBaum)
+    private float[] umfangZentimeterWerteZurueckgeben(@NotNull Baum baum, @NotNull Baum otherBaum)
     {
-        return Float.compare(baum.getMetrik().getUmfangZentimeter(), otherBaum.getMetrik().getUmfangZentimeter());
+        float[] floats={baum.getMetrik().getUmfangZentimeter(), otherBaum.getMetrik().getUmfangZentimeter()};
+        return floats;
+    }
+    
+    
+    private int wennBaumGroeszerIstVerhaeltnisZurueckgebenAnsonstenFloatVergleichen(float baum, float otherBaum)
+    {
+        int compare=Float.compare(baum,otherBaum);
+        if(compare<=0|otherBaum==0)
+        {
+            return compare;
+        }
+        else
+        {
+            return Math.abs(Math.round(baum/otherBaum))+1;
+        }
     }
  
     

@@ -28,12 +28,12 @@ public class Taxonomie
     }
     
     
-    public Taxonomie(List<String> zeileSublist)
+    public Taxonomie(List<String> stringList)
     {
-        this.artDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(0));
-        this.artBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.EINS));
-        this.gattungDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.ZWEI));
-        this.gattungBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(zeileSublist.get(Konstanten.DREI));
+        this.artDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(0));
+        this.artBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(Konstanten.EINS));
+        this.gattungDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(Konstanten.ZWEI));
+        this.gattungBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(Konstanten.DREI));
     }
     
     

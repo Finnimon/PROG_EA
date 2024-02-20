@@ -15,9 +15,9 @@ public class CSVController
 
         for (Integer index : unzulaenglicheRecordIndize.reversed())
         {
-            System.out.println(cSVRecords.get(index).toString());
             cSVRecords.remove(index.intValue());
         }
+        
         cSVParser.setCSVRecords(cSVRecords);
         
         
