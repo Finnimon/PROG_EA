@@ -1,6 +1,7 @@
 package control;
 
 import model.LineareFunktion;
+import utility.Core;
 import utility.LinearerRegressor;
 import utility.iRepairableStatistic;
 
@@ -76,13 +77,13 @@ public class StatisticalDataRepairCenter
     }
     
     
-    public HashMap<Integer, ArrayList<Float>> getRepairables()
+    private HashMap<Integer, ArrayList<Float>> getRepairables()
     {
         return repairables;
     }
     
     
-    public void setRepairables(HashMap<Integer, ArrayList<Float>> repairables)
+    private void setRepairables(HashMap<Integer, ArrayList<Float>> repairables)
     {
         this.repairables = repairables;
     }
@@ -164,7 +165,7 @@ public class StatisticalDataRepairCenter
         ArrayList<Float> averages = new ArrayList<>();
         for (ArrayList<Float> werte : getRepairables().values())
         {
-            for (int i = 0; i < werte.size(); i++)
+            for (int i = 0, size= werte.size(); i < size; i++)
             {
                 float wert = werte.get(i);
                 
@@ -180,14 +181,15 @@ public class StatisticalDataRepairCenter
                     counter = counters.get(i);
                     wert += averages.get(i);
                 }
-                catch (Exception e)
+                catch (IndexOutOfBoundsException e)
                 {
-                    counters.add(0);
-                    averages.add(10f);
+                    counters=Core.createZeroFilledIntegerArrayList(size);
+                    averages=Core.createZeroFilledFloatArrayList(size);
                     counter = 0;
                 }
                 
                 counter++;
+                
                 counters.set(i, counter);
                 
                 averages.set(i, wert);
@@ -205,7 +207,7 @@ public class StatisticalDataRepairCenter
     }
     
     
-    public ArrayList<Float> setUnknownValuesToRepaired(ArrayList<Float> repairables, ArrayList<Float> repaireds)
+    private ArrayList<Float> setUnknownValuesToRepaired(ArrayList<Float> repairables, ArrayList<Float> repaireds)
     {
         for (int i = 0; i < repairables.size(); i++)
         {
@@ -256,7 +258,9 @@ public class StatisticalDataRepairCenter
     {
         repairUpperExtremes();
         setAverages(findAvarages());
-        
+        repairEntirelyUnknowns();
+        repairUnknownsThroughRegression();
+        setIsRepaired(true);
     }
     
     
@@ -325,13 +329,20 @@ public class StatisticalDataRepairCenter
     
     
     private void repairEntirelyUnknowns()
-    
     {
         HashMap<Integer, ArrayList<Float>> repairables = getRepairables();
+        
+        
         for (Integer key : repairables.keySet())
         {
-        
+            if (!hatNurBekannteWerte(repairables.get(key))) repairables.put(key,getAverages());
         }
+        
+        
+        setRepairables(repairables);
+        iRepairableStatistic repairableStatistic = getRepairableStatistic();
+        repairableStatistic.setRepairables(repairables);
+        setRepairableStatistic(repairableStatistic);
     }
     
     

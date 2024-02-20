@@ -86,7 +86,7 @@ public class LinearerRegressor
                 {
                     zeile = zugeordneteRegressierbare.get(j);
                 }
-                catch (NullPointerException e)
+                catch (IndexOutOfBoundsException e)
                 {
                     zugeordneteRegressierbare.add(zeile = new ArrayList<>());
                 }
