@@ -20,7 +20,7 @@ public interface Messages
     String AUSGABE_ANZAHL_ERFOLGREICH_EINGELESENE_ZEILEN = "Anzahl erfolgreich eingelesener Zeilen:\t";
     
     
-    String AUSGABE_ANZAHL_ERZEUGTER_BAUM_INSTANZEN = "Anzahl erzeugter Baum-Instanzen:\t";
+    String AUSGABE_ANZAHL_ERZEUGTER_BAUM_INSTANZEN = "Anzahl erzeugter Tree-Instanzen:\t";
     
     
     String AUSGABE_ANZAHL_GELOESCHTE_DATENSAETZE="Anzahl gelöschter Datensätze:\t";
@@ -35,22 +35,22 @@ public interface Messages
     String AUSGABE_FORMAL_FALSCHE_FRAGENWAHL ="Ihre Auswahl war formal falsch. Bitte versuchen Sie es erneut.";
     
     
-    String[] FRAGEN = {AUSGABE_ANLEITUNG_FRAGENWAHL, "[1]\t\tIn welchem Bezirk steht der höchste Baum?", "[2]\t\tWelcher Baum hat den größten Umfang?", "[3]\t\tWelcher Baum hat die größte Krone?", "[4]\t\tWelcher Baum ist der älteste?", "[5]\t\tWie viele Baumarten gibt es?", "[6]\t\tWie viele Gattungen gibt es?", "[6]\t\tWelche Gattung kommt am häufigsten vor?", "[8]\t\tWelcher Bezirk hat die meisten Bäume?", "[9]\t\tIn welchem Bezirk stehen die meisten Baumarten?", "[10]\tWelche Gattung wächst am höchsten?", "[11]\tWelche Gattung hat den größten Umfang?","[12]\tWie viel Kohlenstoff wurde von den Bäumen in Berlin gespeichert?","[13]\tIn welchem Bezirk fand die größte Kohlenstoffspeicherung statt?","[14]\tWelche Gattung hat die größte Menge an Kohlenstoff gespeichert"};
+    String[] FRAGEN = {AUSGABE_ANLEITUNG_FRAGENWAHL, "[1]\t\tIn welchem Bezirk steht der höchste Tree?", "[2]\t\tWelcher Tree hat den größten Umfang?", "[3]\t\tWelcher Tree hat die größte Krone?", "[4]\t\tWelcher Tree ist der älteste?", "[5]\t\tWie viele Baumarten gibt es?", "[6]\t\tWie viele Gattungen gibt es?", "[6]\t\tWelche Gattung kommt am häufigsten vor?", "[8]\t\tWelcher Bezirk hat die meisten Bäume?", "[9]\t\tIn welchem Bezirk stehen die meisten Baumarten?", "[10]\tWelche Gattung wächst am höchsten?", "[11]\tWelche Gattung hat den größten Umfang?","[12]\tWie viel Kohlenstoff wurde von den Bäumen in Berlin gespeichert?","[13]\tIn welchem Bezirk fand die größte Kohlenstoffspeicherung statt?","[14]\tWelche Gattung hat die größte Menge an Kohlenstoff gespeichert"};
     
     
     
     String AUSGABE_PROGRAMM_BEENDEN="Das Programm wird beendet.\t";
     
-    String AUSGABE_ANTWORT_BEZIRK_MIT_DEM_GROEZSTEN_BAUM="Der höchste Baum steht im Bezirk:\t";
+    String AUSGABE_ANTWORT_BEZIRK_MIT_DEM_GROEZSTEN_BAUM="Der höchste Tree steht im Bezirk:\t";
     
     
-    String AUSGABE_ANTWORT_DICKSTER_BAUM="Baum mit dem größten Umfang:\t";
+    String AUSGABE_ANTWORT_DICKSTER_BAUM="Tree mit dem größten Umfang:\t";
     
     
-    String AUSGABE_ANTWORT_BAUM_MIT_GROESZTER_KRONE="Baum mit der größten Krone:\t";
+    String AUSGABE_ANTWORT_BAUM_MIT_GROESZTER_KRONE="Tree mit der größten Krone:\t";
     
     
-    String AUSGABE_ANTWORT_AELTESTER_BAUM="Älterster Baum:\t";
+    String AUSGABE_ANTWORT_AELTESTER_BAUM="Älterster Tree:\t";
     
     
     String AUSGABE_ANTWORT_ANZAHL_BAUMARTEN="Anzahl Baumarten:\t";

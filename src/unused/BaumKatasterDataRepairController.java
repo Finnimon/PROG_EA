@@ -1,6 +1,6 @@
 //package control;
 //
-//import model.Baum;
+//import model.Tree;
 //import model.BaumKataster;
 //
 //import java.util.HashMap;
@@ -59,7 +59,7 @@
 //    private HashMap<String, BaumKataster> sortBaumKatasterByGattung()
 //    {
 //        BaumKataster baumKataster = getBaumKataster();
-//        HashMap<String, HashMap<Integer, Baum>> sortedBaumHashMaps = sortBaumHashMapByGattungBotanisch(baumKataster.getBaumHashMap());
+//        HashMap<String, HashMap<Integer, Tree>> sortedBaumHashMaps = sortBaumHashMapByGattungBotanisch(baumKataster.getBaumHashMap());
 //
 //        HashMap<String, BaumKataster> sortedBaumKataster = new HashMap<>();
 //
@@ -73,15 +73,15 @@
 //    }
 //
 //
-//    private HashMap<String, HashMap<Integer, Baum>> sortBaumHashMapByGattungBotanisch(HashMap<Integer, Baum> baumHashMap)
+//    private HashMap<String, HashMap<Integer, Tree>> sortBaumHashMapByGattungBotanisch(HashMap<Integer, Tree> baumHashMap)
 //    {
-//        HashMap<String, HashMap<Integer, Baum>> sortedBaumHashMaps = new HashMap<>();
+//        HashMap<String, HashMap<Integer, Tree>> sortedBaumHashMaps = new HashMap<>();
 //
 //        for (Integer key : baumHashMap.keySet())
 //        {
-//            Baum baum = baumHashMap.get(key);
+//            Tree baum = baumHashMap.get(key);
 //            String sortingKey = baum.getTaxonomie().getGattungBotanisch();
-//            HashMap<Integer, Baum> currentSortingMap;
+//            HashMap<Integer, Tree> currentSortingMap;
 //
 //
 //            currentSortingMap = sortedBaumHashMaps.get(sortingKey);

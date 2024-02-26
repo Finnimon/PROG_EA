@@ -1,6 +1,6 @@
 package resources;
 
-import model.LineareFunktion;
+import model.LinearFunction;
 
 
 public interface BaumKohlenStoffSpeicherungFunktionen
@@ -10,28 +10,28 @@ public interface BaumKohlenStoffSpeicherungFunktionen
     float KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID=1f/3.67f;
     
     
-    String BOTANISCHE_GATTUNG_FICHTE="PICEA";
+    String BOTANICAL_GENUS_SPRUCE ="PICEA";
     
     
-    LineareFunktion FICHTE =new LineareFunktion(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*5000f/(60*60*42),0f);
+    LinearFunction SPRUCE =new LinearFunction(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*5000f/(60*60*42),0f);
    
     
-    String BOTANISCHE_GATTUNG_KIEFER="PINUS";
+    String BOTANICAL_GENUS_PINE ="PINUS";
     
     
-    LineareFunktion KIEFER =new LineareFunktion(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*5700f/(60*60*42),0f);
+    LinearFunction PINE =new LinearFunction(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*5700f/(60*60*42),0f);
    
     
-    String BOTANISCHE_GATTUNG_BUCHE="FAGUS";
+    String BOTANICAL_GENUS_BEECH ="FAGUS";
     
     
-    LineareFunktion BUCHE =new LineareFunktion(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*8000f/(60*60*42),0f);
+    LinearFunction BEECH =new LinearFunction(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*8000f/(60*60*42),0f);
    
     
-    String BOTANISCHE_GATTUNG_EICHE="QUERCUS";
+    String BOTANICAL_GENUS_OAK ="QUERCUS";
     
     
-    LineareFunktion EICHE =new LineareFunktion(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*7300f/(60*60*42),0f);
+    LinearFunction OAK =new LinearFunction(KOHLENSTOFF_SPEICHERUNG_PRO_KOHLENSTOFFDIOXID*7300f/(60*60*42),0f);
     
     
 }

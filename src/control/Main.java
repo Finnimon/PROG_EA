@@ -1,12 +1,10 @@
 package control;
 
-import model.Baum;
+import model.Tree;
 import model.BaumKataster;
 import utility.Core;
-import utility.MyIO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 
 
@@ -28,10 +26,10 @@ public class Main
         aufgabenController.aufgabeDreiUndFuenf(shallowRepairedBaumKataster,baumKataster);
         
         HashSet<String>Gattungen=new HashSet<>();
-        for (Baum baum  : shallowRepairedBaumKataster.getBaumHashMap().values()
+        for (Tree tree : shallowRepairedBaumKataster.getBaumHashMap().values()
              )
         {
-            Gattungen.add(baum.getTaxonomie().getGattungBotanisch());
+            Gattungen.add(tree.getTaxonomie().getGattungBotanisch());
         }
         for (String gattung:Gattungen
              )

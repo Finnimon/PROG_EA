@@ -2,12 +2,12 @@ package utility;
 
 import Services.BaumServices;
 import Services.KatasterServices;
-import model.Baum;
+import model.Tree;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Comparator;
 
-public class BaumComparator implements Comparator<Baum>
+public class BaumComparator implements Comparator<Tree>
 {
     //todo    private final Field vergleichendesField;
     
@@ -72,21 +72,21 @@ public class BaumComparator implements Comparator<Baum>
     
     
     @Override
-    public int compare(Baum baum, Baum otherBaum)
+    public int compare(Tree tree, Tree otherTree)
     {
-        if (null == baum && null == otherBaum)
+        if (null == tree && null == otherTree)
         {
             return 0;
         }
-        else if (null == baum)
+        else if (null == tree)
         {
             return -1;
         }
-        else if (null == otherBaum)
+        else if (null == otherTree)
         {
             return 1;
         }
-        float[] floats={baum.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex()),otherBaum.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex())};
+        float[] floats={tree.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex()), otherTree.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex())};
         
         return wennBaumGroeszerIstVerhaeltnisZurueckgebenAnsonstenFloatVergleichen(floats[0],floats[1]);
     }
@@ -96,29 +96,29 @@ public class BaumComparator implements Comparator<Baum>
     //region[Methoden]
     
     
-    private float[] alterWerteZurueckgeben(@NotNull Baum baum, Baum otherBaum)
+    private float[] alterWerteZurueckgeben(@NotNull Tree tree, Tree otherTree)
     {
-        float[] floats={BaumServices.bekanntesStandalterErmitteln(baum),BaumServices.bekanntesStandalterErmitteln(otherBaum)};
+        float[] floats={BaumServices.bekanntesStandalterErmitteln(tree),BaumServices.bekanntesStandalterErmitteln(otherTree)};
         return floats;
     }
     
     
-    private float[] hoeheMeterWerteZurueckgeben(@NotNull Baum baum, @NotNull Baum otherBaum)
+    private float[] hoeheMeterWerteZurueckgeben(@NotNull Tree tree, @NotNull Tree otherTree)
     {
-        return new float[]{baum.getMetrik().getHoeheMeter(),otherBaum.getMetrik().getHoeheMeter()};
+        return new float[]{tree.getMetrik().getHoeheMeter(), otherTree.getMetrik().getHoeheMeter()};
     }
     
     
-    private float[] kroneMeterWerteZurueckgeben(@NotNull Baum baum, @NotNull Baum otherBaum)
+    private float[] kroneMeterWerteZurueckgeben(@NotNull Tree tree, @NotNull Tree otherTree)
     {
-        float[] floats={baum.getMetrik().getKroneMeter(), otherBaum.getMetrik().getKroneMeter()};
+        float[] floats={tree.getMetrik().getKroneMeter(), otherTree.getMetrik().getKroneMeter()};
         return floats;
     }
     
     
-    private float[] umfangZentimeterWerteZurueckgeben(@NotNull Baum baum, @NotNull Baum otherBaum)
+    private float[] umfangZentimeterWerteZurueckgeben(@NotNull Tree tree, @NotNull Tree otherTree)
     {
-        float[] floats={baum.getMetrik().getUmfangZentimeter(), otherBaum.getMetrik().getUmfangZentimeter()};
+        float[] floats={tree.getMetrik().getUmfangZentimeter(), otherTree.getMetrik().getUmfangZentimeter()};
         return floats;
     }
     

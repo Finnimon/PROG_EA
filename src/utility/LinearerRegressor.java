@@ -1,8 +1,7 @@
 package utility;
 
-import model.LineareFunktion;
+import model.LinearFunction;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class LinearerRegressor
@@ -38,9 +37,9 @@ public class LinearerRegressor
     //region [Methoden]
     
     
-    public ArrayList<LineareFunktion> alleRegressierenZurBasis(ArrayList<ArrayList<Float>> regressierbare)
+    public ArrayList<LinearFunction> alleRegressierenZurBasis(ArrayList<ArrayList<Float>> regressierbare)
     {
-        ArrayList<LineareFunktion> regressionen = new ArrayList<>();
+        ArrayList<LinearFunction> regressionen = new ArrayList<>();
         
         int basisIndex = getBasisIndex();
         
@@ -50,7 +49,7 @@ public class LinearerRegressor
         {
             if (i == basisIndex)
             {
-                regressionen.add(new LineareFunktion(1f, 0));
+                regressionen.add(new LinearFunction(1f, 0));
                 continue;
             }
             
@@ -88,7 +87,7 @@ public class LinearerRegressor
     }
     
     
-    private LineareFunktion regressieren(ArrayList<Float> x, ArrayList<Float> y)
+    private LinearFunction regressieren(ArrayList<Float> x, ArrayList<Float> y)
     {
         int anzahlRegressierterElemente = x.size();
         
@@ -110,7 +109,7 @@ public class LinearerRegressor
         }
         float steigung = steigungBerechnen(summeX, summeY, summeXY, summeXX, anzahlRegressierterElemente);
         
-        return new LineareFunktion(steigung, yAchsenAbschnittBerechnen(summeX, summeY, steigung, anzahlRegressierterElemente));
+        return new LinearFunction(steigung, yAchsenAbschnittBerechnen(summeX, summeY, steigung, anzahlRegressierterElemente));
     }
     
     

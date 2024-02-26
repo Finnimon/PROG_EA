@@ -1,6 +1,6 @@
 package Services;
 
-import model.Baum;
+import model.Tree;
 import model.Metrik;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
@@ -11,7 +11,7 @@ import java.util.Objects;
 public class BaumServices
 {
     
-    public static void baumPruefen(Baum baum)
+    public static void baumPruefen(Tree tree)
     {
     //todo und reparieren
     }
@@ -64,11 +64,11 @@ public class BaumServices
     }
     
     
-    public static int bekanntesStandalterErmitteln(@NotNull Baum baum)
+    public static int bekanntesStandalterErmitteln(@NotNull Tree tree)
     {
         
         
-        Metrik metrik = baum.getMetrik();
+        Metrik metrik = tree.getMetrik();
         
         int standalter=0;
         

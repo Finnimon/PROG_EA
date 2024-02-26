@@ -1,11 +1,11 @@
 package utility;
 
-import model.Baum;
+import model.Tree;
 
 import java.util.Comparator;
 import java.util.Map;
 
-public class BaumKatasterEntryComparator implements Comparator<Map.Entry<Integer, Baum>>
+public class BaumKatasterEntryComparator implements Comparator<Map.Entry<Integer, Tree>>
 {
     
     
@@ -40,7 +40,7 @@ public class BaumKatasterEntryComparator implements Comparator<Map.Entry<Integer
     
     
     @Override
-    public int compare(Map.Entry<Integer, Baum> entry1, Map.Entry<Integer, Baum> entry2)
+    public int compare(Map.Entry<Integer, Tree> entry1, Map.Entry<Integer, Tree> entry2)
     {
             return getBaumComparator().compare(entry1.getValue(),entry2.getValue());
     }

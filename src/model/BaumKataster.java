@@ -14,7 +14,7 @@ public class BaumKataster implements iRepairableStatistic
     private final ArrayList<Float> permissableMaxima;
 
     
-    private HashMap<Integer, Baum> baumHashMap;
+    private HashMap<Integer, Tree> baumHashMap;
     
     
     private HashSet<Integer> deletedDataSetKeys = new HashSet<>();
@@ -28,7 +28,7 @@ public class BaumKataster implements iRepairableStatistic
         this.permissableMaxima = permissableMaxima;
         
         
-        HashMap<Integer, Baum> baeume = new HashMap<>();
+        HashMap<Integer, Tree> baeume = new HashMap<>();
         
         for (CSVRecord cSVRecord : cSV)
         {
@@ -36,7 +36,7 @@ public class BaumKataster implements iRepairableStatistic
             try
             {
                 //keep first remove next
-                baeume.putIfAbsent(Integer.parseInt(record.getFirst()), Baum.create(record.subList(Konstanten.EINS, Konstanten.ZWOELF)));
+                baeume.putIfAbsent(Integer.parseInt(record.getFirst()), Tree.create(record.subList(Konstanten.EINS, Konstanten.ZWOELF)));
             }
             catch (Exception e)
             {
@@ -49,14 +49,14 @@ public class BaumKataster implements iRepairableStatistic
   
     
     
-    public BaumKataster(List<Map.Entry<Integer, Baum>> list, ArrayList<Float> permissableMaxima)
+    public BaumKataster(List<Map.Entry<Integer, Tree>> list, ArrayList<Float> permissableMaxima)
     {
         this.permissableMaxima = permissableMaxima;
         
         
-        HashMap<Integer, Baum> baumHashMap = new HashMap<>();
+        HashMap<Integer, Tree> baumHashMap = new HashMap<>();
         
-        for (Map.Entry<Integer, Baum> entry : list)
+        for (Map.Entry<Integer, Tree> entry : list)
         {
             baumHashMap.put(entry.getKey(), entry.getValue());
         }
@@ -66,7 +66,7 @@ public class BaumKataster implements iRepairableStatistic
     }
     
     
-    public BaumKataster(HashMap<Integer, Baum> baeume, ArrayList<Float> permissableMaxima)
+    public BaumKataster(HashMap<Integer, Tree> baeume, ArrayList<Float> permissableMaxima)
     {
         setBaumHashMap(baeume);
         this.permissableMaxima = permissableMaxima;
@@ -74,13 +74,13 @@ public class BaumKataster implements iRepairableStatistic
     
     
     
-    public HashMap<Integer, Baum> getBaumHashMap()
+    public HashMap<Integer, Tree> getBaumHashMap()
     {
         return this.baumHashMap;
     }
     
     
-    private void setBaumHashMap(HashMap<Integer, Baum> baeumeMap)
+    private void setBaumHashMap(HashMap<Integer, Tree> baeumeMap)
     {
         this.baumHashMap = baeumeMap;
     }
@@ -117,7 +117,7 @@ public class BaumKataster implements iRepairableStatistic
     {
         StringBuilder stringbuilder = new StringBuilder();
         
-        HashMap<Integer, Baum> baumMap = getBaumHashMap();
+        HashMap<Integer, Tree> baumMap = getBaumHashMap();
         List<Integer> sortedKeyList=baumMap.keySet().stream().toList();
         Collections.sort(sortedKeyList);
         for (Integer key : sortedKeyList)
@@ -140,7 +140,7 @@ public class BaumKataster implements iRepairableStatistic
     @Override
     public HashMap<Integer, ArrayList<Float>> getRepairableFloats()
     {
-        HashMap<Integer, Baum> baumKataster = getBaumHashMap();
+        HashMap<Integer, Tree> baumKataster = getBaumHashMap();
         HashMap<Integer, ArrayList<Float>> repairables = new HashMap<>();
         
         for (Integer key : baumKataster.keySet())
@@ -155,19 +155,19 @@ public class BaumKataster implements iRepairableStatistic
     @Override
     public void setRepairableFloats(HashMap<Integer, ArrayList<Float>> repairedFloats)
     {
-        HashMap<Integer, Baum> baumMap = getBaumHashMap();
+        HashMap<Integer, Tree> baumMap = getBaumHashMap();
         HashSet<Integer> editedDataSetKeys = getEditedDataSetKeys();
         
         for (Integer key : repairedFloats.keySet())
         {
-            Baum baum = baumMap.get(key);
+            Tree tree = baumMap.get(key);
             ArrayList<Float> repairables = repairedFloats.get(key);
             
-            if(repairables.equals(baum.getRepairables())) continue;
+            if(repairables.equals(tree.getRepairables())) continue;
             
             editedDataSetKeys.add(key);
-            baum.setRepairables(repairedFloats.get(key));
-            baumMap.put(key, baum);
+            tree.setRepairables(repairedFloats.get(key));
+            baumMap.put(key, tree);
         }
         
         setEditedDataSetKeys(editedDataSetKeys);
@@ -179,7 +179,7 @@ public class BaumKataster implements iRepairableStatistic
     public HashSet<Integer> getDeletableDataSetKeys()
     {
         HashSet<Integer> deletableDataSets = new HashSet<>();
-        HashMap<Integer, Baum> baumMap = getBaumHashMap();
+        HashMap<Integer, Tree> baumMap = getBaumHashMap();
         for (Integer key : baumMap.keySet())
         {
             if (baumMap.get(key).isEmpty())
@@ -196,7 +196,7 @@ public class BaumKataster implements iRepairableStatistic
     @Override
     public void deleteDataSetsOfKeySet(HashSet<Integer> deletableKeySet)
     {
-        HashMap<Integer, Baum> dataSets = getBaumHashMap();
+        HashMap<Integer, Tree> dataSets = getBaumHashMap();
         HashSet<Integer> deletedDataSets = getDeletedDataSetKeys();
         
         for (Integer key : deletableKeySet)
@@ -235,8 +235,8 @@ public class BaumKataster implements iRepairableStatistic
     @Override
     public BaumKataster clone()
     {
-        HashMap<Integer,Baum> newBaumHashMap = new HashMap<>();
-        HashMap<Integer,Baum> baumHashMap =getBaumHashMap();
+        HashMap<Integer, Tree> newBaumHashMap = new HashMap<>();
+        HashMap<Integer, Tree> baumHashMap =getBaumHashMap();
         for (Integer key : baumHashMap.keySet())
         {
             newBaumHashMap.put(key, baumHashMap.get(key).clone());

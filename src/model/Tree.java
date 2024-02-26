@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Baum implements Comparable<Baum>, iRepairable
+public class Tree implements Comparable<Tree>, iRepairable
 {
     
     
@@ -39,7 +39,7 @@ public class Baum implements Comparable<Baum>, iRepairable
     //region[create]
     
     
-    private Baum(Ort ort, Taxonomie taxonomie, Metrik metrik)
+    private Tree(Ort ort, Taxonomie taxonomie, Metrik metrik)
     {
         this.ort = ort;
         this.taxonomie = taxonomie;
@@ -47,7 +47,7 @@ public class Baum implements Comparable<Baum>, iRepairable
     }
     
     
-    private Baum(List<String> record) throws ElementFaultyException
+    private Tree(List<String> record) throws ElementFaultyException
     {
         if (record.isEmpty() | record.size() != NOTWENDIGE_ZEILENLAENGE)
         {
@@ -63,9 +63,9 @@ public class Baum implements Comparable<Baum>, iRepairable
     
     
     @Contract("_ -> new")
-    public static @NotNull Baum create(List<String> record) throws ElementFaultyException
+    public static @NotNull Tree create(List<String> record) throws ElementFaultyException
     {
-        return new Baum(record);
+        return new Tree(record);
     }
     
     //endregion
@@ -73,15 +73,15 @@ public class Baum implements Comparable<Baum>, iRepairable
     
     
     @Contract("_, _, _ -> new")
-    public static @NotNull Baum create(Ort ort, Taxonomie taxonomie, Metrik metrik)
+    public static @NotNull Tree create(Ort ort, Taxonomie taxonomie, Metrik metrik)
     {
-        return new Baum(ort, taxonomie, metrik);
+        return new Tree(ort, taxonomie, metrik);
     }
     
     
-    public static Baum create(@NotNull CSVRecord cSVRecord) throws ElementFaultyException
+    public static Tree create(@NotNull CSVRecord cSVRecord) throws ElementFaultyException
     {
-        return new Baum(cSVRecord.getRecord().subList(INDEX_BEGINN_BAUM, INDEX_ENDE_BAUM));
+        return new Tree(cSVRecord.getRecord().subList(INDEX_BEGINN_BAUM, INDEX_ENDE_BAUM));
     }
     
     
@@ -135,7 +135,7 @@ public class Baum implements Comparable<Baum>, iRepairable
     
     
     @Override
-    public int compareTo(@NotNull Baum o)
+    public int compareTo(@NotNull Tree o)
     {
         //todo voll scheiße
         return 0;
@@ -166,18 +166,18 @@ public class Baum implements Comparable<Baum>, iRepairable
     
     
     @Override
-    public Baum clone()
+    public Tree clone()
     {
         try
         {
-            Baum clone = (Baum) super.clone();
+            Tree clone = (Tree) super.clone();
         }
         catch (CloneNotSupportedException e)
         {
         }
         
         
-        return new Baum(getOrt().clone(), getTaxonomie().clone(), getMetrik().clone());
+        return new Tree(getOrt().clone(), getTaxonomie().clone(), getMetrik().clone());
     }
     
     

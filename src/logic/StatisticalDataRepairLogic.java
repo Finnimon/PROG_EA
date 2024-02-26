@@ -1,7 +1,7 @@
 package logic;
 
 import control.StatisticalDataRepairCenter;
-import model.LineareFunktion;
+import model.LinearFunction;
 import utility.Core;
 import utility.LinearerRegressor;
 import utility.iRepairableStatistic;
@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 /**
  * @Summary: This record contains static methods that can be used to repair {@link iRepairableStatistic}. These should be seen as helper methods for {@link StatisticalDataRepairCenter} and not be used outside that context.
- * @Custom.Author: Finn Lindig
- * @Custom.Since: 26.02.2024
+ * @Author: Finn Lindig
+ * @Since: 26.02.2024
  */
 public record StatisticalDataRepairLogic()
 {
@@ -202,7 +202,7 @@ public record StatisticalDataRepairLogic()
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
         float unknown = repairableStatistic.getUnknown();
         
-        ArrayList<LineareFunktion> lineareRegressionen = new LinearerRegressor(indexRegressionBasis).alleRegressierenZurBasis(new ArrayList<>(repairables.values()));
+        ArrayList<LinearFunction> lineareRegressionen = new LinearerRegressor(indexRegressionBasis).alleRegressierenZurBasis(new ArrayList<>(repairables.values()));
         
         for (Integer key : repairables.keySet())
         {
@@ -222,7 +222,7 @@ public record StatisticalDataRepairLogic()
             {
                 int ersterBekannterWertIndex = findIndexOfFirstKnownValue(repairableFloats, repairableStatistic.getUnknown());
                 
-                x = lineareRegressionen.get(ersterBekannterWertIndex).inverseFVonY(repairableFloats.get(ersterBekannterWertIndex));
+                x = lineareRegressionen.get(ersterBekannterWertIndex).inverse(repairableFloats.get(ersterBekannterWertIndex));
             }
             else
             {
@@ -232,7 +232,7 @@ public record StatisticalDataRepairLogic()
             
             for (int i = 0; i < repairableFloats.size(); i++)
             {
-                repairedFloats.add(lineareRegressionen.get(i).fVonX(x));
+                repairedFloats.add(lineareRegressionen.get(i).f(x));
             }
             
             

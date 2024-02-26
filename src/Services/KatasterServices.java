@@ -1,7 +1,7 @@
 package Services;
 
-import logic.BaumKohlenStoffSpeicherungsBerechner;
-import model.Baum;
+import logic.TreeContainedCarbonCalculator;
+import model.Tree;
 import model.BaumKataster;
 import model.Metrik;
 import org.jetbrains.annotations.NotNull;
@@ -90,22 +90,22 @@ public class KatasterServices
     {
         HashSet<String> set = new HashSet<>();
         
-        HashMap<Integer, Baum> baumBaum = baumKataster.getBaumHashMap();
+        HashMap<Integer, Tree> baumBaum = baumKataster.getBaumHashMap();
         String string;
         
         if (attribut == INDEX_BAUMARTEN_ZAEHLEN)
         {
-            for (Baum baum : baumBaum.values())
+            for (Tree tree : baumBaum.values())
             {
-                string = baum.getTaxonomie().getArtBotanisch();
+                string = tree.getTaxonomie().getArtBotanisch();
                 set.add(string);
             }
         }
         else if (attribut == INDEX_GATTUNGEN_ZAEHLEN)
         {
-            for (Baum baum : baumBaum.values())
+            for (Tree tree : baumBaum.values())
             {
-                string = baum.getTaxonomie().getGattungBotanisch();
+                string = tree.getTaxonomie().getGattungBotanisch();
                 set.add(string);
             }
         }
@@ -124,20 +124,20 @@ public class KatasterServices
     //todo yikes
     private static String haeufigsteGattungBezirkZaehlen(BaumKataster baumKataster, int fragenIndex)
     {
-        HashMap<Integer, Baum> baeume = baumKataster.getBaumHashMap();
+        HashMap<Integer, Tree> baeume = baumKataster.getBaumHashMap();
         HashMap<String, Integer> hashMap = new HashMap<>();
         
         String attribut = new String();
         
-        for (Baum baum : baeume.values())
+        for (Tree tree : baeume.values())
         {
             if (fragenIndex == INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN)
             {
-                attribut = baum.getTaxonomie().getGattungBotanisch();
+                attribut = tree.getTaxonomie().getGattungBotanisch();
             }
             else if (fragenIndex == INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
             {
-                attribut = baum.getOrt().getBezirk();
+                attribut = tree.getOrt().getBezirk();
             }
             else
             {
@@ -183,9 +183,9 @@ public class KatasterServices
     {
         HashMap<String, HashSet<String>> hashMap = new HashMap<>();
         
-        for (Baum baum : baumKataster.getBaumHashMap().values())
+        for (Tree tree : baumKataster.getBaumHashMap().values())
         {
-            String bezirk = baum.getOrt().getBezirk();
+            String bezirk = tree.getOrt().getBezirk();
             
             HashSet<String> bezirke = hashMap.get(bezirk);
             
@@ -207,14 +207,14 @@ public class KatasterServices
     {
         HashMap<String, Float> averages = new HashMap<>();
         HashMap<String, Integer> counters = new HashMap<>();
-        for (Baum baum : baumKataster.getBaumHashMap().values())
+        for (Tree tree : baumKataster.getBaumHashMap().values())
         {
-            String gattung = baum.getTaxonomie().getGattungBotanisch();
+            String gattung = tree.getTaxonomie().getGattungBotanisch();
             
             float wert;
             int counter = 0;
             
-            Metrik metrik = baum.getMetrik();
+            Metrik metrik = tree.getMetrik();
             if (attribut == INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
             {
                 wert = metrik.getUmfangZentimeter();
@@ -261,11 +261,11 @@ public class KatasterServices
     
     private static Float kohlenStoffSpeicherungInsgesamtBerechnen(BaumKataster baumKataster)
     {
-        BaumKohlenStoffSpeicherungsBerechner baumKohlenStoffSpeicherungsBerechner=new BaumKohlenStoffSpeicherungsBerechner();
+        TreeContainedCarbonCalculator treeContainedCarbonCalculator =new TreeContainedCarbonCalculator();
         float kohlenStoffSpeicherungInsgesamt = 0;
-        for (Baum baum : baumKataster.getBaumHashMap().values())
+        for (Tree tree : baumKataster.getBaumHashMap().values())
         {
-            kohlenStoffSpeicherungInsgesamt+= baumKohlenStoffSpeicherungsBerechner.speicherungInKiloGrammFuerEinzelBaumBerechnen(baum);
+            kohlenStoffSpeicherungInsgesamt+= treeContainedCarbonCalculator.speicherungInKiloGrammFuerEinzelBaumBerechnen(tree);
         }
         
         
@@ -276,25 +276,25 @@ public class KatasterServices
     private static String kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(BaumKataster robusterBaumKataster, int fragenIndex)
     {
         
-        BaumKohlenStoffSpeicherungsBerechner baumKohlenStoffSpeicherungsBerechner=new BaumKohlenStoffSpeicherungsBerechner();
+        TreeContainedCarbonCalculator treeContainedCarbonCalculator =new TreeContainedCarbonCalculator();
         HashMap<String, Float> kohlenStoffSpeicherungNachBezirkOderGattung = new HashMap<>();
-        for (Baum baum: robusterBaumKataster.getBaumHashMap().values())
+        for (Tree tree : robusterBaumKataster.getBaumHashMap().values())
         {
             String key;
             if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK)
             {
-                key = baum.getOrt().getBezirk();
+                key = tree.getOrt().getBezirk();
             }
             else if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
             {
-                key = baum.getTaxonomie().getGattungBotanisch();
+                key = tree.getTaxonomie().getGattungBotanisch();
             }
             else
             {
                 throw new IllegalArgumentException();
             }
             
-            float wert = baumKohlenStoffSpeicherungsBerechner.speicherungInKiloGrammFuerEinzelBaumBerechnen(baum);
+            float wert = treeContainedCarbonCalculator.speicherungInKiloGrammFuerEinzelBaumBerechnen(tree);
             
             if (kohlenStoffSpeicherungNachBezirkOderGattung.containsKey(key))
             {

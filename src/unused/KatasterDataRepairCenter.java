@@ -1,6 +1,6 @@
 //package control;
 //
-//import model.Baum;
+//import model.Tree;
 //import model.BaumKataster;
 //import utility.BaumComparator;
 //import utility.BaumKatasterEntryComparator;
@@ -61,16 +61,16 @@
 //    }
 //
 //
-//    private HashMap<String, HashMap<Integer, Baum>> katasterSortieren(BaumKataster baumKataster)
+//    private HashMap<String, HashMap<Integer, Tree>> katasterSortieren(BaumKataster baumKataster)
 //    {
-//        HashMap<String, HashMap<Integer, Baum>> sortierterKataster = new HashMap<>();
-//        HashMap<Integer, Baum> baeume = baumKataster.getBaumKataster();
+//        HashMap<String, HashMap<Integer, Tree>> sortierterKataster = new HashMap<>();
+//        HashMap<Integer, Tree> baeume = baumKataster.getBaumKataster();
 //
 //        for (int key : baeume.keySet())
 //        {
-//            HashMap<Integer, Baum> spezifischeBaeume;
+//            HashMap<Integer, Tree> spezifischeBaeume;
 //
-//            Baum baum = baeume.get(key);
+//            Tree baum = baeume.get(key);
 //
 //            String artBotanisch = baum.getTaxonomie().getArtBotanisch();
 //            try
@@ -133,9 +133,9 @@
 //    //    {
 //    //        if(!getIstRepariert()) throw new Exception();
 //    //
-//    //        HashMap<Integer, Baum> reparierteBaume = new HashMap<>();
+//    //        HashMap<Integer, Tree> reparierteBaume = new HashMap<>();
 //    //
-//    //        for (HashMap<Integer, Baum> spezifischeBaeume : getSortierteBaeume().values())
+//    //        for (HashMap<Integer, Tree> spezifischeBaeume : getSortierteBaeume().values())
 //    //        {
 //    //            reparierteBaume.putAll(spezifischeBaeume);
 //    //        }
@@ -151,7 +151,7 @@
 //
 //    public void alleExtremenEntriesVonBaumKatasterEntfernen()
 //    {
-//        ArrayList<Map.Entry<Integer, Baum>> sortierterBaumKataster = new ArrayList<>(getBaumKataster().getBaumKataster().entrySet());
+//        ArrayList<Map.Entry<Integer, Tree>> sortierterBaumKataster = new ArrayList<>(getBaumKataster().getBaumKataster().entrySet());
 //
 //        for (Integer baumComparatorErlaubterAttributIndex : BaumComparator.getErlaubteAttributIndize())
 //        {
@@ -167,7 +167,7 @@
 //    }
 //
 //
-//    private ArrayList<Map.Entry<Integer, Baum>> extremeEntriesStatisticallyRobustEntfernen(ArrayList<Map.Entry<Integer, Baum>> arrayList, int attributIndex)
+//    private ArrayList<Map.Entry<Integer, Tree>> extremeEntriesStatisticallyRobustEntfernen(ArrayList<Map.Entry<Integer, Tree>> arrayList, int attributIndex)
 //    {
 //        //this sucks
 //        boolean condition;
@@ -181,7 +181,7 @@
 //    }
 //
 //
-//    private float[] quartileFinden(ArrayList<Map.Entry<Integer, Baum>> arrayList, int attributIndex)
+//    private float[] quartileFinden(ArrayList<Map.Entry<Integer, Tree>> arrayList, int attributIndex)
 //    {
 //        int arrayListSize = arrayList.size();
 //        return new float[]{arrayList.get(Math.round(arrayListSize / 4)).getValue().getMetrik().getAtrributNachBaumComparatorIndex(attributIndex), arrayList.get(Math.round(arrayListSize * 3 / 4)).getValue().getMetrik().getAtrributNachBaumComparatorIndex(attributIndex)};

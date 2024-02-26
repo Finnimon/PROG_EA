@@ -1,6 +1,5 @@
 package control;
 
-import logic.BaumKohlenStoffSpeicherungsBerechner;
 import model.BaumKataster;
 import model.CSVRecord;
 import resources.Konstanten;
@@ -12,7 +11,6 @@ import utility.MyIO;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AufgabenController
 {
