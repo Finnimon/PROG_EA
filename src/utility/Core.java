@@ -6,7 +6,21 @@ public class Core
 {
     
     
-    public static String keyStringDesGroesztenWertIntegerInHashMapFinden(HashMap<String,Integer> hashMap)
+    public static ArrayList<Float> parseStringArrayIntoFloatArrayList(String[] stringArray)
+    {
+        ArrayList<Float> floats=new ArrayList<>();
+        for (String string:stringArray
+             )
+        {
+            floats.add(Float.parseFloat(string));
+        }
+        
+        
+        return floats;
+    }
+    
+    
+    public static String keyStringDesGroesztenWertIntegerInHashMapFinden(HashMap<String, Integer> hashMap)
     {
         return Collections.max(hashMap.entrySet(), Comparator.comparingInt(Map.Entry::getValue)).getKey();
     }
@@ -14,8 +28,8 @@ public class Core
     
     public static ArrayList<Float> createZeroFilledFloatArrayList(int size)
     {
-        ArrayList<Float> zeroFilledArrayList=new ArrayList<>();
-
+        ArrayList<Float> zeroFilledArrayList = new ArrayList<>();
+        
         for (int i = 0; i < size; i++)
         {
             zeroFilledArrayList.add(0f);
@@ -28,7 +42,7 @@ public class Core
     
     public static ArrayList<Integer> createZeroFilledIntegerArrayList(int size)
     {
-        ArrayList<Integer> zeroFilledArrayList=new ArrayList<>();
+        ArrayList<Integer> zeroFilledArrayList = new ArrayList<>();
         
         for (int i = 0; i < size; i++)
         {
@@ -37,6 +51,28 @@ public class Core
         
         
         return zeroFilledArrayList;
+    }
+    
+    
+    public static <T> boolean areAllValuesInCollectionEqualToSpecificValue(Collection<T> collection, T specificValue)
+    {
+        for (T value : collection)
+        {
+            if (!value.equals(specificValue))
+            {
+                return false;
+            }
+        }
+        
+        
+        return true;
+    }
+    
+    
+    public static String capitalizeAndTrimString(String string)
+    {
+        string=string.trim();
+        return string.toUpperCase();
     }
     
     

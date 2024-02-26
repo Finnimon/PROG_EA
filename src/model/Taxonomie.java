@@ -2,21 +2,36 @@ package model;
 
 import Services.BaumServices;
 import resources.Konstanten;
+import resources.Messages;
 import resources.Strings;
+import utility.Core;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Taxonomie
+public class Taxonomie implements Cloneable
 {
-    //todo nicht abkürzen
+    
+    
+    private final int INDEX_ART_DEUTSCH = 0;
+    
+    private final int INDEX_ART_BOTANISCH = 1;
+    
+    private final int INDEX_GATTUNG_DEUTSCH = 2;
+    
+    private final int INDEX_GATTUNG_BOTANISCH = 3;
+    
+    
     private final String artBotanisch;
+    
     
     private final String artDeutsch;
     
+    
     private final String gattungBotanisch;
     
-    private final String gattungDeutsch;
     
+    private final String gattungDeutsch;
     
     
     public Taxonomie(String artBotanisch, String artDeutsch, String gattungBotanisch, String gattungDeutsch)
@@ -30,10 +45,10 @@ public class Taxonomie
     
     public Taxonomie(List<String> stringList)
     {
-        this.artDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(0));
-        this.artBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(Konstanten.EINS));
-        this.gattungDeutsch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(Konstanten.ZWEI));
-        this.gattungBotanisch = BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(stringList.get(Konstanten.DREI));
+        this.artDeutsch = geeignetenStringFuerEinheitlichkeitZurueckgeben(stringList.get(INDEX_ART_DEUTSCH));
+        this.artBotanisch = geeignetenStringFuerEinheitlichkeitZurueckgeben(stringList.get(INDEX_ART_BOTANISCH));
+        this.gattungDeutsch = geeignetenStringFuerEinheitlichkeitZurueckgeben(stringList.get(INDEX_GATTUNG_DEUTSCH));
+        this.gattungBotanisch = geeignetenStringFuerEinheitlichkeitZurueckgeben(stringList.get(INDEX_GATTUNG_BOTANISCH));
     }
     
     
@@ -62,6 +77,24 @@ public class Taxonomie
     }
     
     
+    public ArrayList<String> getAll()
+    {
+        ArrayList<String> werte = new ArrayList<>();
+
+        werte.add(getArtDeutsch());
+        werte.add(getArtBotanisch());
+        werte.add(getGattungDeutsch());
+        werte.add(getGattungBotanisch());
+        
+        
+        return werte;
+    }
+    
+    
+    private String geeignetenStringFuerEinheitlichkeitZurueckgeben(String string)
+    {
+        return BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(Core.capitalizeAndTrimString(string));
+    }
     
     
     @Override
@@ -69,24 +102,26 @@ public class Taxonomie
     {
         StringBuilder stringBuilder = new StringBuilder();
         
-        stringBuilder.append(Strings.BAUMART);
+        stringBuilder.append(Messages.BAUMART);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(getArtDeutsch());
         stringBuilder.append(Strings.SCHRAEGSTRICH);
         stringBuilder.append(getArtBotanisch());
         stringBuilder.append(Strings.CRLF);
-        stringBuilder.append(Strings.GATTUNG);
+        stringBuilder.append(Messages.GATTUNG);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(getGattungDeutsch());
         stringBuilder.append(Strings.SCHRAEGSTRICH);
         stringBuilder.append(getGattungBotanisch());
-
         
         
         return stringBuilder.toString();
     }
     
     
-    
-    
+    @Override
+    protected Taxonomie clone()
+    {
+        return new Taxonomie(this.getAll());
+    }
 }

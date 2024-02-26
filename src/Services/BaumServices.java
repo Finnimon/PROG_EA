@@ -17,9 +17,6 @@ public class BaumServices
     }
     
     
-    //region[Methoden]
-    
-    
     public static String ausgabeStringUnbekanntesAttributZurueckgeben(int attribut)
     {
         if (bekanntheitPruefen(attribut))
@@ -87,9 +84,6 @@ public class BaumServices
         
         return standalter;
     }
-    
-    
-    //endregion
     
     
 }

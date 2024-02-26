@@ -47,20 +47,21 @@ public interface Konstanten
     
     int UNBEKANNT = Konstanten.MINUSEINS;
     
-    
-    float HOECHSTER_BAUM_BERLINS_HOEHE = 44f;
-    
-    
-    int AELTESTER_BAUM_BERLINS_ALTER = 900;
-    
-    
-    float DICKSTER_BAUM_BERLINS_UMFANG_ZENTIMETER = 775f;
-    
-    
-    //https://www.baumpflegeportal.de/aktuell/starke-baumtypen-die-linde-von-schenklengsfeld/
-    float GROESZTER_KRONEN_DURCHMESSER_DEUTSCHLANDS=25;
-    
-    
-    int ERLAUBTE_ANZAHL_LEERE_WERTE_IN_CSVRECORDS = 5;
-    
+//    FLOAT MAXIMUM
+//
+//    float HOECHSTER_BAUM_BERLINS_HOEHE = 43.5f;
+//
+//
+//    int AELTESTER_BAUM_BERLINS_ALTER = 917;
+//
+//
+//    float DICKSTER_BAUM_BERLINS_UMFANG_ZENTIMETER = 775f;
+//
+//
+//    //https://www.baumpflegeportal.de/aktuell/starke-baumtypen-die-linde-von-schenklengsfeld/
+//    float GROESZTER_KRONEN_DURCHMESSER_DEUTSCHLANDS=25;
+//
+//
+//    int ERLAUBTE_ANZAHL_LEERE_WERTE_IN_CSVRECORDS = 5;
+//
 }

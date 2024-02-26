@@ -2,7 +2,7 @@ package utility;
 
 import java.util.ArrayList;
 
-public interface iRepairable
+public interface iRepairable extends Cloneable
 {
     
     
@@ -12,8 +12,7 @@ public interface iRepairable
     public ArrayList<Float> getRepairables();
     
     
-    //todo divide by 10 until it is correct
-    public ArrayList<Float> getPermissableMaxima();
+    public boolean isEmpty();
     
     
 }

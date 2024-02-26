@@ -2,9 +2,12 @@ package model;
 
 import Services.BaumServices;
 import Services.KatasterServices;
+import control.Main;
 import resources.Konstanten;
+import resources.Messages;
 import resources.Strings;
 import utility.BaumComparator;
+import utility.Core;
 import utility.Parser;
 import utility.iRepairable;
 
@@ -13,36 +16,40 @@ import java.util.List;
 
 public class Metrik implements iRepairable
 {
-    
+    //    FLOAT MAXIMUM
+    //
+    //    float HOECHSTER_BAUM_BERLINS_HOEHE = 43.5f;
+    //
+    //
+    //    int AELTESTER_BAUM_BERLINS_ALTER = 917;
+    //
+    //
+    //    float DICKSTER_BAUM_BERLINS_UMFANG_ZENTIMETER = 775f;
+    //
+    //
+    //    //https://www.baumpflegeportal.de/aktuell/starke-baumtypen-die-linde-von-schenklengsfeld/
+    //    float GROESZTER_KRONEN_DURCHMESSER_DEUTSCHLANDS=25;
+    //
+    //
+    //    int ERLAUBTE_ANZAHL_LEERE_WERTE_IN_CSVRECORDS = 5;
+    //
     
     //region [Konstanten]
     
     
-    private final static float MAXIMUM_PERMISSABLE_STANDALTER = Konstanten.AELTESTER_BAUM_BERLINS_ALTER;
+    public static final int INDEX_PFLANZJAHR = 0;
     
     
-    private final static float MAXIMUM_PERMISSABLE_KRONE_METER = Konstanten.GROESZTER_KRONEN_DURCHMESSER_DEUTSCHLANDS;
+    private static final int INDEX_STANDALTER = 1;
     
     
-    private final static float MAXIMUM_PERMISSABLE_UMFANG_ZENTIMETER = Konstanten.DICKSTER_BAUM_BERLINS_UMFANG_ZENTIMETER;
+    private static final int INDEX_KRONEMETER = 2;
     
     
-    private final static float MAXIMUM_PERMISSABLE_HOEHE = Konstanten.HOECHSTER_BAUM_BERLINS_HOEHE;
+    private static final int INDEX_UMFANG_ZENTIMETER = 3;
     
     
-    private final int INDEX_PFLANZJAHR = 0;
-    
-    
-    private final int INDEX_STANDALTER = 1;
-    
-    
-    private final int INDEX_KRONEMETER = 2;
-    
-    
-    private final int INDEX_UMFANG_ZENTIMETER = 3;
-    
-    
-    private final int INDEX_HOEHE_METER = 4;
+    private static final int INDEX_HOEHE_METER = 4;
     
     
     //endregion
@@ -73,22 +80,13 @@ public class Metrik implements iRepairable
     }
     
     
-    //endregion
-    //region [GetSet]
-    
-    
-    public ArrayList<Float> getPermissableMaxima()
+    public Metrik(int pflanzJahr, int standAlter, float kroneMeter, float umfangZentimeter, float hoeheMeter)
     {
-        ArrayList<Float> permissableMaximums = new ArrayList<>();
-        
-        permissableMaximums.add((float) KatasterServices.JAHR_DER_ERHEBUNG);
-        permissableMaximums.add(MAXIMUM_PERMISSABLE_STANDALTER);
-        permissableMaximums.add(MAXIMUM_PERMISSABLE_KRONE_METER);
-        permissableMaximums.add(MAXIMUM_PERMISSABLE_UMFANG_ZENTIMETER);
-        permissableMaximums.add(MAXIMUM_PERMISSABLE_HOEHE);
-        
-        
-        return permissableMaximums;
+        this.pflanzJahr = pflanzJahr;
+        this.standAlter = standAlter;
+        this.kroneMeter = kroneMeter;
+        this.umfangZentimeter = umfangZentimeter;
+        this.hoeheMeter = hoeheMeter;
     }
     
     
@@ -207,7 +205,16 @@ public class Metrik implements iRepairable
     
     public void setAlter(int pflanzJahr, int standAlter)
     {//todo!!!!!!!!!!!!!!
-        if (standAlter > pflanzJahr && BaumServices.bekanntheitPruefen(pflanzJahr))
+        if (!BaumServices.bekanntheitPruefen(pflanzJahr) && BaumServices.bekanntheitPruefen(standAlter))
+        {
+            pflanzJahr = KatasterServices.JAHR_DER_ERHEBUNG - standAlter;
+        }
+        else if (BaumServices.bekanntheitPruefen(pflanzJahr) && !BaumServices.bekanntheitPruefen(standAlter))
+        {
+            standAlter = KatasterServices.JAHR_DER_ERHEBUNG - pflanzJahr;
+        }
+        
+        if (standAlter > pflanzJahr)
         {
             setStandAlter(pflanzJahr);
             setPflanzJahr(standAlter);
@@ -217,17 +224,19 @@ public class Metrik implements iRepairable
             setPflanzJahr(pflanzJahr);
             setStandAlter(standAlter);
         }
+        
+        
     }
-    
-    
-    //endregion
-    //region [Overrides]
     
     
     public void setAlter(int standAlter)
     {
         setStandAlter(standAlter);
-        setPflanzJahr(KatasterServices.JAHR_DER_ERHEBUNG - standAlter);
+        int pflanzJahr = getPflanzJahr();
+        if (pflanzJahr == Konstanten.UNBEKANNT | pflanzJahr > KatasterServices.JAHR_DER_ERHEBUNG - Main.ARGUMENTE.get(0) | pflanzJahr > KatasterServices.JAHR_DER_ERHEBUNG)
+        {
+            setPflanzJahr(KatasterServices.JAHR_DER_ERHEBUNG - standAlter);
+        }
     }
     
     
@@ -250,11 +259,17 @@ public class Metrik implements iRepairable
     @Override
     public void setRepairables(ArrayList<Float> reparierte)
     {
-        setPflanzJahr(Math.round(reparierte.get(INDEX_PFLANZJAHR)));
-        setStandAlter(Math.round(reparierte.get(INDEX_STANDALTER)));
+        setAlter(Math.round(reparierte.get(INDEX_STANDALTER)));
         setKroneMeter(reparierte.get(INDEX_KRONEMETER));
         setUmfangZentimeter(reparierte.get(INDEX_UMFANG_ZENTIMETER));
         setHoeheMeter(reparierte.get(INDEX_HOEHE_METER));
+    }
+    
+    
+    @Override
+    public boolean isEmpty()
+    {
+        return Core.areAllValuesInCollectionEqualToSpecificValue(getRepairables(), Float.valueOf(Konstanten.UNBEKANNT));
     }
     
     
@@ -263,33 +278,38 @@ public class Metrik implements iRepairable
     {
         StringBuilder stringBuilder = new StringBuilder();
         
-        stringBuilder.append(Strings.PFLANZJAHR_STANDALTER);
+        stringBuilder.append(Messages.PFLANZJAHR_STANDALTER);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getPflanzJahr()));
         stringBuilder.append(Strings.SCHRAEGSTRICH);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getStandAlter()));
         stringBuilder.append(Strings.CRLF);
         
-        stringBuilder.append(Strings.DURCHMESSER_DER_KRONE);
+        stringBuilder.append(Messages.DURCHMESSER_DER_KRONE);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getKroneMeter()));
         stringBuilder.append(Strings.CRLF);
         
-        stringBuilder.append(Strings.STAMMUMFANG);
+        stringBuilder.append(Messages.STAMMUMFANG);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getUmfangZentimeter()));
         stringBuilder.append(Strings.CRLF);
         
         
-        stringBuilder.append(Strings.BAUMHOEHE);
+        stringBuilder.append(Messages.BAUMHOEHE);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getHoeheMeter()));
+        
         
         return stringBuilder.toString();
     }
     
     
-    //endregion
+    @Override
+    protected Metrik clone()
+    {
+        return new Metrik(getPflanzJahr(),getStandAlter(),getKroneMeter(),getUmfangZentimeter(),getHoeheMeter());
+    }
     
     
 }

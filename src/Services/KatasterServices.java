@@ -2,12 +2,12 @@ package Services;
 
 import model.Baum;
 import model.BaumKataster;
+import model.Metrik;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
+import resources.Messages;
 import resources.Strings;
 import utility.BaumKatasterEntryComparator;
-import utility.Core;
-import utility.MyIO;
 
 import java.util.*;
 
@@ -15,46 +15,55 @@ public class KatasterServices
 {
     
     
-    //region[Konstanten]
-    
-    
-    public static final int INDEX_BEZIRK_MIT_GROESZTEM_BAUM = Konstanten.EINS;
-    public static final int INDEX_UMFANG_ZENTIMETER_VERGLEICHEN = Konstanten.ZWEI;
-    public static final int INDEX_KRONE_METER_VERGLEICHEN = Konstanten.DREI;
-    public static final int INDEX_ALTER_VERGLEICHEN = Konstanten.VIER;
-    public static final int INDEX_BAUMARTEN_ZAEHLEN = Konstanten.FUENF;
-    public static final int INDEX_GATTUNGEN_ZAEHLEN = Konstanten.SECHS;
-    public static final int INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN = Konstanten.SIEBEN;
-    public static final int INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN = Konstanten.ACHT;
+    public static final int INDEX_BEZIRK_MIT_GROESZTEM_BAUM = 1;
+    public static final int INDEX_UMFANG_ZENTIMETER_VERGLEICHEN = 2;
+    public static final int INDEX_KRONE_METER_VERGLEICHEN = 3;
+    public static final int INDEX_ALTER_VERGLEICHEN = 4;
+    public static final int INDEX_BAUMARTEN_ZAEHLEN = 5;
+    public static final int INDEX_GATTUNGEN_ZAEHLEN = 6;
+    public static final int INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN = 7;
+    public static final int INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN = 8;
+    public static final int INDEX_BEZIRK_MIT_MEISTEN_ARTEN = 9;
+    public static final int INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN = 10;
+    public static final int INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG = 11;
     public static final int JAHR_DER_ERHEBUNG = Konstanten.ZWEITAUSEND_UND_DREI_UND_ZWANZIG;
     
     
-    //endregion
     //todo find largest value in hashmap and comparator
     
     
-    //todo frage beantworten gives back just the Answer string
-    public static String frageAntwortErmitteln(BaumKataster baumKataster, int fragenWahl)
+    public static String frageAntwortErmitteln(BaumKataster robusterBaumKataster, BaumKataster unverfaelschterBaumKataster, int fragenWahl)
     {//todo alle fragen richtig gelesen?
         //todo messages
         int key;
-        StringBuilder stringBuilder = new StringBuilder();
+        
+        StringBuilder stringBuilder = new StringBuilder(Messages.ANTWORTEN[fragenWahl]);
         
         if (INDEX_BEZIRK_MIT_GROESZTEM_BAUM <= fragenWahl && fragenWahl <= INDEX_ALTER_VERGLEICHEN)
         {
-            key = keyDesGroesztenValueFinden(baumKataster, fragenWahl);
-            stringBuilder.append(baumKataster.getBaumKataster().get(key).toString());
+            key = Collections.max(unverfaelschterBaumKataster.getBaumHashMap().entrySet(), new BaumKatasterEntryComparator(fragenWahl)).getKey();
+            if(fragenWahl==INDEX_BEZIRK_MIT_GROESZTEM_BAUM) stringBuilder.append(unverfaelschterBaumKataster.getBaumHashMap().get(key).getOrt().getBezirk());
+            else stringBuilder.append(unverfaelschterBaumKataster.entryToString(key));
         }
         else if (INDEX_BAUMARTEN_ZAEHLEN <= fragenWahl && fragenWahl <= INDEX_GATTUNGEN_ZAEHLEN)
         {
-            stringBuilder.append(baumArtenGattungenZaehlen(baumKataster, fragenWahl));
+            stringBuilder.append(baumArtenGattungenZaehlen(robusterBaumKataster, fragenWahl));
         }
         else if (INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN <= fragenWahl && fragenWahl <= INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
         {
-            stringBuilder.append(haeufigsteGattungBezirkZaehlen(baumKataster, fragenWahl));
+            stringBuilder.append(haeufigsteGattungBezirkZaehlen(robusterBaumKataster, fragenWahl));
+        }
+        else if (INDEX_BEZIRK_MIT_MEISTEN_ARTEN == fragenWahl)
+        {
+            
+            stringBuilder.append(bezirkMitMeistenBaumArtenFinden(robusterBaumKataster));
+        }
+        else if (INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN == fragenWahl | fragenWahl == INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
+        {
+            stringBuilder.append(extremsteDurchschnittlicheGattungFinden(unverfaelschterBaumKataster, fragenWahl));
         }
         
-        MyIO.printLn(stringBuilder.toString());
+        
         return stringBuilder.toString();
     }
     
@@ -63,13 +72,12 @@ public class KatasterServices
     {
         HashSet<String> set = new HashSet<>();
         
-        HashMap<Integer, Baum> baeume = baumKataster.getBaumKataster();
+        HashMap<Integer, Baum> baumBaum = baumKataster.getBaumHashMap();
         String string;
         
-        //if ausserhalb der for schleife da so trotz redundantem code eine wiederholte abfrage des if vermieden wird
         if (attribut == INDEX_BAUMARTEN_ZAEHLEN)
         {
-            for (Baum baum : baeume.values())
+            for (Baum baum : baumBaum.values())
             {
                 string = baum.getTaxonomie().getArtBotanisch();
                 set.add(string);
@@ -77,7 +85,7 @@ public class KatasterServices
         }
         else if (attribut == INDEX_GATTUNGEN_ZAEHLEN)
         {
-            for (Baum baum : baeume.values())
+            for (Baum baum : baumBaum.values())
             {
                 string = baum.getTaxonomie().getGattungBotanisch();
                 set.add(string);
@@ -98,7 +106,7 @@ public class KatasterServices
     //todo yikes
     public static String haeufigsteGattungBezirkZaehlen(BaumKataster baumKataster, int fragenIndex)
     {
-        HashMap<Integer, Baum> baeume = baumKataster.getBaumKataster();
+        HashMap<Integer, Baum> baeume = baumKataster.getBaumHashMap();
         HashMap<String, Integer> hashMap = new HashMap<>();
         
         String attribut = new String();
@@ -149,28 +157,87 @@ public class KatasterServices
         }
         
         
-        return Core.keyStringDesGroesztenWertIntegerInHashMapFinden(hashMap);
+        return Collections.max(hashMap.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
     
     
-    public static int keyDesGroesztenValueFinden(BaumKataster baumKataster, int attribut) throws IllegalArgumentException
+    private static String bezirkMitMeistenBaumArtenFinden(BaumKataster baumKataster)
     {
-        return Collections.max(baumKataster.getBaumKataster().entrySet(), new BaumKatasterEntryComparator(attribut)).getKey();
-    }
-    
-    
-    private HashMap<String, ArrayList<Baum>> baeumeSortieren(HashMap<String, ArrayList<Baum>> baeume)
-    {
+        HashMap<String, HashSet<String>> hashMap = new HashMap<>();
         
-        ArrayList<Baum> spezifischeBaeume;
-        for (String key : baeume.keySet())
+        for (Baum baum : baumKataster.getBaumHashMap().values())
         {
-            Collections.sort(spezifischeBaeume = baeume.get(key));
-            baeume.put(key, spezifischeBaeume);
+            String bezirk = baum.getOrt().getBezirk();
+            
+            HashSet<String> bezirke = hashMap.get(bezirk);
+            
+            if (bezirke == null)
+            {
+                bezirke = new HashSet<>();
+            }
+            
+            bezirke.add(bezirk);
+            hashMap.put(bezirk, bezirke);
         }
         
-        return baeume;
+        
+        return Collections.max(hashMap.entrySet(), Comparator.comparingInt(entry -> entry.getValue().size())).getKey();
     }
     
+    
+    private static String extremsteDurchschnittlicheGattungFinden(BaumKataster baumKataster, int attribut)
+    {
+        HashMap<String, Float> averages = new HashMap<>();
+        HashMap<String, Integer> counters = new HashMap<>();
+        for (Baum baum : baumKataster.getBaumHashMap().values())
+        {
+            String gattung = baum.getTaxonomie().getGattungBotanisch();
+            
+            float wert;
+            int counter = 0;
+            
+            Metrik metrik = baum.getMetrik();
+            if (attribut == INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
+            {
+                wert = metrik.getUmfangZentimeter();
+            }
+            else if (attribut == INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN)
+            {
+                wert = metrik.getHoeheMeter();
+            }
+            else
+            {
+                throw new IllegalArgumentException();
+            }
+            
+            if (wert == baumKataster.getUNKNOWN())
+            {
+                continue;
+            }
+            
+            counter++;
+            try
+            {
+                counter += counters.get(gattung);
+                wert += averages.get(gattung);
+            }
+            catch (NullPointerException e)
+            {
+            }
+            
+            averages.put(gattung, wert);
+            counters.put(gattung, counter);
+        }
+        
+        for (String key : averages.keySet())
+        {
+            averages.put(key, averages.get(key) / counters.get(key));
+        }
+        
+        averages.remove(Strings.UNBEKANNT);
+        
+        
+        return Collections.max(averages.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
     
 }

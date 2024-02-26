@@ -5,12 +5,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
 import resources.Strings;
+import utility.Core;
 import utility.ElementFaultyException;
 import utility.iRepairable;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class Baum implements Comparable<Baum>, iRepairable
@@ -39,29 +39,6 @@ public class Baum implements Comparable<Baum>, iRepairable
     //region[create]
     
     
-    @Contract("_ -> new")
-    public static @NotNull Baum create(List<String> record) throws ElementFaultyException
-    {
-        return new Baum(record);
-    }
-    
-    
-    @Contract("_, _, _ -> new")
-    public static @NotNull Baum create(Ort ort, Taxonomie taxonomie, Metrik metrik)
-    {
-        return new Baum(ort, taxonomie, metrik);
-    }
-    
-    
-    public static Baum create(@NotNull CSVRecord cSVRecord)throws ElementFaultyException
-    {
-        return new Baum(cSVRecord.getRecord().subList(INDEX_BEGINN_BAUM, INDEX_ENDE_BAUM));
-    }
-    
-    //endregion
-    //region[Konstruktoren]
-    
-    
     private Baum(Ort ort, Taxonomie taxonomie, Metrik metrik)
     {
         this.ort = ort;
@@ -84,7 +61,30 @@ public class Baum implements Comparable<Baum>, iRepairable
         setMetrik(new Metrik(metrikList));
     }
     
-
+    
+    @Contract("_ -> new")
+    public static @NotNull Baum create(List<String> record) throws ElementFaultyException
+    {
+        return new Baum(record);
+    }
+    
+    //endregion
+    //region[Konstruktoren]
+    
+    
+    @Contract("_, _, _ -> new")
+    public static @NotNull Baum create(Ort ort, Taxonomie taxonomie, Metrik metrik)
+    {
+        return new Baum(ort, taxonomie, metrik);
+    }
+    
+    
+    public static Baum create(@NotNull CSVRecord cSVRecord) throws ElementFaultyException
+    {
+        return new Baum(cSVRecord.getRecord().subList(INDEX_BEGINN_BAUM, INDEX_ENDE_BAUM));
+    }
+    
+    
     //endregion
     //region[GetSet]
     
@@ -118,13 +118,6 @@ public class Baum implements Comparable<Baum>, iRepairable
     
     
     @Override
-    public  ArrayList<Float> getPermissableMaxima()
-    {
-        return getMetrik().getPermissableMaxima();
-    }
-    
-    
-    @Override
     public String toString()
     {
         StringBuilder stringBuilder = new StringBuilder(Strings.CRLF);
@@ -150,18 +143,41 @@ public class Baum implements Comparable<Baum>, iRepairable
     
     
     @Override
+    public ArrayList<Float> getRepairables()
+    {
+        return getMetrik().getRepairables();
+    }
+    
+    
+    @Override
     public void setRepairables(ArrayList<Float> reparierte)
     {
         Metrik metrik;
-        (metrik=getMetrik()).setRepairables(reparierte);
+        (metrik = getMetrik()).setRepairables(reparierte);
         setMetrik(metrik);
     }
     
     
     @Override
-    public ArrayList<Float> getRepairables()
+    public boolean isEmpty()
     {
-        return getMetrik().getRepairables();
+        return getMetrik().isEmpty() & Core.areAllValuesInCollectionEqualToSpecificValue(getTaxonomie().getAll(), Strings.UNBEKANNT);
+    }
+    
+    
+    @Override
+    public Baum clone()
+    {
+        try
+        {
+            Baum clone = (Baum) super.clone();
+        }
+        catch (CloneNotSupportedException e)
+        {
+        }
+        
+        
+        return new Baum(getOrt().clone(), getTaxonomie().clone(), getMetrik().clone());
     }
     
     

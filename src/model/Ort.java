@@ -1,8 +1,9 @@
 package model;
 
+import resources.Messages;
 import resources.Strings;
 
-public class Ort
+public class Ort implements Cloneable
 {
     private final String objektName;
     private final String bezirk;
@@ -32,15 +33,23 @@ public class Ort
     {
         StringBuilder stringBuilder = new StringBuilder();
         
-        stringBuilder.append(Strings.OBJEKTNAME);
+        stringBuilder.append(Messages.OBJEKTNAME);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(getObjektName());
         stringBuilder.append(Strings.CRLF);
         
-        stringBuilder.append(Strings.BEZIRK);
+        stringBuilder.append(Messages.BEZIRK);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(getBezirk());
         
         return stringBuilder.toString();
+    }
+    
+    
+    @Override
+    public Ort clone()
+    {
+        
+        return new Ort(getObjektName(), getBezirk());
     }
 }

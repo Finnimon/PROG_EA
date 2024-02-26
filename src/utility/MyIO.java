@@ -4,6 +4,7 @@ import Services.KatasterServices;
 import model.BaumKataster;
 import org.jetbrains.annotations.NotNull;
 import resources.Konstanten;
+import resources.Messages;
 import resources.Strings;
 
 import java.io.*;
@@ -15,10 +16,23 @@ import java.util.ArrayList;
 public class MyIO
 {
     private static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss:SSS";
+    
+    
     private static final String PROMPT = "-> ";
-    private static final int NIEDRIGSTER_FRAGEN_INDEX = Konstanten.EINS;
+    
+    
+    private static final int NIEDRIGSTER_FRAGENWAHL_INDEX = 0;
+    
+    
+    private static final int GROESSTER_FRAGENWAHL_INDEX = Messages.FRAGEN.length - Konstanten.EINS;
+    
+    
     private static boolean timeStamp = true;
+    
+    
     private static boolean verboseMode = true;
+    
+    
     private static ZonedDateTime startZeit = ZonedDateTime.now();
     
     
@@ -32,7 +46,7 @@ public class MyIO
                 StringBuilder stringBuilder = new StringBuilder(Strings.CRLF);
                 stringBuilder.append(text);
                 stringBuilder.append(Strings.TABULATOR);
-                stringBuilder.append(Strings.AUSGABE_IN_MILLISEKUNDEN);
+                stringBuilder.append(Messages.AUSGABE_IN_MILLISEKUNDEN);
                 stringBuilder.append(Strings.TABULATOR);
                 stringBuilder.append(getVergangeneMillisekunden());
                 System.out.println(stringBuilder);
@@ -121,7 +135,7 @@ public class MyIO
     
     private static void fragenAnbieten()
     {
-        for (String frage : Strings.FRAGEN)
+        for (String frage : Messages.FRAGEN)
         {
             MyIO.printLn(frage, false);
         }
@@ -132,24 +146,31 @@ public class MyIO
     {
         try
         {
-            return Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+            int fragenWahl=Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
+            if (fragenWahl < NIEDRIGSTER_FRAGENWAHL_INDEX ||fragenWahl > GROESSTER_FRAGENWAHL_INDEX)
+            {
+                throw new NumberFormatException();
+            }
+            return fragenWahl;
         }
         catch (Exception e)
         {
-            MyIO.printLn("Deine Auswahl einer Frage ist formal falsch. Deine Antwort sollte stattdessen wie beim folgenden Beispiel nur einen Integer i aus der Menge der Indize der Fragen sein:");
+            MyIO.printLn(Messages.AUSGABE_FORMAL_FALSCHE_FRAGENWAHL);
+            MyIO.printLn(Messages.AUSGABE_ANLEITUNG_FRAGENWAHL);
             return fragenWahlEinlesen();
         }
     }
     
     
-    public static void fragenStellenBeantworten(BaumKataster baumKataster)
+    public static void fragenStellenBeantworten(BaumKataster unverfaelschterKataster,BaumKataster robusterKataster)
     {
         int fragenWahl=Konstanten.EINS;
         while (fragenWahl!=0)
         {
             fragenAnbieten();
             fragenWahl = fragenWahlEinlesen();
-            KatasterServices.frageAntwortErmitteln(baumKataster, fragenWahl);
+            MyIO.resetZeitgeber();
+            MyIO.printLn( KatasterServices.frageAntwortErmitteln(robusterKataster,unverfaelschterKataster, fragenWahl),fragenWahl!=0);
         }
     }
     

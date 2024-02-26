@@ -2,6 +2,7 @@ package utility;
 
 import model.LineareFunktion;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class LinearerRegressor
@@ -10,10 +11,6 @@ public class LinearerRegressor
     
     //region [Attribut]
     
-    
-    private final ArrayList<ArrayList<Float>> regressierbare;
-    
-    
     private final int basisIndex;
     
     
@@ -21,21 +18,14 @@ public class LinearerRegressor
     //region [Konstruktor]
     
     
-    public LinearerRegressor(ArrayList<ArrayList<Float>> regressierbare, int basisIndex)
+    public LinearerRegressor(int basisIndex)
     {
-        this.regressierbare = regressierbare;
         this.basisIndex = basisIndex;
     }
     
     
     //endregion
     //region [Get]
-    
-    
-    private ArrayList<ArrayList<Float>> getRegressierbare()
-    {
-        return regressierbare;
-    }
     
     
     public int getBasisIndex()
@@ -48,13 +38,13 @@ public class LinearerRegressor
     //region [Methoden]
     
     
-    public ArrayList<LineareFunktion> alleRegressierenZurBasis()
+    public ArrayList<LineareFunktion> alleRegressierenZurBasis(ArrayList<ArrayList<Float>> regressierbare)
     {
         ArrayList<LineareFunktion> regressionen = new ArrayList<>();
         
         int basisIndex = getBasisIndex();
         
-        ArrayList<ArrayList<Float>> zugeordneteRegressierbare = regressierbareZuordnen();
+        ArrayList<ArrayList<Float>> zugeordneteRegressierbare = regressierbareZuordnen(regressierbare);
         
         for (int i = 0; i < zugeordneteRegressierbare.size(); i++)
         {
@@ -72,13 +62,12 @@ public class LinearerRegressor
     }
     
     
-    private ArrayList<ArrayList<Float>> regressierbareZuordnen()
+    private ArrayList<ArrayList<Float>> regressierbareZuordnen(ArrayList<ArrayList<Float>> regressierbare)
     {
         ArrayList<ArrayList<Float>> zugeordneteRegressierbare = new ArrayList<>();
-        ArrayList<ArrayList<Float>> regressierbare = getRegressierbare();
-        for (int i = 0; i < regressierbare.size(); i++)
+        
+        for (ArrayList<Float> spalte : regressierbare)
         {
-            ArrayList<Float> spalte = regressierbare.get(i);
             for (int j = 0; j < spalte.size(); j++)
             {
                 ArrayList<Float> zeile;
@@ -92,7 +81,6 @@ public class LinearerRegressor
                 }
                 zeile.add(spalte.get(j));
             }
-            
         }
         
         

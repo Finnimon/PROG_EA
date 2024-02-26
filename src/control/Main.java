@@ -1,55 +1,70 @@
 package control;
 
+import model.Baum;
 import model.BaumKataster;
-import model.CSVRecord;
-import resources.Konstanten;
-import resources.Strings;
-import utility.CSVParser;
+import utility.Core;
 import utility.MyIO;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+
 
 public class Main
 {
-    public static void main(String[] args)
+    
+    
+    public static void main(String[] argumente)
     {
         
-        //todo init mit zeitgeberreset
-        File file = null;
+        initialisieren(argumente);
         
-        file = MyIO.dateipfadValidieren(resources.Strings.DATEIPFAD);
+        AufgabenController aufgabenController = new AufgabenController(ARGUMENTE);
         
+        BaumKataster baumKataster=aufgabenController.aufgabeEins();
         
-        MyIO.printLn(Strings.AUSGABE_LESE_AUS_DATEI + Strings.DATEIPFAD, false);
+        BaumKataster shallowRepairedBaumKataster=aufgabenController.aufgabeZwei(baumKataster);
+        //todo fragen beantworten aufgrund von deeprepair und antwort aus shallowrepair beziehen damit in ausgabe nie ausgedachte werte angezeigt werden
+        aufgabenController.aufgabeDreiUndFuenf(shallowRepairedBaumKataster,baumKataster);
         
-        CSVParser cSVParser = new CSVParser(Strings.SEMIKOLON, Konstanten.ZWOELF);
-        ArrayList<CSVRecord> cSVRecords = cSVParser.parse(file, false);
-        
-        
-        MyIO.printLn(Strings.AUSGABE_ERFOLGREICH_DATEI_GELESEN + cSVRecords.size(), true);
-        
-        for (CSVRecord csvRecord : cSVRecords)
+        HashSet<String>Gattungen=new HashSet<>();
+        for (Baum baum  : shallowRepairedBaumKataster.getBaumHashMap().values()
+             )
         {
-            MyIO.printLn(csvRecord.toString(), false);
+            Gattungen.add(baum.getTaxonomie().getGattungBotanisch());
+        }
+        for (String gattung:Gattungen
+             )
+        {
+            System.out.println(gattung);
+        }
+        MyIO.printLn(shallowRepairedBaumKataster.entryToString(1));
+    }
+    
+    
+    public static ArrayList<Float> ARGUMENTE;
+    
+    
+    
+    private static void initialisieren(String[] argumente)
+    {
+        ArrayList<Float> argumenteFloats;
+        try
+        {
+            argumenteFloats= Core.parseStringArrayIntoFloatArrayList(argumente);
+        }
+        catch (NullPointerException e)
+        {
+            argumenteFloats=new ArrayList<>();//todo console Message and readline
+        }
+        catch (NumberFormatException e)
+        {
+            argumenteFloats=new ArrayList<>();
+            //todo siehe oben
         }
         
-        //Because ObjectID ObjectName and Bezirk are always assigned a value
-        // the defacto values that make up a tree are only nine in number therefore anything with that many can be disregarded
-        cSVParser = CSVController.recordsOhneGenugWerteEntfernen(cSVParser, 8);
-        cSVRecords = cSVParser.getCSVRecords();
         
-        BaumKataster baumKataster = new BaumKataster(cSVRecords);
-        MyIO.printLn(Strings.AUSGABE_ERZEUGTER_BAUM_INSTANZEN + baumKataster.getBaumKataster().keySet().size(), true);
-        
-        StatisticalDataRepairCenter statisticalDataRepairCenter = new StatisticalDataRepairCenter(baumKataster, Konstanten.UNBEKANNT);
-        statisticalDataRepairCenter.repair();
-        baumKataster = (BaumKataster) statisticalDataRepairCenter.getRepairableStatistic();
-        
-        MyIO.printLn(
-        baumKataster.getBaumKataster().get(1).toString());
-        
-//        MyIO.fragenStellenBeantworten(baumKataster);
+        Main.ARGUMENTE =argumenteFloats;
     }
+    
     
 }

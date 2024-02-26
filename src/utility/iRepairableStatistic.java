@@ -1,19 +1,43 @@
 package utility;
 
+import resources.Konstanten;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
-public interface iRepairableStatistic
+public interface iRepairableStatistic extends Cloneable
 {
+    
+    
+    public default float getUNKNOWN()
+    {
+        return Konstanten.UNBEKANNT;
+    }
+    
+    
     public HashMap<Integer, ArrayList<Float>> getRepairableFloats();
-    
-    
-    public void put(Integer key, iRepairable repairableObject);
     
     
     public ArrayList<Float> getPermissableMaxima();
     
     
-    public void setRepairables(HashMap<Integer, ArrayList<Float>> reparierte);
+    public void setRepairableFloats(HashMap<Integer, ArrayList<Float>> reparierte);
+    
+    
+    public HashSet<Integer> getDeletableDataSetKeys();
+    
+
+    public void deleteDataSetsOfKeySet(HashSet<Integer> deletableKeySet);
+    
+    
+    public HashSet<Integer> getEditedDataSetKeys();
+    
+    
+    public HashSet<Integer> getDeletedDataSetKeys();
+    
+    
+    public iRepairableStatistic clone();
+    
     
 }

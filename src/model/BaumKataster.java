@@ -1,32 +1,35 @@
 package model;
 
 import resources.Konstanten;
+import resources.Messages;
 import resources.Strings;
-import utility.iRepairable;
 import utility.iRepairableStatistic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BaumKataster implements iRepairableStatistic
 {
     
     
-    //region[Attribut]
+    private final ArrayList<Float> permissableMaxima;
+
+    
+    private HashMap<Integer, Baum> baumHashMap;
     
     
-    private HashMap<Integer, Baum> kataster;
+    private HashSet<Integer> deletedDataSetKeys = new HashSet<>();
     
     
-    //endregion
-    //region[Konstruktoren]
+    private HashSet<Integer> editedDataSetKeys = new HashSet<>();
     
     
-    public BaumKataster(ArrayList<CSVRecord> cSV)
+    public BaumKataster(ArrayList<CSVRecord> cSV, ArrayList<Float> permissableMaxima)
     {
+        this.permissableMaxima = permissableMaxima;
+        
+        
         HashMap<Integer, Baum> baeume = new HashMap<>();
+        
         for (CSVRecord cSVRecord : cSV)
         {
             ArrayList<String> record = cSVRecord.getRecord();
@@ -41,90 +44,103 @@ public class BaumKataster implements iRepairableStatistic
         }
         
         
-        setBaumKataster(baeume);
+        setBaumHashMap(baeume);
     }
+  
     
     
-    public BaumKataster(List<Map.Entry<Integer, Baum>> list)
+    public BaumKataster(List<Map.Entry<Integer, Baum>> list, ArrayList<Float> permissableMaxima)
     {
-        HashMap<Integer, Baum> baeumeHashMap = new HashMap<>();
+        this.permissableMaxima = permissableMaxima;
+        
+        
+        HashMap<Integer, Baum> baumHashMap = new HashMap<>();
+        
         for (Map.Entry<Integer, Baum> entry : list)
         {
-            baeumeHashMap.put(entry.getKey(), entry.getValue());
+            baumHashMap.put(entry.getKey(), entry.getValue());
         }
-        setBaumKataster(baeumeHashMap);
+        
+        
+        setBaumHashMap(baumHashMap);
     }
     
     
-    public BaumKataster(HashMap<Integer, Baum> baeume)
+    public BaumKataster(HashMap<Integer, Baum> baeume, ArrayList<Float> permissableMaxima)
     {
-        setBaumKataster(baeume);
+        setBaumHashMap(baeume);
+        this.permissableMaxima = permissableMaxima;
     }
     
     
-    //endregion
-    //region [GetSet]
     
-    
-    public HashMap<Integer, Baum> getBaumKataster()
+    public HashMap<Integer, Baum> getBaumHashMap()
     {
-        return this.kataster;
+        return this.baumHashMap;
     }
     
     
-    private void setBaumKataster(HashMap<Integer, Baum> baeumeMap)
+    private void setBaumHashMap(HashMap<Integer, Baum> baeumeMap)
     {
-        this.kataster = baeumeMap;
+        this.baumHashMap = baeumeMap;
     }
     
     
-    //endregion
-    //region [Overrides]
+    public void setDeletedDataSetKeys(HashSet<Integer> deletedDataSetKeys)
+    {
+        this.deletedDataSetKeys = deletedDataSetKeys;
+    }
+    
+    
+    public void setEditedDataSetKeys(HashSet<Integer> editedDataSetKeys)
+    {
+        this.editedDataSetKeys = editedDataSetKeys;
+    }
+    
+    
+    public String entryToString(Integer key)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        
+        stringBuilder.append(Messages.OBJEKT_ID);
+        stringBuilder.append(Strings.TABULATOR);
+        stringBuilder.append(key);
+        stringBuilder.append(getBaumHashMap().get(key).toString());
+        
+        
+        return stringBuilder.toString();
+    }
     
     
     @Override
     public String toString()
     {
         StringBuilder stringbuilder = new StringBuilder();
-        HashMap<Integer, Baum> baumHashMap = getBaumKataster();
         
-        for (Integer key : baumHashMap.keySet())
+        HashMap<Integer, Baum> baumMap = getBaumHashMap();
+        List<Integer> sortedKeyList=baumMap.keySet().stream().toList();
+        Collections.sort(sortedKeyList);
+        for (Integer key : sortedKeyList)
         {
-            stringbuilder.append(Strings.OBJEKT_ID);
-            stringbuilder.append(Strings.TABULATOR);
-            stringbuilder.append(key);
-            Baum baum = baumHashMap.get(key);
-            stringbuilder.append(baum.toString());
+            stringbuilder.append(entryToString(key));
         }
+        
         
         return stringbuilder.toString();
     }
     
     
     @Override
-    public void put(Integer key, iRepairable repairableObject)
-    {
-        HashMap<Integer, Baum> baeumeHashMap = getBaumKataster();
-        baeumeHashMap.put(key, (Baum) repairableObject);
-        setBaumKataster(baeumeHashMap);
-    }
-    
-    
-    @Override
     public ArrayList<Float> getPermissableMaxima()
     {
-        for (Baum baum :getBaumKataster().values())
-        {
-            return baum.getPermissableMaxima();
-        }
-        return null;
+        return this.permissableMaxima;
     }
     
     
     @Override
     public HashMap<Integer, ArrayList<Float>> getRepairableFloats()
     {
-        HashMap<Integer, Baum> baumKataster = getBaumKataster();
+        HashMap<Integer, Baum> baumKataster = getBaumHashMap();
         HashMap<Integer, ArrayList<Float>> repairables = new HashMap<>();
         
         for (Integer key : baumKataster.keySet())
@@ -137,21 +153,108 @@ public class BaumKataster implements iRepairableStatistic
     
     
     @Override
-    public void setRepairables(HashMap<Integer, ArrayList<Float>> reparierte)
+    public void setRepairableFloats(HashMap<Integer, ArrayList<Float>> repairedFloats)
     {
-        HashMap<Integer, Baum> baumKataster = getBaumKataster();
+        HashMap<Integer, Baum> baumMap = getBaumHashMap();
+        HashSet<Integer> editedDataSetKeys = getEditedDataSetKeys();
         
-        for (Integer key : baumKataster.keySet())
+        for (Integer key : repairedFloats.keySet())
         {
-            Baum baum = baumKataster.get(key);
-            baum.setRepairables(reparierte.get(key));
-            baumKataster.put(key, baum);
+            Baum baum = baumMap.get(key);
+            ArrayList<Float> repairables = repairedFloats.get(key);
+            
+            if(repairables.equals(baum.getRepairables())) continue;
+            
+            editedDataSetKeys.add(key);
+            baum.setRepairables(repairedFloats.get(key));
+            baumMap.put(key, baum);
         }
         
+        setEditedDataSetKeys(editedDataSetKeys);
+        setBaumHashMap(baumMap);
     }
     
     
-    //endregion
+    @Override
+    public HashSet<Integer> getDeletableDataSetKeys()
+    {
+        HashSet<Integer> deletableDataSets = new HashSet<>();
+        HashMap<Integer, Baum> baumMap = getBaumHashMap();
+        for (Integer key : baumMap.keySet())
+        {
+            if (baumMap.get(key).isEmpty())
+            {
+                deletableDataSets.add(key);
+            }
+        }
+        
+        
+        return deletableDataSets;
+    }
     
     
+    @Override
+    public void deleteDataSetsOfKeySet(HashSet<Integer> deletableKeySet)
+    {
+        HashMap<Integer, Baum> dataSets = getBaumHashMap();
+        HashSet<Integer> deletedDataSets = getDeletedDataSetKeys();
+        
+        for (Integer key : deletableKeySet)
+        {
+            dataSets.remove(key);
+            deletedDataSets.add(key);
+        }
+        
+        
+        setDeletedDataSetKeys(deletedDataSets);
+        setBaumHashMap(dataSets);
+    }
+    
+    
+    @Override
+    public float getUNKNOWN()
+    {
+        return iRepairableStatistic.super.getUNKNOWN();
+    }
+    
+    
+    @Override
+    public HashSet<Integer> getEditedDataSetKeys()
+    {
+        return this.editedDataSetKeys;
+    }
+    
+    
+    @Override
+    public HashSet<Integer> getDeletedDataSetKeys()
+    {
+        return this.deletedDataSetKeys;
+    }
+    
+    
+    @Override
+    public BaumKataster clone()
+    {
+        HashMap<Integer,Baum> newBaumHashMap = new HashMap<>();
+        HashMap<Integer,Baum> baumHashMap =getBaumHashMap();
+        for (Integer key : baumHashMap.keySet())
+        {
+            newBaumHashMap.put(key, baumHashMap.get(key).clone());
+        }
+        
+        HashSet<Integer> newDeletedDataSetKeys = new HashSet<>();
+        HashSet<Integer> deletedDataSetKeys = getDeletedDataSetKeys();
+        newDeletedDataSetKeys.addAll(deletedDataSetKeys);
+        
+        HashSet<Integer> newEditedDataSetKeys = new HashSet<>();
+        HashSet<Integer> editedDataSetKeys = getEditedDataSetKeys();
+        newEditedDataSetKeys.addAll(editedDataSetKeys);
+        
+        BaumKataster newBaumKataster = new BaumKataster(newBaumHashMap, getPermissableMaxima());
+    
+        newBaumKataster.setDeletedDataSetKeys(newDeletedDataSetKeys);
+        newBaumKataster.setEditedDataSetKeys(newEditedDataSetKeys);
+        
+        return newBaumKataster;
+    }
 }
