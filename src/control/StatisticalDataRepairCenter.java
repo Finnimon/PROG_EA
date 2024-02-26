@@ -1,7 +1,10 @@
 package control;
 
 import logic.StatisticalDataRepairLogic;
+import org.jetbrains.annotations.NotNull;
 import utility.iRepairableStatistic;
+
+import java.util.ArrayList;
 
 /**
  * @Summary: This class offers instance methods to repair a {@link iRepairableStatistic} in a shallow {@link #shallowRepair()} and deep way {@link #deepRepair()}.
@@ -30,43 +33,56 @@ public class StatisticalDataRepairCenter
     
     
     /**
-     * @Summary: Whether the method {@link #shallowRepair()} has been called.
+     * @Summary: Whether the method {@link #shallowRepair()} has been called regarding this {@link StatisticalDataRepairCenter}.
      * @Custom.Author: Finn Lindig
      * @Custom.Since: 26.02.2024
      */
     private boolean isShallowRepaired;
     
     
-    
     /**
-     * @Summary: Whether the method {@link #deepRepair()} has been called in regards to this {@link StatisticalDataRepairCenter}.
+     * @Summary: Whether the method {@link #deepRepair()} has been called regarding this {@link StatisticalDataRepairCenter}.
      * @Custom.Author: Finn Lindig
      * @Custom.Since: 26.02.2024
      */
     private boolean isDeepRepaired;
     
     
-    public StatisticalDataRepairCenter(iRepairableStatistic repairableStatistic)
+    /**
+     * @param repairableStatistic The {@link iRepairableStatistic} to repair.
+     * @Summary: Constructs and initializes this {@link StatisticalDataRepairCenter}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
+    public StatisticalDataRepairCenter(@NotNull iRepairableStatistic repairableStatistic)
     {
         this.repairableStatistic = repairableStatistic;
-        initialisieren(false);
+        initialize();
     }
     
     
-    public StatisticalDataRepairCenter(iRepairableStatistic repairableStatistic, boolean isShallowRepaired)
+    /**
+     * @Custom.Precondition: {@link #shallowRepair()} and {@link #deepRepair()} have not been called yet. This method is not used outside the constructor.
+     * @Custom.Postcondition: Insures proper functionality of this {@link StatisticalDataRepairCenter} and it's methods.
+     * @Summary: Initializes this {@link StatisticalDataRepairCenter} to the state of {@link #shallowRepair()} and {@link #deepRepair()} not having been called yet.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
+    private void initialize()
     {
-        this.repairableStatistic = repairableStatistic;
-        initialisieren(isShallowRepaired);
-    }
-    
-    
-    private void initialisieren(boolean isShallowRepaired)
-    {
-        setIsShallowRepaired(isShallowRepaired);
+        setIsShallowRepaired(false);
         setIsDeepRepaired(false);
     }
     
     
+    /**
+     * @return {@link iRepairableStatistic} that has been repaired using only {@link #shallowRepair()}.
+     * @Custom.Precondition: {@link #deepRepair()} has not been called yet.
+     * @Custom.Postcondition: Will return a {@link iRepairableStatistic} that has only been repaired using {@link #shallowRepair()}.
+     * @Summary: If {@link #getIsShallowRepaired()} is false, {@link #shallowRepair()} will be called.  Then {@link #getRepairableStatistic()} is returned. If {@link #getIsDeepRepaired()} is true, a RuntimeException will be thrown.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     public iRepairableStatistic getShallowRepairedStatistic()
     {
         if (!getIsShallowRepaired())
@@ -83,6 +99,14 @@ public class StatisticalDataRepairCenter
     }
     
     
+    /**
+     * @return {@link iRepairableStatistic} that has been repaired using only {@link #shallowRepair()}.
+     * @Summary: If {@link #getIsShallowRepaired()} is false, {@link #shallowRepair()} will be called. If {@link #getIsDeepRepaired()} is false, {@link #deepRepair()} will be called. Then {@link #getRepairableStatistic()} is returned.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * @Custom.Postcondition: Will return a {@link iRepairableStatistic} that has been repaired using {@link #shallowRepair()} and then {@link #deepRepair()}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     public iRepairableStatistic getDeepRepairedStatistic()
     {
         if (!getIsDeepRepaired())
@@ -95,19 +119,44 @@ public class StatisticalDataRepairCenter
     }
     
     
+    /**
+     * @Summary: Getter for {@link #INDEX_REGRESSION_BASIS}.
+     * @return {@link #INDEX_REGRESSION_BASIS}
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * @Custom.Postcondition: {@link #getINDEX_REGRESSION_BASIS()}=={@link #INDEX_REGRESSION_BASIS}
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     private int getINDEX_REGRESSION_BASIS()
     {
         return INDEX_REGRESSION_BASIS;
     }
     
     
+    /**
+     * @Summary: Getter for {@link #repairableStatistic}.
+     * @return {@link #repairableStatistic}
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * @Custom.Postcondition: The attribute {@link #repairableStatistic} is returned.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     private iRepairableStatistic getRepairableStatistic()
     {
         return repairableStatistic;
     }
     
     
-    private void setRepairableStatistic(iRepairableStatistic repairableStatistic)
+    /**
+     * @Summary: Setter for {@link #repairableStatistic}.
+     * @Custom.Precondition: This method is only called by {@link #shallowRepair()} and {@link #deepRepair()}. This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * The Preconditions of {@link #setIsShallowRepaired(boolean)} and {@link #setIsDeepRepaired(boolean)} are met.
+     * @Custom.Postcondition: The attribute {@link #repairableStatistic} is set and {@link #getIsShallowRepaired()} and {@link #getIsDeepRepaired()} are always reflecting the true state of {@link #repairableStatistic}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     * @param repairableStatistic
+     */
+    private void setRepairableStatistic(@NotNull iRepairableStatistic repairableStatistic)
     {
         if (!getIsShallowRepaired())
         {
@@ -122,30 +171,73 @@ public class StatisticalDataRepairCenter
     }
     
     
+    /**
+     * @return {@link #isDeepRepaired}
+     * @Summary: Getter for {@link #isDeepRepaired}.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
+     * @Custom.Postcondition: Reflects weither {@link #repairableStatistic} has been repaired using {@link #deepRepair()}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     private boolean getIsDeepRepaired()
     {
         return isDeepRepaired;
     }
     
     
+    /**
+     * @Summary: Getter for {@link #isDeepRepaired}.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * This Method is only called by {@link #setRepairableStatistic(iRepairableStatistic)} and {@link #initialize()}.
+     * @Custom.Postcondition: {@link #getIsDeepRepaired()} reflects weither {@link #repairableStatistic} has been repaired using  {@link #deepRepair()}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     * @param repaired
+     */
     private void setIsDeepRepaired(boolean repaired)
     {
         isDeepRepaired = repaired;
     }
     
     
+    /**
+     * @return {@link #isShallowRepaired}
+     * @Summary: Getter for {@link #isShallowRepaired}.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
+     * @Custom.Postcondition: Reflects weither {@link #repairableStatistic} has been repaired using {@link #shallowRepair()}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     private boolean getIsShallowRepaired()
     {
         return isShallowRepaired;
     }
     
     
+    /**
+     * @Summary: Getter for {@link #isShallowRepaired}.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly.
+     * This Method is only called by {@link #setRepairableStatistic(iRepairableStatistic)} and {@link #initialize()}.
+     * @Custom.Postcondition: {@link #getIsShallowRepaired()} reflects weither {@link #repairableStatistic} has been repaired using {@link #shallowRepair()}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     * @param shallowRepaired
+     */
     private void setIsShallowRepaired(boolean shallowRepaired)
     {
         isShallowRepaired = shallowRepaired;
     }
     
     
+    /**
+     * @Summary: Deletes all DataSets in the KeySet of {@link iRepairableStatistic#getDeletableDataSetKeys()}.
+     * @Custom.Precondition: The Interface {@link iRepairableStatistic} has been implemented correctly for this {@link #repairableStatistic}.
+     * @Custom.Postcondition: All DataSets in the KeySet of {@link iRepairableStatistic#getDeletableDataSetKeys()} have been deleted from {@link iRepairableStatistic}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     private void deleteDeletableDataSets()
     {
         iRepairableStatistic repairableStatistic = getRepairableStatistic();
@@ -153,9 +245,16 @@ public class StatisticalDataRepairCenter
     }
     
     
+    /**
+     * @Summary: Deletes all DataSets in the KeySet of {@link iRepairableStatistic#getDeletableDataSetKeys()}. Applies {@link StatisticalDataRepairLogic#repairUpperExtremes(iRepairableStatistic)} to {@link #repairableStatistic}.
+     * This results in {@link #repairableStatistic} being presentable and suitable for further queries regarding extremes, whilst not being particularly statistically robust.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly. The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
+     * @Custom.Postcondition: Deletable DataSets have been deleted from {@link #repairableStatistic} and none of its values exceed {@link iRepairableStatistic#getPermissableMaxima()}. Unknown values are left untouched.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     public void shallowRepair()
     {
-        
         if (getIsShallowRepaired())
         {
             return;
@@ -171,6 +270,14 @@ public class StatisticalDataRepairCenter
     }
     
     
+    /**
+     * @Summary: Insures that {@link #shallowRepair()} has been called before it applies {@link StatisticalDataRepairLogic#setEntirelyUnknownsToAverages(iRepairableStatistic, ArrayList)} and {@link StatisticalDataRepairLogic#ascribeValuesToUnknownsUsingRegressions(iRepairableStatistic, int)} to {@link #repairableStatistic}.
+     * This results in {@link #repairableStatistic} being unpresentable and unsuitable for further queries regarding extremes, whilst being particularly statistically robust and having no remaining unknown values.
+     * @Custom.Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly. The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
+     * @Custom.Postcondition: The {@link #repairableStatistic} has been repaired with statistical usage in mind. None of its values exceed {@link iRepairableStatistic#getPermissableMaxima()}. None of its values are {@link iRepairableStatistic#getUnknown()}.
+     * @Custom.Author: Finn Lindig
+     * @Custom.Since: 26.02.2024
+     */
     public void deepRepair()
     {
         if (!getIsShallowRepaired())
@@ -185,8 +292,7 @@ public class StatisticalDataRepairCenter
         iRepairableStatistic repairableStatistic = getRepairableStatistic();
         repairableStatistic = StatisticalDataRepairLogic.setEntirelyUnknownsToAverages(repairableStatistic, StatisticalDataRepairLogic.findAvarages(repairableStatistic));
         repairableStatistic = StatisticalDataRepairLogic.ascribeValuesToUnknownsUsingRegressions(repairableStatistic, getINDEX_REGRESSION_BASIS());
-        //it might regress crazy values out of the true extreme for example the thickest tree if it hast no known height might become incredibly high
-        repairableStatistic = StatisticalDataRepairLogic.repairUpperExtremes(repairableStatistic);
+        
         
         setRepairableStatistic(repairableStatistic);
     }

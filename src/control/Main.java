@@ -25,8 +25,7 @@ public class Main
         
         BaumKataster shallowRepairedBaumKataster=aufgabenController.aufgabeZwei(baumKataster);
         //todo fragen beantworten aufgrund von deeprepair und antwort aus shallowrepair beziehen damit in ausgabe nie ausgedachte werte angezeigt werden
-        HashMap<Integer,Float> kohlenStoffSpeicherungInKiloGrammFuerBaumKataster=aufgabenController.aufgabeVier(baumKataster);
-        aufgabenController.aufgabeDreiUndFuenf(shallowRepairedBaumKataster,baumKataster,kohlenStoffSpeicherungInKiloGrammFuerBaumKataster);
+        aufgabenController.aufgabeDreiUndFuenf(shallowRepairedBaumKataster,baumKataster);
         
         HashSet<String>Gattungen=new HashSet<>();
         for (Baum baum  : shallowRepairedBaumKataster.getBaumHashMap().values()
@@ -39,7 +38,7 @@ public class Main
         {
             System.out.println(gattung);
         }
-        MyIO.printLn(shallowRepairedBaumKataster.entryToString(1));
+        
     }
     
     

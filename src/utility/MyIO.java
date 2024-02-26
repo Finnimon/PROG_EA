@@ -163,7 +163,7 @@ public class MyIO
     }
     
     
-    public static void fragenStellenBeantworten(BaumKataster unverfaelschterKataster,BaumKataster robusterKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex)
+    public static void fragenStellenBeantworten(BaumKataster unverfaelschterKataster,BaumKataster robusterKataster)
     {
         int fragenWahl=Konstanten.EINS;
         while (fragenWahl!=0)
@@ -171,7 +171,7 @@ public class MyIO
             fragenAnbieten();
             fragenWahl = fragenWahlEinlesen();
             MyIO.resetZeitgeber();
-            MyIO.printLn( KatasterServices.frageAntwortErmitteln(robusterKataster,unverfaelschterKataster,kohlenStoffSpeicherungNachBaumIndex, fragenWahl),fragenWahl!=0);
+            MyIO.printLn( KatasterServices.frageAntwortErmitteln(robusterKataster,unverfaelschterKataster, fragenWahl),fragenWahl!=0);
         }
     }
     

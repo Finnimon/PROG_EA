@@ -1,5 +1,6 @@
 package logic;
 
+import control.StatisticalDataRepairCenter;
 import model.LineareFunktion;
 import utility.Core;
 import utility.LinearerRegressor;
@@ -8,8 +9,16 @@ import utility.iRepairableStatistic;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
+/**
+ * @Summary: This record contains static methods that can be used to repair {@link iRepairableStatistic}. These should be seen as helper methods for {@link StatisticalDataRepairCenter} and not be used outside that context.
+ * @Custom.Author: Finn Lindig
+ * @Custom.Since: 26.02.2024
+ */
 public record StatisticalDataRepairLogic()
 {
+    
+    
     public static iRepairableStatistic lowerUpperExtremesUnderAssumptionOfUnitMistakes(iRepairableStatistic repairableStatistic)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
@@ -72,7 +81,7 @@ public record StatisticalDataRepairLogic()
             {
                 float wert = werte.get(i);
                 
-                if (wert == repairableStatistic.getUNKNOWN())
+                if (wert == repairableStatistic.getUnknown())
                 {
                     continue;
                 }
@@ -161,7 +170,7 @@ public record StatisticalDataRepairLogic()
         
         for (Integer key : repairables.keySet())
         {
-            if (Core.areAllValuesInCollectionEqualToSpecificValue(repairables.get(key), repairableStatistic.getUNKNOWN()))
+            if (Core.areAllValuesInCollectionEqualToSpecificValue(repairables.get(key), repairableStatistic.getUnknown()))
             {
                 keys.add(key);
             }
@@ -191,7 +200,7 @@ public record StatisticalDataRepairLogic()
     public static iRepairableStatistic ascribeValuesToUnknownsUsingRegressions(iRepairableStatistic repairableStatistic, int indexRegressionBasis)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
-        float unknown = repairableStatistic.getUNKNOWN();
+        float unknown = repairableStatistic.getUnknown();
         
         ArrayList<LineareFunktion> lineareRegressionen = new LinearerRegressor(indexRegressionBasis).alleRegressierenZurBasis(new ArrayList<>(repairables.values()));
         
@@ -211,7 +220,7 @@ public record StatisticalDataRepairLogic()
             
             if (repairableFloats.get(indexRegressionBasis) == unknown)
             {
-                int ersterBekannterWertIndex = findIndexOfFirstKnownValue(repairableFloats, repairableStatistic.getUNKNOWN());
+                int ersterBekannterWertIndex = findIndexOfFirstKnownValue(repairableFloats, repairableStatistic.getUnknown());
                 
                 x = lineareRegressionen.get(ersterBekannterWertIndex).inverseFVonY(repairableFloats.get(ersterBekannterWertIndex));
             }

@@ -73,16 +73,11 @@ public class AufgabenController
     }
     
     
-    public void aufgabeDreiUndFuenf(BaumKataster shallowRepairedBaumKataster, BaumKataster deepRepairedBaumKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex)
+    public void aufgabeDreiUndFuenf(BaumKataster shallowRepairedBaumKataster, BaumKataster deepRepairedBaumKataster)
     {
-        MyIO.fragenStellenBeantworten(shallowRepairedBaumKataster,deepRepairedBaumKataster,kohlenStoffSpeicherungNachBaumIndex);
+        MyIO.fragenStellenBeantworten(shallowRepairedBaumKataster,deepRepairedBaumKataster);
     }
     
-    
-    public HashMap<Integer, Float> aufgabeVier(BaumKataster baumKataster)
-    {
-        return new BaumKohlenStoffSpeicherungsBerechner().berechneSpeicherungInKiloGrammFuerBaumKataster(baumKataster);
-    }
     
     
 }

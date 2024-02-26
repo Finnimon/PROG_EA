@@ -212,9 +212,9 @@ public class BaumKataster implements iRepairableStatistic
     
     
     @Override
-    public float getUNKNOWN()
+    public float getUnknown()
     {
-        return iRepairableStatistic.super.getUNKNOWN();
+        return iRepairableStatistic.super.getUnknown();
     }
     
     

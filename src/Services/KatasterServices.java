@@ -1,5 +1,6 @@
 package Services;
 
+import logic.BaumKohlenStoffSpeicherungsBerechner;
 import model.Baum;
 import model.BaumKataster;
 import model.Metrik;
@@ -35,7 +36,7 @@ public class KatasterServices
     //todo find largest value in hashmap and comparator
     
     
-    public static String frageAntwortErmitteln(BaumKataster robusterBaumKataster, BaumKataster unverfaelschterBaumKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex, int fragenIndex)
+    public static String frageAntwortErmitteln(BaumKataster robusterBaumKataster, BaumKataster unverfaelschterBaumKataster, int fragenIndex)
     {//todo alle fragen richtig gelesen?
         //todo messages
         int key;
@@ -74,18 +75,18 @@ public class KatasterServices
         else if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_BERLIN_INSGESAMT)
         {
             //todo format
-            stringBuilder.append(String.format("%.2f", kohlenStoffSpeicherungInsgesamtBerechnen(kohlenStoffSpeicherungNachBaumIndex)));
+            stringBuilder.append(String.format("%.2f", kohlenStoffSpeicherungInsgesamtBerechnen(robusterBaumKataster)));
         }
-        else if (fragenIndex==INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK|fragenIndex==INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
+        else if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK | fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
         {
-            stringBuilder.append(String.format("%.2f", kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(robusterBaumKataster, kohlenStoffSpeicherungNachBaumIndex, fragenIndex)));
+            stringBuilder.append(kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(robusterBaumKataster,  fragenIndex));
         }
         
         return stringBuilder.toString();
     }
     
     
-    public static int baumArtenGattungenZaehlen(@NotNull BaumKataster baumKataster, int attribut)
+    private static int baumArtenGattungenZaehlen(@NotNull BaumKataster baumKataster, int attribut)
     {
         HashSet<String> set = new HashSet<>();
         
@@ -121,7 +122,7 @@ public class KatasterServices
     
     
     //todo yikes
-    public static String haeufigsteGattungBezirkZaehlen(BaumKataster baumKataster, int fragenIndex)
+    private static String haeufigsteGattungBezirkZaehlen(BaumKataster baumKataster, int fragenIndex)
     {
         HashMap<Integer, Baum> baeume = baumKataster.getBaumHashMap();
         HashMap<String, Integer> hashMap = new HashMap<>();
@@ -227,7 +228,7 @@ public class KatasterServices
                 throw new IllegalArgumentException();
             }
             
-            if (wert == baumKataster.getUNKNOWN())
+            if (wert == baumKataster.getUnknown())
             {
                 continue;
             }
@@ -258,12 +259,13 @@ public class KatasterServices
     }
     
     
-    private static Float kohlenStoffSpeicherungInsgesamtBerechnen(HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex)
+    private static Float kohlenStoffSpeicherungInsgesamtBerechnen(BaumKataster baumKataster)
     {
-        float kohlenStoffSpeicherungInsgesamt = 0f;
-        for (Float wert : kohlenStoffSpeicherungNachBaumIndex.values())
+        BaumKohlenStoffSpeicherungsBerechner baumKohlenStoffSpeicherungsBerechner=new BaumKohlenStoffSpeicherungsBerechner();
+        float kohlenStoffSpeicherungInsgesamt = 0;
+        for (Baum baum : baumKataster.getBaumHashMap().values())
         {
-            kohlenStoffSpeicherungInsgesamt += wert;
+            kohlenStoffSpeicherungInsgesamt+= baumKohlenStoffSpeicherungsBerechner.speicherungInKiloGrammFuerEinzelBaumBerechnen(baum);
         }
         
         
@@ -271,14 +273,13 @@ public class KatasterServices
     }
     
     
-    private static String kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(BaumKataster robusterBaumKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex, int fragenIndex)
+    private static String kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(BaumKataster robusterBaumKataster, int fragenIndex)
     {
+        
+        BaumKohlenStoffSpeicherungsBerechner baumKohlenStoffSpeicherungsBerechner=new BaumKohlenStoffSpeicherungsBerechner();
         HashMap<String, Float> kohlenStoffSpeicherungNachBezirkOderGattung = new HashMap<>();
-        HashMap<Integer, Baum> baumHashMap = robusterBaumKataster.getBaumHashMap();
-        for (Integer baumKey : baumHashMap.keySet())
+        for (Baum baum: robusterBaumKataster.getBaumHashMap().values())
         {
-            Baum baum = baumHashMap.get(baumKey);
-            
             String key;
             if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK)
             {
@@ -293,7 +294,7 @@ public class KatasterServices
                 throw new IllegalArgumentException();
             }
             
-            float wert = kohlenStoffSpeicherungNachBaumIndex.get(key);
+            float wert = baumKohlenStoffSpeicherungsBerechner.speicherungInKiloGrammFuerEinzelBaumBerechnen(baum);
             
             if (kohlenStoffSpeicherungNachBezirkOderGattung.containsKey(key))
             {
@@ -304,6 +305,8 @@ public class KatasterServices
         }
         
         kohlenStoffSpeicherungNachBezirkOderGattung.remove(Strings.UNBEKANNT);
+        
+        
         return Collections.max(kohlenStoffSpeicherungNachBezirkOderGattung.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
     

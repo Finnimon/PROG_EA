@@ -8,7 +8,7 @@ import resources.Strings;
 
 import java.util.HashMap;
 
-import static resources.BaumKohlenSpeicherungFunktionen.*;
+import static resources.BaumKohlenStoffSpeicherungFunktionen.*;
 
 public class BaumKohlenStoffSpeicherungsBerechner
 {
@@ -28,6 +28,7 @@ public class BaumKohlenStoffSpeicherungsBerechner
         funktionen.put(BOTANISCHE_GATTUNG_BUCHE, BUCHE);
         funktionen.put(BOTANISCHE_GATTUNG_EICHE, EICHE);
         funktionen.put(Strings.UNBEKANNT, new LineareFunktion((FICHTE.steigung()+KIEFER.steigung()+BUCHE.steigung()+EICHE.steigung())/ funktionen.size(),0));
+        
         
         this.funktionen = funktionen;
     }

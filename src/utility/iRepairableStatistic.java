@@ -10,7 +10,7 @@ public interface iRepairableStatistic extends Cloneable
 {
     
     
-    public default float getUNKNOWN()
+    public default float getUnknown()
     {
         return Konstanten.UNBEKANNT;
     }

@@ -1,5 +1,5 @@
-package utility;
-
-public class XMLParser
-{
-}
+//package utility;
+//
+//public class XMLParser extends FileParser
+//{
+//}
