@@ -46,7 +46,7 @@ public class BaumKohlenStoffSpeicherungsBerechner
         
         for (Integer key  :baumHashMap.keySet() )
         {
-            gespeicherterKohlenStoffNachBaumID.put(key, berechneSpeicherungInKiloGrammFuerEinzelBaum(baumHashMap.get(key)));
+            gespeicherterKohlenStoffNachBaumID.put(key, speicherungInKiloGrammFuerEinzelBaumBerechnen(baumHashMap.get(key)));
         }
         
         
@@ -55,7 +55,7 @@ public class BaumKohlenStoffSpeicherungsBerechner
     
     
     
-    public float berechneSpeicherungInKiloGrammFuerEinzelBaum(Baum baum)
+    public float speicherungInKiloGrammFuerEinzelBaumBerechnen(Baum baum)
     {
         HashMap<String,LineareFunktion> funktionen = getFunktionen();
         LineareFunktion funktion = funktionen.get(baum.getTaxonomie().getGattungBotanisch());

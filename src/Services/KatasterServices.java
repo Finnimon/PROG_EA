@@ -26,43 +26,60 @@ public class KatasterServices
     public static final int INDEX_BEZIRK_MIT_MEISTEN_ARTEN = 9;
     public static final int INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN = 10;
     public static final int INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG = 11;
+    public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_BERLIN_INSGESAMT = 12;
+    public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK = 13;
+    public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG = 14;
     public static final int JAHR_DER_ERHEBUNG = Konstanten.ZWEITAUSEND_UND_DREI_UND_ZWANZIG;
     
     
     //todo find largest value in hashmap and comparator
     
     
-    public static String frageAntwortErmitteln(BaumKataster robusterBaumKataster, BaumKataster unverfaelschterBaumKataster, int fragenWahl)
+    public static String frageAntwortErmitteln(BaumKataster robusterBaumKataster, BaumKataster unverfaelschterBaumKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex, int fragenIndex)
     {//todo alle fragen richtig gelesen?
         //todo messages
         int key;
         
-        StringBuilder stringBuilder = new StringBuilder(Messages.ANTWORTEN[fragenWahl]);
+        StringBuilder stringBuilder = new StringBuilder(Messages.ANTWORTEN[fragenIndex]);
         
-        if (INDEX_BEZIRK_MIT_GROESZTEM_BAUM <= fragenWahl && fragenWahl <= INDEX_ALTER_VERGLEICHEN)
+        if (INDEX_BEZIRK_MIT_GROESZTEM_BAUM <= fragenIndex && fragenIndex <= INDEX_ALTER_VERGLEICHEN)
         {
-            key = Collections.max(unverfaelschterBaumKataster.getBaumHashMap().entrySet(), new BaumKatasterEntryComparator(fragenWahl)).getKey();
-            if(fragenWahl==INDEX_BEZIRK_MIT_GROESZTEM_BAUM) stringBuilder.append(unverfaelschterBaumKataster.getBaumHashMap().get(key).getOrt().getBezirk());
-            else stringBuilder.append(unverfaelschterBaumKataster.entryToString(key));
+            key = Collections.max(unverfaelschterBaumKataster.getBaumHashMap().entrySet(), new BaumKatasterEntryComparator(fragenIndex)).getKey();
+            if (fragenIndex == INDEX_BEZIRK_MIT_GROESZTEM_BAUM)
+            {
+                stringBuilder.append(unverfaelschterBaumKataster.getBaumHashMap().get(key).getOrt().getBezirk());
+            }
+            else
+            {
+                stringBuilder.append(unverfaelschterBaumKataster.entryToString(key));
+            }
         }
-        else if (INDEX_BAUMARTEN_ZAEHLEN <= fragenWahl && fragenWahl <= INDEX_GATTUNGEN_ZAEHLEN)
+        else if (INDEX_BAUMARTEN_ZAEHLEN <= fragenIndex && fragenIndex <= INDEX_GATTUNGEN_ZAEHLEN)
         {
-            stringBuilder.append(baumArtenGattungenZaehlen(robusterBaumKataster, fragenWahl));
+            stringBuilder.append(baumArtenGattungenZaehlen(robusterBaumKataster, fragenIndex));
         }
-        else if (INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN <= fragenWahl && fragenWahl <= INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
+        else if (INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN <= fragenIndex && fragenIndex <= INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
         {
-            stringBuilder.append(haeufigsteGattungBezirkZaehlen(robusterBaumKataster, fragenWahl));
+            stringBuilder.append(haeufigsteGattungBezirkZaehlen(robusterBaumKataster, fragenIndex));
         }
-        else if (INDEX_BEZIRK_MIT_MEISTEN_ARTEN == fragenWahl)
+        else if (INDEX_BEZIRK_MIT_MEISTEN_ARTEN == fragenIndex)
         {
             
             stringBuilder.append(bezirkMitMeistenBaumArtenFinden(robusterBaumKataster));
         }
-        else if (INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN == fragenWahl | fragenWahl == INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
+        else if (INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN == fragenIndex | fragenIndex == INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
         {
-            stringBuilder.append(extremsteDurchschnittlicheGattungFinden(unverfaelschterBaumKataster, fragenWahl));
+            stringBuilder.append(extremsteDurchschnittlicheGattungFinden(unverfaelschterBaumKataster, fragenIndex));
         }
-        
+        else if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_BERLIN_INSGESAMT)
+        {
+            //todo format
+            stringBuilder.append(String.format("%.2f", kohlenStoffSpeicherungInsgesamtBerechnen(kohlenStoffSpeicherungNachBaumIndex)));
+        }
+        else if (fragenIndex==INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK|fragenIndex==INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
+        {
+            stringBuilder.append(String.format("%.2f", kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(robusterBaumKataster, kohlenStoffSpeicherungNachBaumIndex, fragenIndex)));
+        }
         
         return stringBuilder.toString();
     }
@@ -238,6 +255,56 @@ public class KatasterServices
         
         
         return Collections.max(averages.entrySet(), Map.Entry.comparingByValue()).getKey();
+    }
+    
+    
+    private static Float kohlenStoffSpeicherungInsgesamtBerechnen(HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex)
+    {
+        float kohlenStoffSpeicherungInsgesamt = 0f;
+        for (Float wert : kohlenStoffSpeicherungNachBaumIndex.values())
+        {
+            kohlenStoffSpeicherungInsgesamt += wert;
+        }
+        
+        
+        return kohlenStoffSpeicherungInsgesamt;
+    }
+    
+    
+    private static String kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(BaumKataster robusterBaumKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex, int fragenIndex)
+    {
+        HashMap<String, Float> kohlenStoffSpeicherungNachBezirkOderGattung = new HashMap<>();
+        HashMap<Integer, Baum> baumHashMap = robusterBaumKataster.getBaumHashMap();
+        for (Integer baumKey : baumHashMap.keySet())
+        {
+            Baum baum = baumHashMap.get(baumKey);
+            
+            String key;
+            if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK)
+            {
+                key = baum.getOrt().getBezirk();
+            }
+            else if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
+            {
+                key = baum.getTaxonomie().getGattungBotanisch();
+            }
+            else
+            {
+                throw new IllegalArgumentException();
+            }
+            
+            float wert = kohlenStoffSpeicherungNachBaumIndex.get(key);
+            
+            if (kohlenStoffSpeicherungNachBezirkOderGattung.containsKey(key))
+            {
+                wert += kohlenStoffSpeicherungNachBezirkOderGattung.get(key);
+            }
+            
+            kohlenStoffSpeicherungNachBezirkOderGattung.put(key, wert);
+        }
+        
+        kohlenStoffSpeicherungNachBezirkOderGattung.remove(Strings.UNBEKANNT);
+        return Collections.max(kohlenStoffSpeicherungNachBezirkOderGattung.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
     
 }

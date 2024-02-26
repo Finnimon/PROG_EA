@@ -62,7 +62,7 @@ public class AufgabenController
         
         MyIO.printLn(Messages.AUSGABE_ANZAHL_GELOESCHTE_DATENSAETZE+baumKataster.getDeletedDataSetKeys().size(),true);
         
-        BaumKataster shallowRepairedBaumKataster= (BaumKataster) statisticalDataRepairCenter.getShallowRepairedStatistic();
+        BaumKataster shallowRepairedBaumKataster= (BaumKataster) statisticalDataRepairCenter.getShallowRepairedStatistic().clone();
         
         statisticalDataRepairCenter.deepRepair();
         
@@ -73,9 +73,9 @@ public class AufgabenController
     }
     
     
-    public void aufgabeDreiUndFuenf(BaumKataster shallowRepairedBaumKataster, BaumKataster deepRepairedBaumKataster)
+    public void aufgabeDreiUndFuenf(BaumKataster shallowRepairedBaumKataster, BaumKataster deepRepairedBaumKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex)
     {
-        MyIO.fragenStellenBeantworten(shallowRepairedBaumKataster,deepRepairedBaumKataster);
+        MyIO.fragenStellenBeantworten(shallowRepairedBaumKataster,deepRepairedBaumKataster,kohlenStoffSpeicherungNachBaumIndex);
     }
     
     

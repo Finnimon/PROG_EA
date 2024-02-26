@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MyIO
 {
@@ -162,7 +163,7 @@ public class MyIO
     }
     
     
-    public static void fragenStellenBeantworten(BaumKataster unverfaelschterKataster,BaumKataster robusterKataster)
+    public static void fragenStellenBeantworten(BaumKataster unverfaelschterKataster,BaumKataster robusterKataster, HashMap<Integer, Float> kohlenStoffSpeicherungNachBaumIndex)
     {
         int fragenWahl=Konstanten.EINS;
         while (fragenWahl!=0)
@@ -170,7 +171,7 @@ public class MyIO
             fragenAnbieten();
             fragenWahl = fragenWahlEinlesen();
             MyIO.resetZeitgeber();
-            MyIO.printLn( KatasterServices.frageAntwortErmitteln(robusterKataster,unverfaelschterKataster, fragenWahl),fragenWahl!=0);
+            MyIO.printLn( KatasterServices.frageAntwortErmitteln(robusterKataster,unverfaelschterKataster,kohlenStoffSpeicherungNachBaumIndex, fragenWahl),fragenWahl!=0);
         }
     }
     
