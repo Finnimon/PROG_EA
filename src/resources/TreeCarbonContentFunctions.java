@@ -3,7 +3,7 @@ package resources;
 import model.LinearFunction;
 
 
-public interface FunctionsTreeCarbonContent
+public interface TreeCarbonContentFunctions
 {
     
     

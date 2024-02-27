@@ -22,10 +22,10 @@ public interface Strings
     String EMPTY = "";
     
     
-    String SEMIKOLON = ";";
+    String SEMICOLON = ";";
     
     
-    String DATEIPFAD = "src/resources/Baumkataster_Berlin.csv";
+    String BAUMKATASTER_FILEPATH = "src/resources/Baumkataster_Berlin.csv";
     
     
 }

@@ -1,65 +1,76 @@
 package model;
 
 import resources.Strings;
+import utility.ElementFaultyException;
 import utility.RecordShortException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+
+/**
+ * @Summary: This class represents a line in a RFC4180 compliant CSV file.
+ * @Author: Finn Lindig
+ * @Since: 26.02.2024
+ */
 public class CSVRecord
 {
-    //    private final char delimiter;
-    //    private final int zeilenlaenge;
-    private static final String REGEX_SKIP = "\"";
+    
+    
+    /**
+     * @Summary: This regex is used to skip other regex in a record. This includes linebreaks and delimiters.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    private final String REGEX_SKIP = "\"";
+    
+    
+    /**
+     * @Summary: This regex is the standard delimiter in a RFC4180 compliant CSV file. It is used by {@link #toString()}
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    private final String COMMA = ",";
+    
+    
+    /**
+     * @Summary: This regex is the standard linebreak in a RFC4180 compliant CSV file. It is used by {@link #toString()}.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    private final String CRLF = "\r\n";
+    
+    
+    /**
+     * @Summary: This attribute represents a line in a RFC4180 compliant CSV file. Each String is a field in the record.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
     private ArrayList<String> record;
     
     
-    public CSVRecord(String zeile, String seperator, int zeilenlaenge) throws RecordShortException
+    /**
+     * @param line         the line in a RFC4180 compliant CSV file.
+     * @param delimiter    the delimiter used by the RFC4180 compliant CSV file.
+     * @param specifedRecordLength the record length used by the RFC4180 compliant CSV file and specified in {@link utility.CSVParser#CSVParser(String, String, int)}.
+     * @throws RecordShortException if the record is too short. This prompts the {@link utility.CSVParser} to pass this and the next line into a new {@link CSVRecord}.
+     * @Precondition: The line is a line in an RFC4180 compliant CSV file.
+     * @Postcondition: If the line is shorter than specified a {@link RecordShortException} will be thrown. This prompts the {@link utility.CSVParser} to pass this and the next line into a new {@link CSVRecord}, asserting that no Short Records exist. Records that are too long will be ignored.
+     * @Summary: This constructor parses a line in a RFC4180 compliant CSV file. It also handles linebreaks and delimiters. If the record is too short, an exception will be thrown.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    public CSVRecord(String line,String delimiter, int specifedRecordLength) throws RecordShortException, ElementFaultyException
     {
-        //        this.seperator=seperator;
-        //        this.zeilenlaenge=zeilenlaenge;
-        
-        ArrayList<String> record = new ArrayList<>(Arrays.asList(zeile.split(seperator)));
-        if (record.size() == zeilenlaenge)
-        {
-            setRecord(record);
-            
-            return;
-        }
-        
-        if (record.size() > zeilenlaenge)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            String wert;
-            for (int i = 0; i < record.size(); i++)
-            {
-                if ((wert = record.get(i)).startsWith(REGEX_SKIP))
-                {
-                    stringBuilder.append(wert);
-                    
-                    stringBuilder.append(seperator);
-                    stringBuilder.append(record.get(i + 1));
-                    wert = stringBuilder.toString();
-                    
-                    record.remove(i + 1);
-                    if (wert.endsWith(REGEX_SKIP))
-                    {
-                        wert.replace(REGEX_SKIP, Strings.EMPTY);
-                        
-                        continue;
-                    }
-                    else
-                    {
-                        i--;
-                    }
-                    record.set(i, wert);
-                }
-            }
-        }
-        
-        if (record.size() != zeilenlaenge)
+        ArrayList<String> record =readRecord(line,delimiter);
+        int recordLength=record.size();
+        if(recordLength<specifedRecordLength)
         {
             throw new RecordShortException();
+        }
+        else if (recordLength>specifedRecordLength)
+        {
+            throw new ElementFaultyException();
         }
         
         
@@ -67,42 +78,108 @@ public class CSVRecord
     }
     
     
+    /**
+     * @param line in a RFC4180 compliant CSV file.
+     * @param delimiter the delimiter used by the RFC4180 compliant CSV file and specified in {@link utility.CSVParser#CSVParser(String, String, int)}.
+     * @return The record as an ArrayList of Strings.
+     * @throws RecordShortException if the record ends upon a field enclosed by {@link #REGEX_SKIP} that does not end with {@link #REGEX_SKIP}.
+     * @Precondition: The String line is a line in an RFC4180 compliant CSV file.
+     * @Postcondition: The return will remove all {@link #REGEX_SKIP} from the fields and not split within a field enclosed by the {@link #REGEX_SKIP}.
+     * @Summary: Splits a csv line into an ArrayList of Strings. This is RFC418ß compliant.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    private ArrayList<String> readRecord(String line, String delimiter) throws RecordShortException
+    {
+        ArrayList<String> record= new ArrayList<>(Arrays.asList(line.split(delimiter)));
+        
+        for (int i = 0; i < record.size(); i++)
+        {
+            int fieldIndex = i;
+            String field=record.get(i);
+            StringBuilder stringBuilder = new StringBuilder();
+            while (field.startsWith(REGEX_SKIP)&!field.endsWith(REGEX_SKIP))
+            {
+                stringBuilder.append(field);
+                stringBuilder.append(delimiter);
+                try
+                {
+                    field=stringBuilder.append(record.remove(i+1)).toString();
+                }
+                catch (IndexOutOfBoundsException e)
+                {
+                    throw new RecordShortException();
+                }
+            }
+            
+            record.set(fieldIndex, field.replace(REGEX_SKIP, Strings.EMPTY));
+            
+        }
+        
+        
+        return record;
+    }
+    
+    
+    /**
+     * @return {@link #record}
+     * @Precondition: {@link #setRecord(ArrayList)} has been called by {@link #CSVRecord(String, String, int)}
+     * @Postcondition: The return will be of the correct length.
+     * @Summary: This method returns the {@link #record}
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
     public ArrayList<String> getRecord()
     {
         return record;
     }
     
     
-    public void setRecord(ArrayList<String> record)
+    /**
+     * @param record the line in a RFC4180 compliant CSV file as passed by {@link #CSVRecord(String, String, int)}.
+     * @Precondition: {@link #setRecord(ArrayList)} is only ever called by {@link #CSVRecord(String, String, int)}.
+     * @Postcondition: {@link #record} will be of the correct length.
+     * @Summary: This method sets the {@link #record}
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    private void setRecord(ArrayList<String> record)
     {
         this.record = record;
     }
     
     
-    
-    //
-    //    public char getDelimiter()
-    //    {
-    //        return delimiter;
-    //    }
-    //
-    //
-    //    public int getZeilenlaenge()
-    //    {
-    //        return zeilenlaenge;
-    //    }
-    
-    
+    /**
+     * @return {@link #record} as an RFC4180 compliant CSV line with a linebreak.
+     * @Precondition: {@link #setRecord(ArrayList)} has been called by {@link #CSVRecord(String, String, int)} and its Precondition has been met.
+     * @Postcondition: The returned {@link String} will be RFC4180 compliant.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
     @Override
     public String toString()
     {
         StringBuilder stringBuilder = new StringBuilder();
-        for (String wert : getRecord())
+        
+        for (String field : getRecord())
         {
-            stringBuilder.append(wert);
-            stringBuilder.append(Strings.SEMIKOLON);
+            boolean containsRegex=(field.contains(COMMA)||field.contains(CRLF));
+            
+            if (containsRegex)
+            {
+                stringBuilder.append(REGEX_SKIP);
+                stringBuilder.append(field);
+                stringBuilder.append(REGEX_SKIP);
+            }
+            else
+            {
+                stringBuilder.append(field);
+            }
+            
+            stringBuilder.append(COMMA);
         }
-       
-        return  stringBuilder.deleteCharAt(stringBuilder.length()-1).toString();
+        
+        
+        return stringBuilder.deleteCharAt(stringBuilder.length() - 1).append(CRLF).toString();
     }
 }

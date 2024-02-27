@@ -4,16 +4,16 @@ import model.Tree;
 import model.BaumKataster;
 import model.LinearFunction;
 import model.Metrik;
-import resources.FunctionsTreeCarbonContent;
+import resources.TreeCarbonContentFunctions;
 import resources.Strings;
 
 import java.util.HashMap;
 
-import static resources.FunctionsTreeCarbonContent.*;
+import static resources.TreeCarbonContentFunctions.*;
 
 
 /**
- * @Summary: This class offers instance methods for calculating the carbon contained by a tree. The collection of {@link LinearFunction} used for this are stored in {@link FunctionsTreeCarbonContent}.
+ * @Summary: This class offers instance methods for calculating the carbon contained by a tree. The collection of {@link LinearFunction} used for this are stored in {@link TreeCarbonContentFunctions}.
  * @Author: Finn Lindig
  * @Since: Finn Lindig
  */

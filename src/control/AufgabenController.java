@@ -19,7 +19,7 @@ public class AufgabenController
     private final ArrayList<Float> argumente;
     
     
-    public AufgabenController(ArrayList<Float > argumente)
+    public AufgabenController(ArrayList<Float> argumente)
     {
         this.argumente = argumente;
     }
@@ -27,15 +27,15 @@ public class AufgabenController
     
     public BaumKataster aufgabeEins()
     {
-        MyIO.printLn(Messages.AUSGABE_PROGRAMM_INITIALISIERT,true);// Message String
+        MyIO.printLn(Messages.AUSGABE_PROGRAMM_INITIALISIERT, true);// Message String
         
-        File file = MyIO.dateipfadValidieren(resources.Strings.DATEIPFAD);
-        MyIO.printLn(Messages.AUSGABE_LESE_AUS_DATEI + Strings.DATEIPFAD, false);
+        File file = MyIO.dateipfadValidieren(resources.Strings.BAUMKATASTER_FILEPATH);
+        MyIO.printLn(Messages.AUSGABE_LESE_AUS_DATEI + Strings.BAUMKATASTER_FILEPATH, false);
         CSVParser cSVParser;
         
         try
         {
-            cSVParser= new CSVParser(Strings.DATEIPFAD, Strings.SEMIKOLON, Constants.ZWOELF);
+            cSVParser = new CSVParser(Strings.BAUMKATASTER_FILEPATH, Strings.SEMICOLON, Constants.ZWOELF);
         }
         catch (FileNotFoundException e)
         {
@@ -45,7 +45,7 @@ public class AufgabenController
         
         MyIO.printLn(Messages.AUSGABE_ANZAHL_ERFOLGREICH_EINGELESENE_ZEILEN + cSVRecords.size(), true);
         
-        BaumKataster baumKataster = new BaumKataster(cSVRecords,Main.ARGUMENTE);
+        BaumKataster baumKataster = new BaumKataster(cSVRecords, Main.ARGUMENTE);
         MyIO.printLn(Messages.AUSGABE_ANZAHL_ERZEUGTER_BAUM_INSTANZEN + baumKataster.getBaumHashMap().keySet().size(), true);
         
         return baumKataster;
@@ -58,13 +58,13 @@ public class AufgabenController
         
         statisticalDataRepairCenter.shallowRepair();
         
-        MyIO.printLn(Messages.AUSGABE_ANZAHL_GELOESCHTE_DATENSAETZE+baumKataster.getDeletedDataSetKeys().size(),true);
+        MyIO.printLn(Messages.AUSGABE_ANZAHL_GELOESCHTE_DATENSAETZE + baumKataster.getDeletedDataSetKeys().size(), true);
         
-        BaumKataster shallowRepairedBaumKataster= (BaumKataster) statisticalDataRepairCenter.getShallowRepairedStatistic().clone();
+        BaumKataster shallowRepairedBaumKataster = (BaumKataster) statisticalDataRepairCenter.getShallowRepairedStatistic().clone();
         
         statisticalDataRepairCenter.deepRepair();
         
-        MyIO.printLn(Messages.AUSGABE_ANZAHL_BEARBEITETE_DATENSAETZE+baumKataster.getEditedDataSetKeys().size(),true);
+        MyIO.printLn(Messages.AUSGABE_ANZAHL_BEARBEITETE_DATENSAETZE + baumKataster.getEditedDataSetKeys().size(), true);
         
         
         return shallowRepairedBaumKataster;
@@ -73,9 +73,8 @@ public class AufgabenController
     
     public void aufgabeDreiUndFuenf(BaumKataster shallowRepairedBaumKataster, BaumKataster deepRepairedBaumKataster)
     {
-        MyIO.fragenStellenBeantworten(shallowRepairedBaumKataster,deepRepairedBaumKataster);
+        MyIO.fragenStellenBeantworten(shallowRepairedBaumKataster, deepRepairedBaumKataster);
     }
-    
     
     
 }

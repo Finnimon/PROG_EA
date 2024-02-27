@@ -4,6 +4,7 @@ import model.CSVRecord;
 import resources.Strings;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc/html/rfc4180 quelle
@@ -16,8 +17,7 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
     private final int recordLength;
     
     
-    
-    public CSVParser(String filePath,String delimiter, int recordLength) throws FileNotFoundException
+    public CSVParser(String filePath, String delimiter, int recordLength) throws FileNotFoundException
     {
         super(filePath);
         this.delimiter = delimiter;
@@ -37,43 +37,44 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
     }
     
     
-    
     public ArrayList<CSVRecord> parse(boolean removeHeader)
     {
-        ArrayList<String> cSV = super.parse();
-        
-        if(removeHeader) cSV.removeFirst();
-        
+        ArrayList<String> csvFile = super.parse();
         ArrayList<CSVRecord> cSVRecords = new ArrayList<>();
-        for (int i = 0; i < cSV.size(); i++)
+        
+        if (removeHeader)
         {
-            CSVRecord cSVRecord;
-            String line = cSV.get(i);
-            
-            
+            csvFile.removeFirst();
+        }
+        
+        for (int i = 0; i < csvFile.size(); i++)
+        {
+            String line = csvFile.get(i);
+            CSVRecord csvRecord;
             try
             {
-                cSVRecord = new CSVRecord(line, getDelimiter(), getRecordLength());
+                csvRecord = new CSVRecord(line, delimiter, recordLength);
             }
             catch (RecordShortException e)
             {
                 StringBuilder stringBuilder = new StringBuilder(line);
                 stringBuilder.append(Strings.CRLF);
-                try
-                {
-                    cSVRecord = new CSVRecord((stringBuilder.append(cSV.get(i+1)).toString()), getDelimiter(), getRecordLength());
-                    cSV.remove(i+1);
-                }
-                catch (Exception ex)
-                {
-                    continue;
-                } //todo
+                stringBuilder.append(csvFile.remove(i + 1));
                 
+                csvFile.set(i, (stringBuilder.toString()));
+                i--;
                 
+                continue;
+            }
+            catch (ElementFaultyException e)
+            {
+                csvFile.remove(i);
+                i--;
+                
+                continue;
             }
             
-            
-            cSVRecords.add(cSVRecord);
+            cSVRecords.add(csvRecord);
         }
         
         
@@ -81,4 +82,20 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
     }
     
     
+    /**
+     * @param filePath The path of the file to be written to.
+     * @param content The content to be written to filePath.
+     * @param <T> The type of the content to be written to filePath.
+     * @throws IOException if filePath cannot be written to.
+     * @Precondition: Params are not null and filePath exists and canWrite.
+     * @Postcondition: content is written to filePath.
+     * @Summary: Writes content to filePath.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    @Override
+    public <T> void save(String filePath, Iterable<T> content) throws IOException
+    {
+        super.save(filePath, content);
+    }
 }
