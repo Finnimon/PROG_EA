@@ -1,7 +1,5 @@
 package utility;
 
-import resources.Strings;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -77,7 +75,7 @@ public class FileParser
         }
         catch (IOException e)
         {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         
         
@@ -99,25 +97,19 @@ public class FileParser
     
     
     /**
-     * @param filePath The path of the file to be written to.
-     * @param content The content to be written to filePath.
-     * @param <T> The type of the content to be written to filePath.
+     * @param filePath The path to save this {@link FileParser#parse()} to.
      * @throws IOException if filePath cannot be written to.
-     * @Precondition: Params are not null and filePath exists and canWrite.
+     * @Precondition: filePath is not null and filePath exists and canWrite.
      * @Postcondition: content is written to filePath.
-     * @Summary: Writes content to filePath.
+     * @Summary: Writes the contents of this {@link FileParser#parse()} to filePath.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    public <T> void save(String filePath, Iterable<T> content) throws IOException
+    public void save(String filePath) throws IOException
     {
         File file = new File(filePath);
         file.createNewFile();
-        for (T t : content)
-        {
-            Files.writeString(file.toPath(), t.toString());
-            Files.writeString(file.toPath(), Strings.CRLF);
-        }
+        Files.write(file.toPath(), parse());
     }
     
 }

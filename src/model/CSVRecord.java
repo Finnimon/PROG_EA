@@ -30,7 +30,7 @@ public class CSVRecord
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    private final String COMMA = ",";
+    private final String STANDARD_DELIMITER_COMMA = ",";
     
     
     /**
@@ -163,7 +163,7 @@ public class CSVRecord
         
         for (String field : getRecord())
         {
-            boolean containsRegex=(field.contains(COMMA)||field.contains(CRLF));
+            boolean containsRegex=(field.contains(STANDARD_DELIMITER_COMMA)||field.contains(CRLF));
             
             if (containsRegex)
             {
@@ -176,7 +176,7 @@ public class CSVRecord
                 stringBuilder.append(field);
             }
             
-            stringBuilder.append(COMMA);
+            stringBuilder.append(STANDARD_DELIMITER_COMMA);
         }
         
         
