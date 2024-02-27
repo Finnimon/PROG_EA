@@ -1,43 +1,39 @@
 package utility;
 
 import model.CSVRecord;
-import org.jetbrains.annotations.NotNull;
-import resources.Konstanten;
 import resources.Strings;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc/html/rfc4180 quelle
 {
     
     
-    private final String SEPERATOR;
+    private final String delimiter;
     
     
-    private final int ZEILENLAENGE;
+    private final int recordLength;
     
     
     
-    public CSVParser(String filePath,String SEPERATOR, int ZEILENLAENGE) throws FileNotFoundException
+    public CSVParser(String filePath,String delimiter, int recordLength) throws FileNotFoundException
     {
         super(filePath);
-        this.SEPERATOR = SEPERATOR;
-        this.ZEILENLAENGE = ZEILENLAENGE;
+        this.delimiter = delimiter;
+        this.recordLength = recordLength;
     }
     
     
-    public String getSEPERATOR()
+    public String getDelimiter()
     {
-        return SEPERATOR;
+        return delimiter;
     }
     
     
-    public int getZEILENLAENGE()
+    public int getRecordLength()
     {
-        return ZEILENLAENGE;
+        return recordLength;
     }
     
     
@@ -52,26 +48,26 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
         for (int i = 0; i < cSV.size(); i++)
         {
             CSVRecord cSVRecord;
-            String zeile = cSV.get(i);
+            String line = cSV.get(i);
             
             
             try
             {
-                cSVRecord = new CSVRecord(zeile, getSEPERATOR(), getZEILENLAENGE());
+                cSVRecord = new CSVRecord(line, getDelimiter(), getRecordLength());
             }
             catch (RecordShortException e)
             {
-                StringBuilder stringBuilder = new StringBuilder(zeile);
+                StringBuilder stringBuilder = new StringBuilder(line);
                 stringBuilder.append(Strings.CRLF);
                 try
                 {
-                    cSVRecord = new CSVRecord((stringBuilder.append(cSV.get(i+1)).toString()),getSEPERATOR(),getZEILENLAENGE());
+                    cSVRecord = new CSVRecord((stringBuilder.append(cSV.get(i+1)).toString()), getDelimiter(), getRecordLength());
                     cSV.remove(i+1);
                 }
                 catch (Exception ex)
                 {
                     continue;
-                }
+                } //todo
                 
                 
             }

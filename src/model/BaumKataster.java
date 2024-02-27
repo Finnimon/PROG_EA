@@ -1,6 +1,6 @@
 package model;
 
-import resources.Konstanten;
+import resources.Constants;
 import resources.Messages;
 import resources.Strings;
 import utility.iRepairableStatistic;
@@ -36,7 +36,7 @@ public class BaumKataster implements iRepairableStatistic
             try
             {
                 //keep first remove next
-                baeume.putIfAbsent(Integer.parseInt(record.getFirst()), Tree.create(record.subList(Konstanten.EINS, Konstanten.ZWOELF)));
+                baeume.putIfAbsent(Integer.parseInt(record.getFirst()), Tree.create(record.subList(Constants.EINS, Constants.ZWOELF)));
             }
             catch (Exception e)
             {

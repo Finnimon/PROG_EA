@@ -13,7 +13,7 @@
 //{
 //
 //
-//    //region[Konstanten]
+//    //region[Constants]
 //
 //
 //    private final int INDEX_ERSTES_QUARTIL=0;

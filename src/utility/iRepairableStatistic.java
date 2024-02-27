@@ -1,6 +1,6 @@
 package utility;
 
-import resources.Konstanten;
+import resources.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ public interface iRepairableStatistic extends Cloneable
     
     public default float getUnknown()
     {
-        return Konstanten.UNBEKANNT;
+        return Constants.UNBEKANNT;
     }
     
     

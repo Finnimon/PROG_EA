@@ -1,6 +1,6 @@
 package resources;
 
-public interface Konstanten
+public interface Constants
 {
     //überall konstanten entsprechend zweck benenner
     int MINUSEINS = -1;
@@ -45,7 +45,7 @@ public interface Konstanten
     int ZWEITAUSEND_UND_DREI_UND_ZWANZIG = 2023;
     
     
-    int UNBEKANNT = Konstanten.MINUSEINS;
+    int UNBEKANNT = Constants.MINUSEINS;
     
 //    FLOAT MAXIMUM
 //

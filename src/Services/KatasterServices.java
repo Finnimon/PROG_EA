@@ -5,7 +5,7 @@ import model.Tree;
 import model.BaumKataster;
 import model.Metrik;
 import org.jetbrains.annotations.NotNull;
-import resources.Konstanten;
+import resources.Constants;
 import resources.Messages;
 import resources.Strings;
 import utility.BaumKatasterEntryComparator;
@@ -30,7 +30,7 @@ public class KatasterServices
     public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_BERLIN_INSGESAMT = 12;
     public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK = 13;
     public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG = 14;
-    public static final int JAHR_DER_ERHEBUNG = Konstanten.ZWEITAUSEND_UND_DREI_UND_ZWANZIG;
+    public static final int JAHR_DER_ERHEBUNG = Constants.ZWEITAUSEND_UND_DREI_UND_ZWANZIG;
     
     
     //todo find largest value in hashmap and comparator
@@ -152,11 +152,11 @@ public class KatasterServices
             
             try
             {
-                hashMap.put(attribut, (hashMap.get(attribut) + Konstanten.EINS));
+                hashMap.put(attribut, (hashMap.get(attribut) + Constants.EINS));
             }
             catch (NullPointerException e)
             {
-                hashMap.put(attribut, Konstanten.EINS);
+                hashMap.put(attribut, Constants.EINS);
             }
         }
         

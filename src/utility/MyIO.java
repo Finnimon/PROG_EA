@@ -3,7 +3,7 @@ package utility;
 import Services.KatasterServices;
 import model.BaumKataster;
 import org.jetbrains.annotations.NotNull;
-import resources.Konstanten;
+import resources.Constants;
 import resources.Messages;
 import resources.Strings;
 
@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MyIO
 {
@@ -25,7 +24,7 @@ public class MyIO
     private static final int NIEDRIGSTER_FRAGENWAHL_INDEX = 0;
     
     
-    private static final int GROESSTER_FRAGENWAHL_INDEX = Messages.FRAGEN.length - Konstanten.EINS;
+    private static final int GROESSTER_FRAGENWAHL_INDEX = Messages.FRAGEN.length - Constants.EINS;
     
     
     private static boolean timeStamp = true;
@@ -165,7 +164,7 @@ public class MyIO
     
     public static void fragenStellenBeantworten(BaumKataster unverfaelschterKataster,BaumKataster robusterKataster)
     {
-        int fragenWahl=Konstanten.EINS;
+        int fragenWahl= Constants.EINS;
         while (fragenWahl!=0)
         {
             fragenAnbieten();

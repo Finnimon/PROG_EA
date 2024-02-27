@@ -3,7 +3,7 @@ package Services;
 import model.Tree;
 import model.Metrik;
 import org.jetbrains.annotations.NotNull;
-import resources.Konstanten;
+import resources.Constants;
 import resources.Strings;
 
 import java.util.Objects;
@@ -50,12 +50,12 @@ public class BaumServices
     
     public static boolean bekanntheitPruefen(int attribut)
     {
-        return attribut !=Konstanten.UNBEKANNT;
+        return attribut != Constants.UNBEKANNT;
     }
     
     public static boolean bekanntheitPruefen(float attribut)
     {
-        return attribut !=Konstanten.UNBEKANNT;
+        return attribut != Constants.UNBEKANNT;
     }
     
     public static boolean bekanntheitPruefen(String attribut)

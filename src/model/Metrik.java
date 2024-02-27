@@ -3,7 +3,7 @@ package model;
 import Services.BaumServices;
 import Services.KatasterServices;
 import control.Main;
-import resources.Konstanten;
+import resources.Constants;
 import resources.Messages;
 import resources.Strings;
 import utility.BaumComparator;
@@ -34,7 +34,7 @@ public class Metrik implements iRepairable
     //    int ERLAUBTE_ANZAHL_LEERE_WERTE_IN_CSVRECORDS = 5;
     //
     
-    //region [Konstanten]
+    //region [Constants]
     
     
     public static final int INDEX_PFLANZJAHR = 0;
@@ -233,7 +233,7 @@ public class Metrik implements iRepairable
     {
         setStandAlter(standAlter);
         int pflanzJahr = getPflanzJahr();
-        if (pflanzJahr == Konstanten.UNBEKANNT | pflanzJahr > KatasterServices.JAHR_DER_ERHEBUNG - Main.ARGUMENTE.get(0) | pflanzJahr > KatasterServices.JAHR_DER_ERHEBUNG)
+        if (pflanzJahr == Constants.UNBEKANNT | pflanzJahr > KatasterServices.JAHR_DER_ERHEBUNG - Main.ARGUMENTE.get(0) | pflanzJahr > KatasterServices.JAHR_DER_ERHEBUNG)
         {
             setPflanzJahr(KatasterServices.JAHR_DER_ERHEBUNG - standAlter);
         }
@@ -269,7 +269,7 @@ public class Metrik implements iRepairable
     @Override
     public boolean isEmpty()
     {
-        return Core.areAllValuesInCollectionEqualToSpecificValue(getRepairables(), Float.valueOf(Konstanten.UNBEKANNT));
+        return Core.areAllValuesInCollectionEqualToSpecificValue(getRepairables(), Float.valueOf(Constants.UNBEKANNT));
     }
     
     

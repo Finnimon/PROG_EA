@@ -2,7 +2,7 @@ package control;
 
 import model.BaumKataster;
 import model.CSVRecord;
-import resources.Konstanten;
+import resources.Constants;
 import resources.Messages;
 import resources.Strings;
 import utility.CSVParser;
@@ -35,7 +35,7 @@ public class AufgabenController
         
         try
         {
-            cSVParser= new CSVParser(Strings.DATEIPFAD, Strings.SEMIKOLON, Konstanten.ZWOELF);
+            cSVParser= new CSVParser(Strings.DATEIPFAD, Strings.SEMIKOLON, Constants.ZWOELF);
         }
         catch (FileNotFoundException e)
         {

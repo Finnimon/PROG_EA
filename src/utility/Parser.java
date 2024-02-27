@@ -1,6 +1,6 @@
 package utility;
 
-import resources.Konstanten;
+import resources.Constants;
 
 public class Parser
 {
@@ -13,7 +13,7 @@ public class Parser
         }
         catch (NumberFormatException e)
         {
-            parsedInt = Konstanten.UNBEKANNT;
+            parsedInt = Constants.UNBEKANNT;
         }
         
         
@@ -31,7 +31,7 @@ public class Parser
         }
         catch (NumberFormatException e)
         {
-            parsedFloat = Konstanten.UNBEKANNT;
+            parsedFloat = Constants.UNBEKANNT;
         }
         
         

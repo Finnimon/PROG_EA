@@ -3,7 +3,7 @@ package model;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import resources.Konstanten;
+import resources.Constants;
 import resources.Strings;
 import utility.Core;
 import utility.ElementFaultyException;
@@ -17,16 +17,16 @@ public class Tree implements Comparable<Tree>, iRepairable
 {
     
     
-    //region[Konstanten]
+    //region[Constants]
     
     
-    private static final int INDEX_BEGINN_METRIK = Konstanten.FUENF;
-    private static final int INDEX_BEGINN_TAXONOMIE = Konstanten.EINS;
+    private static final int INDEX_BEGINN_METRIK = Constants.FUENF;
+    private static final int INDEX_BEGINN_TAXONOMIE = Constants.EINS;
     private static final int INDEX_ENDE_TAXONOMIE = INDEX_BEGINN_METRIK;
-    private static final int INDEX_ENDE_METRIK = Konstanten.ZEHN;
-    private static final int NOTWENDIGE_ZEILENLAENGE = Konstanten.ELF;
-    private static final int INDEX_BEGINN_BAUM = Konstanten.EINS;
-    private static final int INDEX_ENDE_BAUM = Konstanten.ZWOELF;
+    private static final int INDEX_ENDE_METRIK = Constants.ZEHN;
+    private static final int NOTWENDIGE_ZEILENLAENGE = Constants.ELF;
+    private static final int INDEX_BEGINN_BAUM = Constants.EINS;
+    private static final int INDEX_ENDE_BAUM = Constants.ZWOELF;
     
     
     //endregion
