@@ -97,7 +97,7 @@ public class KatasterServices
         {
             for (Tree tree : baumBaum.values())
             {
-                string = tree.getTaxonomie().getArtBotanisch();
+                string = tree.getTaxonomie().getSpeciesBotanical();
                 set.add(string);
             }
         }
@@ -105,7 +105,7 @@ public class KatasterServices
         {
             for (Tree tree : baumBaum.values())
             {
-                string = tree.getTaxonomie().getGattungBotanisch();
+                string = tree.getTaxonomie().getGenusBotanical();
                 set.add(string);
             }
         }
@@ -133,7 +133,7 @@ public class KatasterServices
         {
             if (fragenIndex == INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN)
             {
-                attribut = tree.getTaxonomie().getGattungBotanisch();
+                attribut = tree.getTaxonomie().getGenusBotanical();
             }
             else if (fragenIndex == INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
             {
@@ -209,7 +209,7 @@ public class KatasterServices
         HashMap<String, Integer> counters = new HashMap<>();
         for (Tree tree : baumKataster.getBaumHashMap().values())
         {
-            String gattung = tree.getTaxonomie().getGattungBotanisch();
+            String gattung = tree.getTaxonomie().getGenusBotanical();
             
             float wert;
             int counter = 0;
@@ -287,7 +287,7 @@ public class KatasterServices
             }
             else if (fragenIndex == INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
             {
-                key = tree.getTaxonomie().getGattungBotanisch();
+                key = tree.getTaxonomie().getGenusBotanical();
             }
             else
             {

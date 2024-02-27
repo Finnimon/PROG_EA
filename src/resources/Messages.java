@@ -77,10 +77,10 @@ public interface Messages
     String BEZIRK = "Bezirk:";
     
     
-    String BAUMART = "Art (Deutsch/Botanisch):";
+    String TREE_SPECIES = "Art (Deutsch/Botanisch):";
     
     
-    String GATTUNG = "Gattung (Deutsch/Botanisch):";
+    String TREE_GENUS = "Gattung (Deutsch/Botanisch):";
     
     
     String PFLANZJAHR_STANDALTER = "Jahr der Pflanzung/Standalter:";

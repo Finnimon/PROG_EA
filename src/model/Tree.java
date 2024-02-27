@@ -32,17 +32,17 @@ public class Tree implements Comparable<Tree>, iRepairable
     //endregion
     //region [Attribute]
     private final Ort ort;
-    private final Taxonomie taxonomie;
+    private final Taxonomy taxonomy;
     private Metrik metrik;
     
     //endregion
     //region[create]
     
     
-    private Tree(Ort ort, Taxonomie taxonomie, Metrik metrik)
+    private Tree(Ort ort, Taxonomy taxonomy, Metrik metrik)
     {
         this.ort = ort;
-        this.taxonomie = taxonomie;
+        this.taxonomy = taxonomy;
         setMetrik(metrik);
     }
     
@@ -56,7 +56,7 @@ public class Tree implements Comparable<Tree>, iRepairable
         //todo both empty
         this.ort = new Ort(record.getFirst(), record.getLast());
         List<String> taxonomieList = record.subList(INDEX_BEGINN_TAXONOMIE, INDEX_ENDE_TAXONOMIE);
-        this.taxonomie = new Taxonomie(taxonomieList);
+        this.taxonomy = new Taxonomy(taxonomieList);
         List<String> metrikList = record.subList(INDEX_BEGINN_METRIK, INDEX_ENDE_METRIK);
         setMetrik(new Metrik(metrikList));
     }
@@ -73,9 +73,9 @@ public class Tree implements Comparable<Tree>, iRepairable
     
     
     @Contract("_, _, _ -> new")
-    public static @NotNull Tree create(Ort ort, Taxonomie taxonomie, Metrik metrik)
+    public static @NotNull Tree create(Ort ort, Taxonomy taxonomy, Metrik metrik)
     {
-        return new Tree(ort, taxonomie, metrik);
+        return new Tree(ort, taxonomy, metrik);
     }
     
     
@@ -89,9 +89,9 @@ public class Tree implements Comparable<Tree>, iRepairable
     //region[GetSet]
     
     
-    public Taxonomie getTaxonomie()
+    public Taxonomy getTaxonomie()
     {
-        return this.taxonomie;
+        return this.taxonomy;
     }
     
     

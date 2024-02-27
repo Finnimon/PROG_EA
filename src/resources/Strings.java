@@ -10,7 +10,7 @@ public interface Strings
     String CRLF = "\r\n";
     
     
-    String SCHRAEGSTRICH = "/";
+    String FORWARD_SLASH = "/";
     
     
     String ANFUEHRUNGSZEICHEN = "\"";

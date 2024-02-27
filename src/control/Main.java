@@ -29,7 +29,7 @@ public class Main
         for (Tree tree : shallowRepairedBaumKataster.getBaumHashMap().values()
              )
         {
-            Gattungen.add(tree.getTaxonomie().getGattungBotanisch());
+            Gattungen.add(tree.getTaxonomie().getGenusBotanical());
         }
         for (String gattung:Gattungen
              )

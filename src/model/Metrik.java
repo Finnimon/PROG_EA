@@ -281,7 +281,7 @@ public class Metrik implements iRepairable
         stringBuilder.append(Messages.PFLANZJAHR_STANDALTER);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getPflanzJahr()));
-        stringBuilder.append(Strings.SCHRAEGSTRICH);
+        stringBuilder.append(Strings.FORWARD_SLASH);
         stringBuilder.append(BaumServices.ausgabeStringUnbekanntesAttributZurueckgeben(getStandAlter()));
         stringBuilder.append(Strings.CRLF);
         

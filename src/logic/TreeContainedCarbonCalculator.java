@@ -65,7 +65,7 @@ public class TreeContainedCarbonCalculator
     public float speicherungInKiloGrammFuerEinzelBaumBerechnen(Tree tree)
     {
         HashMap<String, LinearFunction> funktionen = getFunctions();
-        LinearFunction funktion = funktionen.get(tree.getTaxonomie().getGattungBotanisch());
+        LinearFunction funktion = funktionen.get(tree.getTaxonomie().getGenusBotanical());
         if(funktion == null)
         {
             funktion = funktionen.get(Strings.UNBEKANNT);
