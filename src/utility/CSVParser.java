@@ -12,13 +12,6 @@ import java.util.ArrayList;
 public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc/html/rfc4180 quelle
 {
     
-    /**
-     * @Summary: The default delimiter.
-     * @Author: Finn Lindig
-     * @Since: 26.02.2024
-     */
-    private final String DEFAULT_DELIMITER_COMMA = ",";
-    
     
     /**
      * @Summary: The delimiter to be used whenever parsing.
@@ -58,7 +51,7 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
     /**
      * @param filePath The path of the file to be parsed.
      * @throws FileNotFoundException if filePath cannot be found or read.
-     * @Precondition: Params are not null and filePath exists and canRead. The file under filePath is RFC4180 compliant. The delimiter used by the file is the {@link #DEFAULT_DELIMITER_COMMA}.
+     * @Precondition: Params are not null and filePath exists and canRead. The file under filePath is RFC4180 compliant. The delimiter used by the file is the {@link CSVRecord#DEFAULT_DELIMITER}.
      * @Postcondition: content is written to filePath.
      * @Summary: Writes content to filePath.
      * @Author: Finn Lindig
@@ -67,7 +60,7 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
     public CSVParser(String filePath, int recordLength) throws FileNotFoundException
     {
         super(filePath);
-        this.delimiter = DEFAULT_DELIMITER_COMMA;
+        this.delimiter = CSVRecord.DEFAULT_DELIMITER;
         this.recordLength = recordLength;
     }
     
@@ -168,7 +161,7 @@ public class CSVParser extends FileParser//todo https://datatracker.ietf.org/doc
         for (CSVRecord csvRe : parse(false))
         {
             Files.writeString(file.toPath(), csvRe.toString());
-            Files.writeString(file.toPath(), Strings.CRLF);
+            Files.writeString(file.toPath(), CSVRecord.CRLF);
         }
     }
 }

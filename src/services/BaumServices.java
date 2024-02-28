@@ -1,7 +1,8 @@
-package Services;
+package services;
 
+import control.TreeCadastreQueryController;
 import model.Tree;
-import model.Metrik;
+import model.Metric;
 import org.jetbrains.annotations.NotNull;
 import resources.Constants;
 import resources.Strings;
@@ -10,11 +11,6 @@ import java.util.Objects;
 
 public class BaumServices
 {
-    
-    public static void baumPruefen(Tree tree)
-    {
-    //todo und reparieren
-    }
     
     
     public static String ausgabeStringUnbekanntesAttributZurueckgeben(int attribut)
@@ -68,17 +64,17 @@ public class BaumServices
     {
         
         
-        Metrik metrik = tree.getMetrik();
+        Metric metric = tree.getMetric();
         
         int standalter=0;
         
-        if (BaumServices.bekanntheitPruefen(metrik.getStandAlter()))
+        if (BaumServices.bekanntheitPruefen(metric.getAgeInYears()))
         {
-            standalter= metrik.getStandAlter();
+            standalter= metric.getAgeInYears();
         }
-        else if(BaumServices.bekanntheitPruefen(metrik.getPflanzJahr()))
+        else if(BaumServices.bekanntheitPruefen(metric.getPlantingYear()))
         {
-            standalter= KatasterServices.JAHR_DER_ERHEBUNG- metrik.getPflanzJahr();
+            standalter= TreeCadastreQueryController.JAHR_DER_ERHEBUNG- metric.getPlantingYear();
         }
         
         

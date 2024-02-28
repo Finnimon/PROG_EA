@@ -4,7 +4,7 @@ import resources.Constants;
 
 public class Parser
 {
-    public static int parseInt(String string)
+    public static int safeParseInt(String string)
     {
         int parsedInt;
         try
@@ -21,9 +21,8 @@ public class Parser
     }
     
     
-    public static float parseFloat(String string)
+    public static float safeParseFloat(String string)
     {
-        
         float parsedFloat;
         try
         {

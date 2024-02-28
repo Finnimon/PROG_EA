@@ -1,7 +1,7 @@
 //package control;
 //
 //import model.Tree;
-//import model.BaumKataster;
+//import model.TreeCadastre;
 //import utility.BaumComparator;
 //import utility.BaumKatasterEntryComparator;
 //
@@ -27,7 +27,7 @@
 //
 //
 //    private final float maximumIncreaseBetweenTwoValues;
-//    private BaumKataster baumKataster;
+//    private TreeCadastre baumKataster;
 //    private boolean istRepariert;
 //
 //
@@ -35,14 +35,14 @@
 //    //region [Konstruktor]
 //
 //    //
-//    //    public KatasterDataRepairCenter(BaumKataster baumKataster)
+//    //    public KatasterDataRepairCenter(TreeCadastre baumKataster)
 //    //    {
 //    //        setSortierteBaeume(katasterSortieren(baumKataster));
 //    //    }
 //    //
 //
 //
-//    public KatasterDataRepairCenter(BaumKataster baumKataster, float maximumIncreaseBetweenTwoValues)
+//    public KatasterDataRepairCenter(TreeCadastre baumKataster, float maximumIncreaseBetweenTwoValues)
 //    {
 //        setBaumKataster(baumKataster);
 //        this.maximumIncreaseBetweenTwoValues = maximumIncreaseBetweenTwoValues;
@@ -61,7 +61,7 @@
 //    }
 //
 //
-//    private HashMap<String, HashMap<Integer, Tree>> katasterSortieren(BaumKataster baumKataster)
+//    private HashMap<String, HashMap<Integer, Tree>> katasterSortieren(TreeCadastre baumKataster)
 //    {
 //        HashMap<String, HashMap<Integer, Tree>> sortierterKataster = new HashMap<>();
 //        HashMap<Integer, Tree> baeume = baumKataster.getBaumKataster();
@@ -93,13 +93,13 @@
 //    //region[GetSet]
 //
 //
-//    public BaumKataster getBaumKataster()
+//    public TreeCadastre getBaumKataster()
 //    {
 //        return baumKataster;
 //    }
 //
 //
-//    public void setBaumKataster(BaumKataster baumKataster)
+//    public void setBaumKataster(TreeCadastre baumKataster)
 //    {
 //        this.baumKataster = baumKataster;
 //    }
@@ -129,7 +129,7 @@
 //    }
 //
 //
-//    //    public BaumKataster getReparierterKataster()throws Exception //todo custom
+//    //    public TreeCadastre getReparierterKataster()throws Exception //todo custom
 //    //    {
 //    //        if(!getIstRepariert()) throw new Exception();
 //    //
@@ -141,7 +141,7 @@
 //    //        }
 //    //
 //    //
-//    //        return new BaumKataster(reparierteBaume);
+//    //        return new TreeCadastre(reparierteBaume);
 //    //    }
 //
 //
@@ -162,7 +162,7 @@
 //            sortierterBaumKataster = extremeEntriesStatisticallyRobustEntfernen(sortierterBaumKataster, baumComparatorErlaubterAttributIndex);
 //        }
 //
-//        setBaumKataster(new BaumKataster(sortierterBaumKataster));
+//        setBaumKataster(new TreeCadastre(sortierterBaumKataster));
 //        setIstRepariert(true);
 //    }
 //

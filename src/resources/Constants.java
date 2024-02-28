@@ -36,7 +36,7 @@ public interface Constants
     int ELF = 11;
     
     
-    int ZWOELF = 12;
+    int CSV_RECORD_LENGTH = 12;
     
     
     int DREIZEHN = 13;

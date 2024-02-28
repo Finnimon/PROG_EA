@@ -1,7 +1,7 @@
 //package control;
 //
 //import model.Tree;
-//import model.BaumKataster;
+//import model.TreeCadastre;
 //
 //import java.util.HashMap;
 //
@@ -9,22 +9,22 @@
 //{
 //
 //
-//    private BaumKataster baumKataster;
+//    private TreeCadastre baumKataster;
 //
 //
-//    public BaumKatasterDataRepairController(BaumKataster baumKataster)
+//    public BaumKatasterDataRepairController(TreeCadastre baumKataster)
 //    {
 //        setBaumKataster(baumKataster);
 //    }
 //
 //
-//    public BaumKataster getBaumKataster()
+//    public TreeCadastre getBaumKataster()
 //    {
 //        return baumKataster;
 //    }
 //
 //
-//    public void setBaumKataster(BaumKataster baumKataster)
+//    public void setBaumKataster(TreeCadastre baumKataster)
 //    {
 //        this.baumKataster = baumKataster;
 //    }
@@ -42,12 +42,12 @@
 //    }
 //
 //
-//    private <T> void deepRepairSortedBaumKataster(HashMap<T, BaumKataster> sortedBaumKataster)
+//    private <T> void deepRepairSortedBaumKataster(HashMap<T, TreeCadastre> sortedBaumKataster)
 //    {
-//        BaumKataster baumKataster = getBaumKataster();
+//        TreeCadastre baumKataster = getBaumKataster();
 //        for (T gattungKey : sortedBaumKataster.keySet())
 //        {
-//            BaumKataster currentRepairKataster = sortedBaumKataster.get(gattungKey);
+//            TreeCadastre currentRepairKataster = sortedBaumKataster.get(gattungKey);
 //            new StatisticalDataRepairCenter(currentRepairKataster, true).deepRepair();
 //
 //            baumKataster.setRepairableFloats(currentRepairKataster.getRepairableFloats());
@@ -56,16 +56,16 @@
 //    }
 //
 //
-//    private HashMap<String, BaumKataster> sortBaumKatasterByGattung()
+//    private HashMap<String, TreeCadastre> sortBaumKatasterByGattung()
 //    {
-//        BaumKataster baumKataster = getBaumKataster();
+//        TreeCadastre baumKataster = getBaumKataster();
 //        HashMap<String, HashMap<Integer, Tree>> sortedBaumHashMaps = sortBaumHashMapByGattungBotanisch(baumKataster.getBaumHashMap());
 //
-//        HashMap<String, BaumKataster> sortedBaumKataster = new HashMap<>();
+//        HashMap<String, TreeCadastre> sortedBaumKataster = new HashMap<>();
 //
 //        for (String gattungKey : sortedBaumHashMaps.keySet())
 //        {
-//            sortedBaumKataster.put(gattungKey, new BaumKataster(sortedBaumHashMaps.get(gattungKey), baumKataster.getPermissableMaxima()));
+//            sortedBaumKataster.put(gattungKey, new TreeCadastre(sortedBaumHashMaps.get(gattungKey), baumKataster.getPermissableMaxima()));
 //        }
 //
 //

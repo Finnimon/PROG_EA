@@ -19,7 +19,7 @@ public interface iRepairableStatistic extends Cloneable
     public HashMap<Integer, ArrayList<Float>> getRepairableFloats();
     
     
-    public ArrayList<Float> getPermissableMaxima();
+    public ArrayList<Float> getPermissibleMaxima();
     
     
     public void setRepairableFloats(HashMap<Integer, ArrayList<Float>> reparierte);

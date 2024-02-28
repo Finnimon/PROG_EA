@@ -1,7 +1,7 @@
 package utility;
 
-import Services.BaumServices;
-import Services.KatasterServices;
+import services.BaumServices;
+import control.TreeCadastreQueryController;
 import model.Tree;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
@@ -17,16 +17,16 @@ public class BaumComparator implements Comparator<Tree>
     private static final Integer[] erlaubteAttributIndize = {1, 2, 3, 4};
     
     
-    public static final int INDEX_HOEHE_METER=KatasterServices.INDEX_BEZIRK_MIT_GROESZTEM_BAUM;
+    public static final int INDEX_HOEHE_METER= TreeCadastreQueryController.INDEX_BEZIRK_MIT_GROESZTEM_BAUM;
     
     
-    public static final int INDEX_KRONE_METER=KatasterServices.INDEX_KRONE_METER_VERGLEICHEN;
+    public static final int INDEX_KRONE_METER= TreeCadastreQueryController.INDEX_KRONE_METER_VERGLEICHEN;
     
     
-    public static final int INDEX_UMFANG_ZENTIMETER=KatasterServices.INDEX_UMFANG_ZENTIMETER_VERGLEICHEN;
+    public static final int INDEX_UMFANG_ZENTIMETER= TreeCadastreQueryController.INDEX_UMFANG_ZENTIMETER_VERGLEICHEN;
     
     
-    public static final int INDEX_ALTER=KatasterServices.INDEX_ALTER_VERGLEICHEN;
+    public static final int INDEX_ALTER= TreeCadastreQueryController.INDEX_ALTER_VERGLEICHEN;
     
     
     //endregion
@@ -86,7 +86,7 @@ public class BaumComparator implements Comparator<Tree>
         {
             return 1;
         }
-        float[] floats={tree.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex()), otherTree.getMetrik().getAtrributNachBaumComparatorIndex(getAttributIndex())};
+        float[] floats={tree.getMetric().getAttributeByTreeComparatorIndex(getAttributIndex()), otherTree.getMetric().getAttributeByTreeComparatorIndex(getAttributIndex())};
         
         return wennBaumGroeszerIstVerhaeltnisZurueckgebenAnsonstenFloatVergleichen(floats[0],floats[1]);
     }
@@ -105,20 +105,20 @@ public class BaumComparator implements Comparator<Tree>
     
     private float[] hoeheMeterWerteZurueckgeben(@NotNull Tree tree, @NotNull Tree otherTree)
     {
-        return new float[]{tree.getMetrik().getHoeheMeter(), otherTree.getMetrik().getHoeheMeter()};
+        return new float[]{tree.getMetric().getHeightMeters(), otherTree.getMetric().getHeightMeters()};
     }
     
     
     private float[] kroneMeterWerteZurueckgeben(@NotNull Tree tree, @NotNull Tree otherTree)
     {
-        float[] floats={tree.getMetrik().getKroneMeter(), otherTree.getMetrik().getKroneMeter()};
+        float[] floats={tree.getMetric().getTreeTopDiameterMeters(), otherTree.getMetric().getTreeTopDiameterMeters()};
         return floats;
     }
     
     
     private float[] umfangZentimeterWerteZurueckgeben(@NotNull Tree tree, @NotNull Tree otherTree)
     {
-        float[] floats={tree.getMetrik().getUmfangZentimeter(), otherTree.getMetrik().getUmfangZentimeter()};
+        float[] floats={tree.getMetric().getCircumferenceCentimeters(), otherTree.getMetric().getCircumferenceCentimeters()};
         return floats;
     }
     

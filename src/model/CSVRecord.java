@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 
 /**
- * @Summary: This class represents a line in a RFC4180 compliant CSV file.
+ * @Summary: This class represents a record in an RFC4180 compliant CSV file. If it is successfully instantiated it stores the record. It is used by {@link utility.CSVParser}.
  * @Author: Finn Lindig
  * @Since: 26.02.2024
  */
@@ -26,11 +26,11 @@ public class CSVRecord
     
     
     /**
-     * @Summary: This regex is the standard delimiter in a RFC4180 compliant CSV file. It is used by {@link #toString()}
+     * @Summary: This regex is the standard delimiter in a RFC4180 compliant CSV file. It is used by {@link #toString()} and {@link utility.CSVParser}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    private final String STANDARD_DELIMITER_COMMA = ",";
+    public static final String DEFAULT_DELIMITER = ",";
     
     
     /**
@@ -38,7 +38,7 @@ public class CSVRecord
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    private final String CRLF = "\r\n";
+    public static final String CRLF = "\r\n";
     
     
     /**
@@ -95,7 +95,6 @@ public class CSVRecord
         
         for (int i = 0; i < record.size(); i++)
         {
-            int fieldIndex = i;
             String field=record.get(i);
             StringBuilder stringBuilder = new StringBuilder();
             while (field.startsWith(REGEX_SKIP)&!field.endsWith(REGEX_SKIP))
@@ -104,7 +103,8 @@ public class CSVRecord
                 stringBuilder.append(delimiter);
                 try
                 {
-                    field=stringBuilder.append(record.remove(i+1)).toString();
+                    field=stringBuilder.append(record.remove(i++)).toString();
+                    i--;
                 }
                 catch (IndexOutOfBoundsException e)
                 {
@@ -112,7 +112,7 @@ public class CSVRecord
                 }
             }
             
-            record.set(fieldIndex, field.replace(REGEX_SKIP, Strings.EMPTY));
+            record.set(i, field.replace(REGEX_SKIP, Strings.EMPTY));
             
         }
         
@@ -163,7 +163,7 @@ public class CSVRecord
         
         for (String field : getRecord())
         {
-            boolean containsRegex=(field.contains(STANDARD_DELIMITER_COMMA)||field.contains(CRLF));
+            boolean containsRegex=(field.contains(DEFAULT_DELIMITER)||field.contains(CRLF));
             
             if (containsRegex)
             {
@@ -176,7 +176,7 @@ public class CSVRecord
                 stringBuilder.append(field);
             }
             
-            stringBuilder.append(STANDARD_DELIMITER_COMMA);
+            stringBuilder.append(DEFAULT_DELIMITER);
         }
         
         

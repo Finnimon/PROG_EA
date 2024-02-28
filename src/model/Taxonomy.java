@@ -1,6 +1,6 @@
 package model;
 
-import Services.BaumServices;
+import services.BaumServices;
 import resources.Messages;
 import resources.Strings;
 import utility.Core;
@@ -101,13 +101,13 @@ public class Taxonomy implements Cloneable
     {
         StringBuilder stringBuilder = new StringBuilder();
         
-        stringBuilder.append(Messages.TREE_SPECIES);
+        stringBuilder.append(Messages.BAUM_ART);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(getSpeciesGerman());
         stringBuilder.append(Strings.FORWARD_SLASH);
         stringBuilder.append(getSpeciesBotanical());
         stringBuilder.append(Strings.CRLF);
-        stringBuilder.append(Messages.TREE_GENUS);
+        stringBuilder.append(Messages.BAUM_GATTUNG);
         stringBuilder.append(Strings.TABULATOR);
         stringBuilder.append(getGenusGerman());
         stringBuilder.append(Strings.FORWARD_SLASH);

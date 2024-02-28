@@ -2,6 +2,7 @@ package logic;
 
 import control.StatisticalDataRepairCenter;
 import model.LinearFunction;
+import org.jetbrains.annotations.NotNull;
 import utility.Core;
 import utility.LinearerRegressor;
 import utility.iRepairableStatistic;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 
 
 /**
- * @Summary: This record contains static methods that can be used to repair {@link iRepairableStatistic}. These should be seen as helper methods for {@link StatisticalDataRepairCenter} and not be used outside that context.
+ * @Summary: This record contains static methods that can be used to repair {@link iRepairableStatistic}. This should be seen as a helper record for {@link StatisticalDataRepairCenter} and not be used outside that context.
  * @Author: Finn Lindig
  * @Since: 26.02.2024
  */
@@ -19,28 +20,29 @@ public record StatisticalDataRepairLogic()
 {
     
     
-    public static iRepairableStatistic lowerUpperExtremesUnderAssumptionOfUnitMistakes(iRepairableStatistic repairableStatistic)
-    {
-        HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
-        
-        for (Integer key : repairables.keySet())
-        {
-            ArrayList<Float> repairable = repairables.get(key);
-            ArrayList<Float> repaireds = divideRepairableByTenUntilAllPermissable(repairable, repairableStatistic.getPermissableMaxima());
-            if (repaireds.equals(repairable))
-            {
-                continue;
-            }
-            
-            
-            repairables.put(key, repaireds);
-        }
-        
-        repairableStatistic.setRepairableFloats(repairables);
-        
-        
-        return repairableStatistic;
-    }
+
+//todo    public static iRepairableStatistic lowerUpperExtremesUnderAssumptionOfUnitMistakes(@NotNull iRepairableStatistic repairableStatistic)
+//    {
+//        HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
+//
+//        for (Integer key : repairables.keySet())
+//        {
+//            ArrayList<Float> repairable = repairables.get(key);
+//            ArrayList<Float> repaireds = divideRepairableByTenUntilAllPermissable(repairable, repairableStatistic.getPermissibleMaxima());
+//            if (repaireds.equals(repairable))
+//            {
+//                continue;
+//            }
+//
+//
+//            repairables.put(key, repaireds);
+//        }
+//
+//        repairableStatistic.setRepairableFloats(repairables);
+//
+//
+//        return repairableStatistic;
+//    }
     
     
     public static ArrayList<Float> divideRepairableByTenUntilAllPermissable(ArrayList<Float> repairables, ArrayList<Float> permissableMaxima)
@@ -246,13 +248,20 @@ public record StatisticalDataRepairLogic()
     }
     
     
+    /**
+     * @param repairableStatistic a {@link iRepairableStatistic} that is not null.
+     * @return repairableStatistic after lowering upper extremes under assumption of unit mistakes until all values are permissible.
+     * @Precondition: repairableStatistic is not null.
+     * @Postcondition: No values exceed their respective {@link iRepairableStatistic#getPermissibleMaxima()}.
+     * @Summary: Lowers upper extremes under the assumption of unit mistakes until all values are permissible.
+     */
     public static iRepairableStatistic repairUpperExtremes(iRepairableStatistic repairableStatistic)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
         
         for (Integer key : repairables.keySet())
         {
-            repairables.put(key,divideRepairableByTenUntilAllPermissable(repairables.get(key), repairableStatistic.getPermissableMaxima()));
+            repairables.put(key,divideRepairableByTenUntilAllPermissable(repairables.get(key), repairableStatistic.getPermissibleMaxima()));
         }
         
         repairableStatistic.setRepairableFloats(repairables);

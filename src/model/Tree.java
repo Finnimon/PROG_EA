@@ -26,24 +26,24 @@ public class Tree implements Comparable<Tree>, iRepairable
     private static final int INDEX_ENDE_METRIK = Constants.ZEHN;
     private static final int NOTWENDIGE_ZEILENLAENGE = Constants.ELF;
     private static final int INDEX_BEGINN_BAUM = Constants.EINS;
-    private static final int INDEX_ENDE_BAUM = Constants.ZWOELF;
+    private static final int INDEX_ENDE_BAUM = Constants.CSV_RECORD_LENGTH;
     
     
     //endregion
     //region [Attribute]
     private final Ort ort;
     private final Taxonomy taxonomy;
-    private Metrik metrik;
+    private Metric metric;
     
     //endregion
     //region[create]
     
     
-    private Tree(Ort ort, Taxonomy taxonomy, Metrik metrik)
+    private Tree(Ort ort, Taxonomy taxonomy, Metric metric)
     {
         this.ort = ort;
         this.taxonomy = taxonomy;
-        setMetrik(metrik);
+        setMetrik(metric);
     }
     
     
@@ -58,7 +58,7 @@ public class Tree implements Comparable<Tree>, iRepairable
         List<String> taxonomieList = record.subList(INDEX_BEGINN_TAXONOMIE, INDEX_ENDE_TAXONOMIE);
         this.taxonomy = new Taxonomy(taxonomieList);
         List<String> metrikList = record.subList(INDEX_BEGINN_METRIK, INDEX_ENDE_METRIK);
-        setMetrik(new Metrik(metrikList));
+        setMetrik(new Metric(metrikList));
     }
     
     
@@ -73,9 +73,9 @@ public class Tree implements Comparable<Tree>, iRepairable
     
     
     @Contract("_, _, _ -> new")
-    public static @NotNull Tree create(Ort ort, Taxonomy taxonomy, Metrik metrik)
+    public static @NotNull Tree create(Ort ort, Taxonomy taxonomy, Metric metric)
     {
-        return new Tree(ort, taxonomy, metrik);
+        return new Tree(ort, taxonomy, metric);
     }
     
     
@@ -89,21 +89,21 @@ public class Tree implements Comparable<Tree>, iRepairable
     //region[GetSet]
     
     
-    public Taxonomy getTaxonomie()
+    public Taxonomy getTaxonomy()
     {
         return this.taxonomy;
     }
     
     
-    public Metrik getMetrik()
+    public Metric getMetric()
     {
-        return this.metrik;
+        return this.metric;
     }
     
     
-    public void setMetrik(Metrik metrik)
+    public void setMetrik(Metric metric)
     {
-        this.metrik = metrik;
+        this.metric = metric;
     }
     
     
@@ -124,10 +124,10 @@ public class Tree implements Comparable<Tree>, iRepairable
         stringBuilder.append(getOrt().toString());
         
         stringBuilder.append(Strings.CRLF);
-        stringBuilder.append(getTaxonomie().toString());
+        stringBuilder.append(getTaxonomy().toString());
         
         stringBuilder.append(Strings.CRLF);
-        stringBuilder.append(getMetrik().toString());
+        stringBuilder.append(getMetric().toString());
         
         
         return stringBuilder.toString();
@@ -145,23 +145,23 @@ public class Tree implements Comparable<Tree>, iRepairable
     @Override
     public ArrayList<Float> getRepairables()
     {
-        return getMetrik().getRepairables();
+        return getMetric().getRepairables();
     }
     
     
     @Override
     public void setRepairables(ArrayList<Float> reparierte)
     {
-        Metrik metrik;
-        (metrik = getMetrik()).setRepairables(reparierte);
-        setMetrik(metrik);
+        Metric metric;
+        (metric = getMetric()).setRepairables(reparierte);
+        setMetrik(metric);
     }
     
     
     @Override
     public boolean isEmpty()
     {
-        return getMetrik().isEmpty() & Core.areAllValuesInCollectionEqualToSpecificValue(getTaxonomie().getAll(), Strings.UNBEKANNT);
+        return getMetric().isEmpty() & Core.areAllValuesInCollectionEqualToSpecificValue(getTaxonomy().getAll(), Strings.UNBEKANNT);
     }
     
     
@@ -177,7 +177,7 @@ public class Tree implements Comparable<Tree>, iRepairable
         }
         
         
-        return new Tree(getOrt().clone(), getTaxonomie().clone(), getMetrik().clone());
+        return new Tree(getOrt().clone(), getTaxonomy().clone(), getMetric().clone());
     }
     
     

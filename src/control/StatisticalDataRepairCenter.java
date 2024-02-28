@@ -3,7 +3,6 @@ package control;
 import logic.StatisticalDataRepairLogic;
 import org.jetbrains.annotations.NotNull;
 import utility.iRepairableStatistic;
-
 import java.util.ArrayList;
 
 
@@ -117,7 +116,7 @@ public class StatisticalDataRepairCenter
         }
         
         
-        return getRepairableStatistic().clone();
+        return getRepairableStatistic();
     }
     
     
@@ -156,7 +155,7 @@ public class StatisticalDataRepairCenter
      * @Postcondition: The attribute {@link #repairableStatistic} is set and {@link #getIsShallowRepaired()} and {@link #getIsDeepRepaired()} are always reflecting the true state of {@link #repairableStatistic}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
-     * @param repairableStatistic
+     * @param repairableStatistic The {@link iRepairableStatistic} that has experienced a change in {@link StatisticalDataRepairCenter}.
      */
     private void setRepairableStatistic(@NotNull iRepairableStatistic repairableStatistic)
     {
@@ -195,7 +194,7 @@ public class StatisticalDataRepairCenter
      * @Postcondition: {@link #getIsDeepRepaired()} reflects weither {@link #repairableStatistic} has been repaired using  {@link #deepRepair()}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
-     * @param repaired
+     * @param repaired Weither {@link #repairableStatistic} has been repaired using {@link #deepRepair()}.
      */
     private void setIsDeepRepaired(boolean repaired)
     {
@@ -225,7 +224,7 @@ public class StatisticalDataRepairCenter
      * @Postcondition: {@link #getIsShallowRepaired()} reflects weither {@link #repairableStatistic} has been repaired using {@link #shallowRepair()}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
-     * @param shallowRepaired
+     * @param shallowRepaired Weither {@link #repairableStatistic} has been repaired using {@link #shallowRepair()}.
      */
     private void setIsShallowRepaired(boolean shallowRepaired)
     {
@@ -251,7 +250,7 @@ public class StatisticalDataRepairCenter
      * @Summary: Deletes all DataSets in the KeySet of {@link iRepairableStatistic#getDeletableDataSetKeys()}. Applies {@link StatisticalDataRepairLogic#repairUpperExtremes(iRepairableStatistic)} to {@link #repairableStatistic}.
      * This results in {@link #repairableStatistic} being presentable and suitable for further queries regarding extremes, whilst not being particularly statistically robust.
      * @Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly. The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
-     * @Postcondition: Deletable DataSets have been deleted from {@link #repairableStatistic} and none of its values exceed {@link iRepairableStatistic#getPermissableMaxima()}. Unknown values are left untouched.
+     * @Postcondition: Deletable DataSets have been deleted from {@link #repairableStatistic} and none of its values exceed {@link iRepairableStatistic#getPermissibleMaxima()}. Unknown values are left untouched.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
@@ -264,9 +263,9 @@ public class StatisticalDataRepairCenter
         
         iRepairableStatistic repairableStatistic = getRepairableStatistic();
         
-        repairableStatistic.deleteDataSetsOfKeySet(repairableStatistic.getDeletableDataSetKeys());
+        deleteDeletableDataSets();
         
-        repairableStatistic = StatisticalDataRepairLogic.repairUpperExtremes(repairableStatistic);
+        StatisticalDataRepairLogic.repairUpperExtremes(repairableStatistic);
         
         setRepairableStatistic(repairableStatistic);
     }
@@ -276,7 +275,7 @@ public class StatisticalDataRepairCenter
      * @Summary: Insures that {@link #shallowRepair()} has been called before it applies {@link StatisticalDataRepairLogic#setEntirelyUnknownsToAverages(iRepairableStatistic, ArrayList)} and {@link StatisticalDataRepairLogic#ascribeValuesToUnknownsUsingRegressions(iRepairableStatistic, int)} to {@link #repairableStatistic}.
      * This results in {@link #repairableStatistic} being unpresentable and unsuitable for further queries regarding extremes, whilst being particularly statistically robust and having no remaining unknown values.
      * @Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly. The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
-     * @Postcondition: The {@link #repairableStatistic} has been repaired with statistical usage in mind. None of its values exceed {@link iRepairableStatistic#getPermissableMaxima()}. None of its values are {@link iRepairableStatistic#getUnknown()}.
+     * @Postcondition: The {@link #repairableStatistic} has been repaired with statistical usage in mind. None of its values exceed {@link iRepairableStatistic#getPermissibleMaxima()}. None of its values are {@link iRepairableStatistic#getUnknown()}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
@@ -292,8 +291,8 @@ public class StatisticalDataRepairCenter
         }
         
         iRepairableStatistic repairableStatistic = getRepairableStatistic();
-        repairableStatistic = StatisticalDataRepairLogic.setEntirelyUnknownsToAverages(repairableStatistic, StatisticalDataRepairLogic.findAvarages(repairableStatistic));
-        repairableStatistic = StatisticalDataRepairLogic.ascribeValuesToUnknownsUsingRegressions(repairableStatistic, getINDEX_REGRESSION_BASIS());
+        StatisticalDataRepairLogic.setEntirelyUnknownsToAverages(repairableStatistic, StatisticalDataRepairLogic.findAvarages(repairableStatistic));
+        StatisticalDataRepairLogic.ascribeValuesToUnknownsUsingRegressions(repairableStatistic, getINDEX_REGRESSION_BASIS());
         
         
         setRepairableStatistic(repairableStatistic);

@@ -22,7 +22,7 @@ public interface Strings
     String EMPTY = "";
     
     
-    String SEMICOLON = ";";
+    String DELIMITER = ";";
     
     
     String BAUMKATASTER_FILEPATH = "src/resources/Baumkataster_Berlin.csv";
