@@ -1,7 +1,10 @@
 package control;
 
 import org.jetbrains.annotations.NotNull;
-import Utility.Core;
+import resources.Constants;
+import resources.Messages;
+import utility.Core;
+
 import java.util.ArrayList;
 
 
@@ -46,10 +49,14 @@ public class Main
         try
         {
             argumenteFloats= Core.parseStringArrayIntoFloatArrayList(argumente);
+            if (argumenteFloats.size()!= Constants.NEEDED_ARGUMENTS_SIZE)
+            {
+                throw new NullPointerException();
+            }
         }
         catch (NullPointerException | NumberFormatException e)
         {
-            argumenteFloats=new ArrayList<>();
+            throw new RuntimeException(Messages.AUSGABE_PROGRAMM_ARGUMENTE_FEHLERHAFT);
         }
         
         

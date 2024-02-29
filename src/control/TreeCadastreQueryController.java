@@ -1,13 +1,13 @@
 package control;
 
-import Model.TreeCadastre;
-import Utility.DataRepair.StatisticalDataRepairCenter;
+import model.TreeCadastre;
+import utility.DataRepair.StatisticalDataRepairCenter;
 import org.jetbrains.annotations.NotNull;
-import Resources.Messages;
-import Resources.Strings;
-import Services.TreeCadastreServices;
-import Utility.TreeCadastreEntryComparator;
-import Utility.IO.MyIO;
+import resources.Messages;
+import resources.Strings;
+import services.TreeCadastreServices;
+import utility.TreeCadastreEntryComparator;
+import utility.IO.MyIO;
 
 import java.util.Collections;
 
@@ -168,7 +168,7 @@ public class TreeCadastreQueryController
                 throw new NumberFormatException();
             }
             
-            MyIO.resetZeitgeber();
+            MyIO.resetTimer();
             
             
             return queryIndex;
@@ -230,15 +230,15 @@ public class TreeCadastreQueryController
         }
         else if (TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_HEIGHT == questionIndex | questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_CIRCUMFERENCE)
         {
-            answer = TreeCadastreServices.extremsteDurchschnittlicheGattungFinden(intactTreeCadastre, questionIndex);
+            answer = TreeCadastreServices.findMostExtremeGenus(intactTreeCadastre, questionIndex);
         }
         else if (questionIndex == TreeCadastreQueryController.INDEX_FIND_BERLINS_ENTIRE_CARBON_RETENTION)
         {
-            stringBuilder.append(String.format("%.2f", TreeCadastreServices.kohlenStoffSpeicherungInKiloGrammInsgesamtBerechnen(statisticallyRobustTreeCadastre) / UNIT_CONVERSION_KILOGRAMM_TO_TON));
+            stringBuilder.append(String.format("%.2f", TreeCadastreServices.calculateCarbonRetentionOfTreeCadastre(statisticallyRobustTreeCadastre) / UNIT_CONVERSION_KILOGRAMM_TO_TON));
         }
         else if (questionIndex == TreeCadastreQueryController.INDEX_FIND_DISTRICT_OF_GREATEST_CARBON_RETENTION | questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_GREATEST_CARBON_RETENTION)
         {
-            answer = TreeCadastreServices.kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(statisticallyRobustTreeCadastre, questionIndex);
+            answer = TreeCadastreServices.findGenusOrDistrictWithGreatestCarbonRetention(statisticallyRobustTreeCadastre, questionIndex);
         }
         
         stringBuilder.append(answer);

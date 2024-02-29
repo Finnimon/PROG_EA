@@ -1,14 +1,14 @@
 package control;
 
-import Model.TreeCadastre;
-import Model.CSVRecord;
-import Utility.DataRepair.StatisticalDataRepairCenter;
+import model.TreeCadastre;
+import model.CSVRecord;
+import utility.DataRepair.StatisticalDataRepairCenter;
 import org.jetbrains.annotations.NotNull;
-import Resources.Constants;
-import Resources.Messages;
-import Resources.Strings;
-import Utility.IO.CSVParser;
-import Utility.IO.MyIO;
+import resources.Constants;
+import resources.Messages;
+import resources.Strings;
+import utility.IO.CSVParser;
+import utility.IO.MyIO;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
