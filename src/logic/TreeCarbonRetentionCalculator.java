@@ -1,14 +1,14 @@
 package logic;
 
-import model.Tree;
-import model.LinearFunction;
-import model.Metric;
-import resources.TreeCarbonContentFunctions;
-import resources.Strings;
+import Model.Tree;
+import Model.LinearFunction;
+import Model.Metric;
+import Resources.TreeCarbonContentFunctions;
+import Resources.Strings;
 
 import java.util.HashMap;
 
-import static resources.TreeCarbonContentFunctions.*;
+import static Resources.TreeCarbonContentFunctions.*;
 
 
 /**

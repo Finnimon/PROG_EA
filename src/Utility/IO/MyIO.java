@@ -1,7 +1,7 @@
-package utility;
+package Utility.IO;
 
-import resources.Messages;
-import resources.Strings;
+import Resources.Messages;
+import Resources.Strings;
 
 import java.io.BufferedReader;
 import java.io.IOException;

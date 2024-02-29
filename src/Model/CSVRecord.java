@@ -1,15 +1,16 @@
-package model;
+package Model;
 
-import resources.Strings;
-import utility.ElementFaultyException;
-import utility.RecordShortException;
+import Resources.Strings;
+import Utility.ElementFaultyException;
+import Utility.IO.CSVParser;
+import Utility.RecordShortException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 /**
- * @Summary: This class represents a record in an RFC4180 compliant CSV file. If it is successfully instantiated it stores the record. It is used by {@link utility.CSVParser}.
+ * @Summary: This class represents a record in an RFC4180 compliant CSV file. If it is successfully instantiated it stores the record. It is used by {@link CSVParser}.
  * @Author: Finn Lindig
  * @Since: 26.02.2024
  */
@@ -26,7 +27,7 @@ public class CSVRecord
     
     
     /**
-     * @Summary: This regex is the standard delimiter in a RFC4180 compliant CSV file. It is used by {@link #toString()} and {@link utility.CSVParser}.
+     * @Summary: This regex is the standard delimiter in a RFC4180 compliant CSV file. It is used by {@link #toString()} and {@link CSVParser}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
@@ -52,10 +53,10 @@ public class CSVRecord
     /**
      * @param line         the line in a RFC4180 compliant CSV file.
      * @param delimiter    the delimiter used by the RFC4180 compliant CSV file.
-     * @param specifedRecordLength the record length used by the RFC4180 compliant CSV file and specified in {@link utility.CSVParser#CSVParser(String, String, int)}.
-     * @throws RecordShortException if the record is too short. This prompts the {@link utility.CSVParser} to pass this and the next line into a new {@link CSVRecord}.
+     * @param specifedRecordLength the record length used by the RFC4180 compliant CSV file and specified in {@link CSVParser#CSVParser(String, String, int)}.
+     * @throws RecordShortException if the record is too short. This prompts the {@link CSVParser} to pass this and the next line into a new {@link CSVRecord}.
      * @Precondition: The line is a line in an RFC4180 compliant CSV file.
-     * @Postcondition: If the line is shorter than specified a {@link RecordShortException} will be thrown. This prompts the {@link utility.CSVParser} to pass this and the next line into a new {@link CSVRecord}, asserting that no Short Records exist. Records that are too long will be ignored.
+     * @Postcondition: If the line is shorter than specified a {@link RecordShortException} will be thrown. This prompts the {@link CSVParser} to pass this and the next line into a new {@link CSVRecord}, asserting that no Short Records exist. Records that are too long will be ignored.
      * @Summary: This constructor parses a line in a RFC4180 compliant CSV file. It also handles linebreaks and delimiters. If the record is too short, an exception will be thrown.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
@@ -80,7 +81,7 @@ public class CSVRecord
     
     /**
      * @param line in a RFC4180 compliant CSV file.
-     * @param delimiter the delimiter used by the RFC4180 compliant CSV file and specified in {@link utility.CSVParser#CSVParser(String, String, int)}.
+     * @param delimiter the delimiter used by the RFC4180 compliant CSV file and specified in {@link CSVParser#CSVParser(String, String, int)}.
      * @return The record as an ArrayList of Strings.
      * @throws RecordShortException if the record ends upon a field enclosed by {@link #REGEX_SKIP} that does not end with {@link #REGEX_SKIP}.
      * @Precondition: The String line is a line in an RFC4180 compliant CSV file.

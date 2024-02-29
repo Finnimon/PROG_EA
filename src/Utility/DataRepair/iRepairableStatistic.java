@@ -1,7 +1,7 @@
-package utility;
+package Utility.DataRepair;
 
-import resources.Constants;
-
+import control.Main;
+import Resources.Constants;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +10,8 @@ public interface iRepairableStatistic extends Cloneable
 {
     
     
-    public default float getUnknown()
+    
+    public default float UNKNOWN()
     {
         return Constants.UNBEKANNT;
     }
@@ -19,7 +20,10 @@ public interface iRepairableStatistic extends Cloneable
     public HashMap<Integer, ArrayList<Float>> getRepairableFloats();
     
     
-    public ArrayList<Float> getPermissibleMaxima();
+    public default ArrayList<Float> getPermissibleMaxima()
+    {
+        return Main.ARGUMENTS;
+    };
     
     
     public void setRepairableFloats(HashMap<Integer, ArrayList<Float>> reparierte);

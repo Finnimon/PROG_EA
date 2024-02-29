@@ -1,13 +1,14 @@
 package control;
 
-import model.TreeCadastre;
-import model.CSVRecord;
+import Model.TreeCadastre;
+import Model.CSVRecord;
+import Utility.DataRepair.StatisticalDataRepairCenter;
 import org.jetbrains.annotations.NotNull;
-import resources.Constants;
-import resources.Messages;
-import resources.Strings;
-import utility.CSVParser;
-import utility.MyIO;
+import Resources.Constants;
+import Resources.Messages;
+import Resources.Strings;
+import Utility.IO.CSVParser;
+import Utility.IO.MyIO;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -35,6 +36,17 @@ public class TaskController
     }
     
     
+    protected void run()
+    {
+        
+        TreeCadastre treeCadastre = parseCsvIntoBaumKataster();
+        
+        TreeCadastre shallowRepairedTreeCadastre = dataRepair(treeCadastre);
+        
+        offerAndAnswerQueries(shallowRepairedTreeCadastre, treeCadastre);
+    }
+    
+    
     /**
      * @return {@link TreeCadastre} with the data from {@link Strings#BAUMKATASTER_FILEPATH}.
      * @Precondition: {@link Strings#BAUMKATASTER_FILEPATH} is correct.
@@ -43,7 +55,7 @@ public class TaskController
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    protected TreeCadastre parseCsvIntoBaumKataster()
+    private TreeCadastre parseCsvIntoBaumKataster()
     {
         MyIO.printLine(Messages.AUSGABE_LESE_AUS_DATEI + Strings.BAUMKATASTER_FILEPATH, false);
         CSVParser cSVParser;
@@ -60,7 +72,7 @@ public class TaskController
         
         MyIO.printLine(Messages.AUSGABE_ANZAHL_ERFOLGREICH_EINGELESENE_ZEILEN + cSVRecords.size(), true);
         
-        TreeCadastre treeCadastre = new TreeCadastre(cSVRecords, Main.ARGUMENTS);
+        TreeCadastre treeCadastre = new TreeCadastre(cSVRecords);
         MyIO.printLine(Messages.AUSGABE_ANZAHL_ERZEUGTER_BAUM_INSTANZEN + treeCadastre.getTreeHashMap().keySet().size(), true);
         
         
@@ -77,7 +89,7 @@ public class TaskController
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    protected TreeCadastre dataRepair(@NotNull TreeCadastre treeCadastre)
+    private TreeCadastre dataRepair(@NotNull TreeCadastre treeCadastre)
     {
         StatisticalDataRepairCenter statisticalDataRepairCenter = new StatisticalDataRepairCenter(treeCadastre);
         
@@ -97,16 +109,16 @@ public class TaskController
     
     /**
      * @param shallowRepairedTreeCadastre a {@link TreeCadastre} that has been only {@link StatisticalDataRepairCenter#shallowRepair()}ed.
-     * @param deepRepairedTreeCadastre a {@link TreeCadastre} that has been {@link StatisticalDataRepairCenter#deepRepair()}ed.
+     * @param deepRepairedTreeCadastre    a {@link TreeCadastre} that has been {@link StatisticalDataRepairCenter#deepRepair()}ed.
      * @Precondition: The parameters are passed correctly.
      * @Postcondition: The queries will be offered and answered correctly in the console.
      * @Summary: Offers and answers 14 different queries as well as the option to end the program.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    protected void offerAndAnswerQueries(@NotNull TreeCadastre shallowRepairedTreeCadastre,@NotNull TreeCadastre deepRepairedTreeCadastre)
+    private void offerAndAnswerQueries(@NotNull TreeCadastre shallowRepairedTreeCadastre, @NotNull TreeCadastre deepRepairedTreeCadastre)
     {
-        TreeCadastreQueryController treeCadastreQueryController =new TreeCadastreQueryController(deepRepairedTreeCadastre,shallowRepairedTreeCadastre);
+        TreeCadastreQueryController treeCadastreQueryController = new TreeCadastreQueryController(deepRepairedTreeCadastre, shallowRepairedTreeCadastre);
         treeCadastreQueryController.offerAndAnswerQueriesThroughConsole();
     }
     

@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 /**
  * @Summary: This record represents the mathematical concept linear function.

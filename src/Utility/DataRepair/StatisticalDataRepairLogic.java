@@ -1,11 +1,9 @@
-package logic;
+package Utility.DataRepair;
 
-import control.StatisticalDataRepairCenter;
-import model.LinearFunction;
+import Model.LinearFunction;
 import org.jetbrains.annotations.NotNull;
-import utility.Core;
-import utility.LinearerRegressor;
-import utility.iRepairableStatistic;
+import Utility.Core;
+import Utility.LinearRegressor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,36 +14,11 @@ import java.util.HashMap;
  * @Author: Finn Lindig
  * @Since: 26.02.2024
  */
-public record StatisticalDataRepairLogic()
+record StatisticalDataRepairLogic()
 {
     
     
-
-//todo    public static iRepairableStatistic lowerUpperExtremesUnderAssumptionOfUnitMistakes(@NotNull iRepairableStatistic repairableStatistic)
-//    {
-//        HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
-//
-//        for (Integer key : repairables.keySet())
-//        {
-//            ArrayList<Float> repairable = repairables.get(key);
-//            ArrayList<Float> repaireds = divideRepairableByTenUntilAllPermissable(repairable, repairableStatistic.getPermissibleMaxima());
-//            if (repaireds.equals(repairable))
-//            {
-//                continue;
-//            }
-//
-//
-//            repairables.put(key, repaireds);
-//        }
-//
-//        repairableStatistic.setRepairableFloats(repairables);
-//
-//
-//        return repairableStatistic;
-//    }
-    
-    
-    public static ArrayList<Float> divideRepairableByTenUntilAllPermissable(ArrayList<Float> repairables, ArrayList<Float> permissableMaxima)
+    static ArrayList<Float> divideRepairableByTenUntilAllPermissable(@NotNull ArrayList<Float> repairables,@NotNull ArrayList<Float> permissableMaxima)
     {
         
         for (int i = 0; i < repairables.size(); i++)
@@ -58,7 +31,7 @@ public record StatisticalDataRepairLogic()
     }
     
     
-    public static float divideByTenUntilPermissable(float repairableWert, float maximumPermissableWert)
+    static float divideByTenUntilPermissable(float repairableWert, float maximumPermissableWert)
     {
         final int divider = 10;
         
@@ -72,7 +45,7 @@ public record StatisticalDataRepairLogic()
     }
     
     
-    public static ArrayList<Float> findAvarages(iRepairableStatistic repairableStatistic)
+    static ArrayList<Float> findAverages(@NotNull iRepairableStatistic repairableStatistic)
     {
         ArrayList<Integer> counters = null;
         ArrayList<Float> averages = null;
@@ -83,7 +56,7 @@ public record StatisticalDataRepairLogic()
             {
                 float wert = werte.get(i);
                 
-                if (wert == repairableStatistic.getUnknown())
+                if (wert == repairableStatistic.UNKNOWN())
                 {
                     continue;
                 }
@@ -121,7 +94,7 @@ public record StatisticalDataRepairLogic()
     }
     
     
-    public static ArrayList<Float> setUnknownValuesToRepaired(ArrayList<Float> repairables, ArrayList<Float> repaireds, float UNKNOWN)
+    static ArrayList<Float> setUnknownValuesToRepaired(@NotNull ArrayList<Float> repairables,@NotNull  ArrayList<Float> repaireds, float UNKNOWN)
     {
         for (int i = 0; i < repairables.size(); i++)
         {
@@ -136,7 +109,7 @@ public record StatisticalDataRepairLogic()
     }
     
     
-    public static int findIndexOfFirstKnownValue(ArrayList<Float> repairables, float UNKNOWN)
+    static int findIndexOfFirstKnownValue(@NotNull ArrayList<Float> repairables, float UNKNOWN)
     {
         for (int i = 0; i < repairables.size(); i++)
         {
@@ -146,33 +119,18 @@ public record StatisticalDataRepairLogic()
             }
         }
         
-        throw new IllegalArgumentException("The provided ArrayLis has no known values.");//todo message
+        throw new IllegalArgumentException();
     }
     
     
-    public static boolean hatNurBekannteWerte(ArrayList<Float> repairables, float UNKNOWN)
-    {
-        for (Float repairable : repairables)
-        {
-            if (repairable == UNKNOWN)
-            {
-                return false;
-            }
-        }
-        
-        
-        return true;
-    }
-    
-    
-    public static ArrayList<Integer> findKeysUnknowns(iRepairableStatistic repairableStatistic)
+    static ArrayList<Integer> findKeysUnknowns(@NotNull iRepairableStatistic repairableStatistic)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
         ArrayList<Integer> keys = new ArrayList<>();
         
         for (Integer key : repairables.keySet())
         {
-            if (Core.areAllValuesInCollectionEqualToSpecificValue(repairables.get(key), repairableStatistic.getUnknown()))
+            if (Core.areAllValuesInCollectionEqualToSpecificValue(repairables.get(key), repairableStatistic.UNKNOWN()))
             {
                 keys.add(key);
             }
@@ -183,7 +141,7 @@ public record StatisticalDataRepairLogic()
     }
     
     
-    public static iRepairableStatistic setEntirelyUnknownsToAverages(iRepairableStatistic repairableStatistic, ArrayList<Float> averages)
+    static iRepairableStatistic setEntirelyUnknownsToAverages(@NotNull iRepairableStatistic repairableStatistic,@NotNull  ArrayList<Float> averages)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
         
@@ -199,12 +157,12 @@ public record StatisticalDataRepairLogic()
     }
     
     
-    public static iRepairableStatistic ascribeValuesToUnknownsUsingRegressions(iRepairableStatistic repairableStatistic, int indexRegressionBasis)
+    static iRepairableStatistic ascribeValuesToUnknownsUsingRegressions(@NotNull iRepairableStatistic repairableStatistic, int indexRegressionBasis)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
-        float unknown = repairableStatistic.getUnknown();
+        float unknown = repairableStatistic.UNKNOWN();
         
-        ArrayList<LinearFunction> lineareRegressionen = new LinearerRegressor(indexRegressionBasis).alleRegressierenZurBasis(new ArrayList<>(repairables.values()));
+        ArrayList<LinearFunction> lineareRegressionen = new LinearRegressor(indexRegressionBasis).alleRegressierenZurBasis(new ArrayList<>(repairables.values()));
         
         for (Integer key : repairables.keySet())
         {
@@ -222,7 +180,7 @@ public record StatisticalDataRepairLogic()
             
             if (repairableFloats.get(indexRegressionBasis) == unknown)
             {
-                int ersterBekannterWertIndex = findIndexOfFirstKnownValue(repairableFloats, repairableStatistic.getUnknown());
+                int ersterBekannterWertIndex = findIndexOfFirstKnownValue(repairableFloats, repairableStatistic.UNKNOWN());
                 
                 x = lineareRegressionen.get(ersterBekannterWertIndex).inverse(repairableFloats.get(ersterBekannterWertIndex));
             }
@@ -255,14 +213,11 @@ public record StatisticalDataRepairLogic()
      * @Postcondition: No values exceed their respective {@link iRepairableStatistic#getPermissibleMaxima()}.
      * @Summary: Lowers upper extremes under the assumption of unit mistakes until all values are permissible.
      */
-    public static iRepairableStatistic repairUpperExtremes(iRepairableStatistic repairableStatistic)
+    static iRepairableStatistic repairUpperExtremes(@NotNull iRepairableStatistic repairableStatistic)
     {
         HashMap<Integer, ArrayList<Float>> repairables = repairableStatistic.getRepairableFloats();
         
-        for (Integer key : repairables.keySet())
-        {
-            repairables.put(key,divideRepairableByTenUntilAllPermissable(repairables.get(key), repairableStatistic.getPermissibleMaxima()));
-        }
+        repairables.replaceAll((k, v) -> divideRepairableByTenUntilAllPermissable(repairables.get(k), repairableStatistic.getPermissibleMaxima()));
         
         repairableStatistic.setRepairableFloats(repairables);
         

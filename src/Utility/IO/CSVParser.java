@@ -1,7 +1,9 @@
-package utility;
+package Utility.IO;
 
-import model.CSVRecord;
-import resources.Strings;
+import Model.CSVRecord;
+import Resources.Strings;
+import Utility.ElementFaultyException;
+import Utility.RecordShortException;
 
 import java.io.File;
 import java.io.FileNotFoundException;

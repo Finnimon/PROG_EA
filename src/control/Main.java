@@ -1,8 +1,7 @@
 package control;
 
-import model.TreeCadastre;
 import org.jetbrains.annotations.NotNull;
-import utility.Core;
+import Utility.Core;
 import java.util.ArrayList;
 
 
@@ -25,29 +24,11 @@ public class Main
      */
     public static void main(String[] argumente)
     {
-        
         initialisieren(argumente);
         
-        TaskController taskController = new TaskController();
+        TaskController taskController=new TaskController();
         
-        TreeCadastre treeCadastre = taskController.parseCsvIntoBaumKataster();
-        
-        TreeCadastre shallowRepairedTreeCadastre = taskController.dataRepair(treeCadastre);
-        
-        taskController.offerAndAnswerQueries(shallowRepairedTreeCadastre, treeCadastre);
-//
-//        HashSet<String>Gattungen=new HashSet<>();
-//        for (Tree tree : shallowRepairedTreeCadastre.getBaumHashMap().values()
-//             )
-//        {
-//            Gattungen.add(tree.getTaxonomie().getGenusBotanical());
-//        }
-//        for (String gattung:Gattungen
-//             )
-//        {
-//            System.out.println(gattung);
-//        }
-//
+        taskController.run();
     }
     
     
@@ -66,14 +47,9 @@ public class Main
         {
             argumenteFloats= Core.parseStringArrayIntoFloatArrayList(argumente);
         }
-        catch (NullPointerException e)
-        {
-            argumenteFloats=new ArrayList<>();//todo console Message and readline
-        }
-        catch (NumberFormatException e)
+        catch (NullPointerException | NumberFormatException e)
         {
             argumenteFloats=new ArrayList<>();
-            //todo siehe oben
         }
         
         

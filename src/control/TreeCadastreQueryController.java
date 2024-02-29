@@ -1,19 +1,19 @@
 package control;
 
-import model.TreeCadastre;
+import Model.TreeCadastre;
+import Utility.DataRepair.StatisticalDataRepairCenter;
 import org.jetbrains.annotations.NotNull;
-import resources.Constants;
-import resources.Messages;
-import resources.Strings;
-import services.KatasterServices;
-import utility.BaumKatasterEntryComparator;
-import utility.MyIO;
+import Resources.Messages;
+import Resources.Strings;
+import Services.TreeCadastreServices;
+import Utility.TreeCadastreEntryComparator;
+import Utility.IO.MyIO;
 
 import java.util.Collections;
 
 
 /**
- * @Summary: The {@link TreeCadastreQueryController} utilizes methods from {@link KatasterServices} to answer queries regarding a {@link TreeCadastre} via the console.
+ * @Summary: The {@link TreeCadastreQueryController} utilizes methods from {@link TreeCadastreServices} to answer queries regarding a {@link TreeCadastre} via the console.
  * @Author: Finn Lindig
  * @Since: 26.02.2024
  */
@@ -21,49 +21,49 @@ public class TreeCadastreQueryController
 {
     
     
-    public static final int INDEX_BEZIRK_MIT_GROESZTEM_BAUM = 1;
+    public static final int INDEX_DISTRICT_OF_HIGHEST_TREE = 1;
     
     
-    public static final int INDEX_UMFANG_ZENTIMETER_VERGLEICHEN = 2;
+    public static final int INDEX_FIND_TREE_OF_GREATEST_CIRCUMFERENCE = 2;
     
     
-    public static final int INDEX_KRONE_METER_VERGLEICHEN = 3;
+    public static final int INDEX_FIND_TREE_OF_GREATEST_TOP = 3;
     
     
-    public static final int INDEX_ALTER_VERGLEICHEN = 4;
+    public static final int INDEX_FIND_OLDEST_TREE = 4;
     
     
-    public static final int INDEX_BAUMARTEN_ZAEHLEN = 5;
+    public static final int INDEX_COUNT_SPECIES = 5;
     
     
-    public static final int INDEX_GATTUNGEN_ZAEHLEN = 6;
+    public static final int INDEX_COUNT_GENERA = 6;
     
     
-    public static final int INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN = 7;
+    public static final int INDEX_FIND_MOST_COMMON_GENUS = 7;
     
     
-    public static final int INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN = 8;
+    public static final int INDEX_FIND_MOST_COMMON_DISTRICT = 8;
     
     
-    public static final int INDEX_BEZIRK_MIT_MEISTEN_ARTEN = 9;
+    public static final int INDEX_FIND_DISTRICT_WITH_MOST_DIFFERENT_SPECIES = 9;
     
     
-    public static final int INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN = 10;
+    public static final int INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_HEIGHT = 10;
     
     
-    public static final int INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG = 11;
+    public static final int INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_CIRCUMFERENCE = 11;
     
     
-    public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_BERLIN_INSGESAMT = 12;
+    public static final int INDEX_FIND_BERLINS_ENTIRE_CARBON_RETENTION = 12;
     
     
-    public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK = 13;
+    public static final int INDEX_FIND_DISTRICT_OF_GREATEST_CARBON_RETENTION = 13;
     
     
-    public static final int INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG = 14;
+    public static final int INDEX_FIND_GENUS_OF_GREATEST_CARBON_RETENTION = 14;
     
     
-    public static final int JAHR_DER_ERHEBUNG = Constants.ZWEITAUSEND_UND_DREI_UND_ZWANZIG;
+    public static final int YEAR_OF_THE_SURVEY = 2023;
     
     
     public static final int UNIT_CONVERSION_KILOGRAMM_TO_TON = 1000;
@@ -144,7 +144,7 @@ public class TreeCadastreQueryController
         {
             offerQueries();
             queryIndex = readQueryChoiceFromConsole();
-            MyIO.printLine(determineQueryAnswer(queryIndex));
+            MyIO.printLine(determineQueryAnswer(queryIndex),true);
         }
     }
     
@@ -189,7 +189,7 @@ public class TreeCadastreQueryController
      * @return The answer {@link String} that should be printed as an answer to the selected query.
      * @Precondition: The param is in bounds for the Array {@link Messages#ANTWORTEN} and the {@link TreeCadastreQueryController} has been instantiated correctly.
      * @Postcondition: The method will return a {@link String} that answers the selected query.
-     * @Summary: Determines the answer to the selected query by calling methods from {@link KatasterServices} depending on the query index.
+     * @Summary: Determines the answer to the selected query by calling methods from {@link TreeCadastreServices} depending on the query index.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
@@ -203,50 +203,50 @@ public class TreeCadastreQueryController
         StringBuilder stringBuilder = new StringBuilder(Messages.ANTWORTEN[questionIndex]);
         
         
-        if (TreeCadastreQueryController.INDEX_BEZIRK_MIT_GROESZTEM_BAUM <= questionIndex && questionIndex <= TreeCadastreQueryController.INDEX_ALTER_VERGLEICHEN)
+        if (TreeCadastreQueryController.INDEX_DISTRICT_OF_HIGHEST_TREE <= questionIndex && questionIndex <= TreeCadastreQueryController.INDEX_FIND_OLDEST_TREE)
         {
-            int key = Collections.max(intactTreeCadastre.getTreeHashMap().entrySet(), new BaumKatasterEntryComparator(questionIndex)).getKey();
-            if (questionIndex == TreeCadastreQueryController.INDEX_BEZIRK_MIT_GROESZTEM_BAUM)
+            int key = Collections.max(intactTreeCadastre.getTreeHashMap().entrySet(), new TreeCadastreEntryComparator(questionIndex)).getKey();
+            if (questionIndex == TreeCadastreQueryController.INDEX_DISTRICT_OF_HIGHEST_TREE)
             {
-                stringBuilder.append(intactTreeCadastre.getTreeHashMap().get(key).getOrt().getBezirk());
+                stringBuilder.append(intactTreeCadastre.getTreeHashMap().get(key).getSite().district());
             }
             else
             {
                 stringBuilder.append(intactTreeCadastre.entryToString(key));
             }
         }
-        else if (TreeCadastreQueryController.INDEX_BAUMARTEN_ZAEHLEN <= questionIndex && questionIndex <= TreeCadastreQueryController.INDEX_GATTUNGEN_ZAEHLEN)
+        else if (TreeCadastreQueryController.INDEX_COUNT_SPECIES <= questionIndex && questionIndex <= TreeCadastreQueryController.INDEX_COUNT_GENERA)
         {
-            stringBuilder.append(KatasterServices.baumArtenGattungenZaehlen(intactTreeCadastre, questionIndex));
+            stringBuilder.append(TreeCadastreServices.countTreeGenusOrSpecies(intactTreeCadastre, questionIndex));
         }
-        else if (TreeCadastreQueryController.INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN <= questionIndex && questionIndex <= TreeCadastreQueryController.INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
+        else if (TreeCadastreQueryController.INDEX_FIND_MOST_COMMON_GENUS <= questionIndex && questionIndex <= TreeCadastreQueryController.INDEX_FIND_MOST_COMMON_DISTRICT)
         {
-            answer = KatasterServices.haeufigsteGattungBezirkZaehlen(statisticallyRobustTreeCadastre, questionIndex);
+            answer = TreeCadastreServices.findMostCommonGenusOrDistrict(statisticallyRobustTreeCadastre, questionIndex);
         }
-        else if (TreeCadastreQueryController.INDEX_BEZIRK_MIT_MEISTEN_ARTEN == questionIndex)
+        else if (TreeCadastreQueryController.INDEX_FIND_DISTRICT_WITH_MOST_DIFFERENT_SPECIES == questionIndex)
         {
             
-            stringBuilder.append(KatasterServices.bezirkMitMeistenBaumArtenFinden(statisticallyRobustTreeCadastre));
+            stringBuilder.append(TreeCadastreServices.findDistrictWithMostDifferentiableTreeSpecies(statisticallyRobustTreeCadastre));
         }
-        else if (TreeCadastreQueryController.INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN == questionIndex | questionIndex == TreeCadastreQueryController.INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
+        else if (TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_HEIGHT == questionIndex | questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_CIRCUMFERENCE)
         {
-            answer = KatasterServices.extremsteDurchschnittlicheGattungFinden(intactTreeCadastre, questionIndex);
+            answer = TreeCadastreServices.extremsteDurchschnittlicheGattungFinden(intactTreeCadastre, questionIndex);
         }
-        else if (questionIndex == TreeCadastreQueryController.INDEX_KOHLENSTOFF_SPEICHERUNG_BERLIN_INSGESAMT)
+        else if (questionIndex == TreeCadastreQueryController.INDEX_FIND_BERLINS_ENTIRE_CARBON_RETENTION)
         {
-            stringBuilder.append(String.format("%.2f", KatasterServices.kohlenStoffSpeicherungInKiloGrammInsgesamtBerechnen(statisticallyRobustTreeCadastre) / UNIT_CONVERSION_KILOGRAMM_TO_TON));
+            stringBuilder.append(String.format("%.2f", TreeCadastreServices.kohlenStoffSpeicherungInKiloGrammInsgesamtBerechnen(statisticallyRobustTreeCadastre) / UNIT_CONVERSION_KILOGRAMM_TO_TON));
         }
-        else if (questionIndex == TreeCadastreQueryController.INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK | questionIndex == TreeCadastreQueryController.INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
+        else if (questionIndex == TreeCadastreQueryController.INDEX_FIND_DISTRICT_OF_GREATEST_CARBON_RETENTION | questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_GREATEST_CARBON_RETENTION)
         {
-            answer = KatasterServices.kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(statisticallyRobustTreeCadastre, questionIndex);
+            answer = TreeCadastreServices.kohlenStoffSpeicherungStaerksteBezirkOderGattungFinden(statisticallyRobustTreeCadastre, questionIndex);
         }
         
         stringBuilder.append(answer);
         
-        if (questionIndex == TreeCadastreQueryController.INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG | TreeCadastreQueryController.INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN == questionIndex | questionIndex == TreeCadastreQueryController.INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG | questionIndex == TreeCadastreQueryController.INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN)
+        if (questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_GREATEST_CARBON_RETENTION | TreeCadastreQueryController.INDEX_FIND_MOST_COMMON_GENUS == questionIndex | questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_CIRCUMFERENCE | questionIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_HEIGHT)
         {
             stringBuilder.append(Strings.FORWARD_SLASH);
-            stringBuilder.append(KatasterServices.findCorrespondingGermanGenus(answer, intactTreeCadastre));
+            stringBuilder.append(TreeCadastreServices.findCorrespondingGermanGenus(answer, intactTreeCadastre));
         }
         
         

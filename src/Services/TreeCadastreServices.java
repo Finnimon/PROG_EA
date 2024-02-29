@@ -1,50 +1,54 @@
-package services;
+package Services;
 
 import control.TreeCadastreQueryController;
 import logic.TreeCarbonRetentionCalculator;
-import model.Metric;
-import model.Tree;
-import model.TreeCadastre;
+import Model.Metric;
+import Model.Tree;
+import Model.TreeCadastre;
 import org.jetbrains.annotations.NotNull;
-import resources.Constants;
-import resources.Strings;
+import Resources.Strings;
+
 import java.util.*;
 
 
-public class KatasterServices
+public class TreeCadastreServices
 {
     
     
-    public static int baumArtenGattungenZaehlen(@NotNull TreeCadastre treeCadastre, int attribut)
+    /**
+     * @param treeCadastre The {@link TreeCadastre} to count the number of different not unknown species or genera.
+     * @param queryIndex The index of the {@link TreeCadastreQueryController} that should be used to determine the type of the query.
+     * @return The number of different not unknown species or genera.
+     * @throws IllegalArgumentException If the queryIndex is not valid.
+     * @Precondition: The param {@link TreeCadastre} is not null and the queryIndex is either {@link TreeCadastreQueryController#INDEX_COUNT_SPECIES} or {@link TreeCadastreQueryController#INDEX_COUNT_GENERA}.
+     * @Postcondition: The number of different not unknown species or genera is returned and no exceptions will be thrown.
+     * @Summary: Counts the number of different not unknown species or genera depending on the queryIndex.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    public static int countTreeGenusOrSpecies(@NotNull TreeCadastre treeCadastre, int queryIndex)
     {
         HashSet<String> set = new HashSet<>();
         
         HashMap<Integer, Tree> treeHashMap = treeCadastre.getTreeHashMap();
         String string;
         
-        if (attribut == TreeCadastreQueryController.INDEX_BAUMARTEN_ZAEHLEN)
-        {
-            for (Tree tree : treeHashMap.values())
-            {
-                string = tree.getTaxonomy().getSpeciesBotanical();
-                set.add(string);
-            }
-        }
-        else if (attribut == TreeCadastreQueryController.INDEX_GATTUNGEN_ZAEHLEN)
-        {
-            for (Tree tree : treeHashMap.values())
-            {
-                string = tree.getTaxonomy().getGenusBotanical();
-                set.add(string);
-            }
-        }
-        else
-        {
-            throw new IllegalArgumentException();
-        }
         for (Tree tree : treeHashMap.values())
         {
-        
+            if (queryIndex == TreeCadastreQueryController.INDEX_COUNT_SPECIES)
+            {
+                string = tree.getTaxonomy().getSpeciesBotanical();
+                
+            }
+            else if (queryIndex == TreeCadastreQueryController.INDEX_COUNT_GENERA)
+            {
+                string = tree.getTaxonomy().getGenusBotanical();
+            }
+            else
+            {
+                throw new IllegalArgumentException();
+            }
+            set.add(string);
         }
         
         set.remove(Strings.UNBEKANNT);
@@ -54,71 +58,76 @@ public class KatasterServices
     }
     
     
-    //todo yikes
-    public static String haeufigsteGattungBezirkZaehlen(TreeCadastre treeCadastre, int fragenIndex)
+    /**
+     * @param treeCadastre The {@link TreeCadastre} to find the most common district or genus within.
+     * @param queryIndex The index of the {@link TreeCadastreQueryController} that should be used to determine the type of the query.
+     * @return The most common district or genus within the {@link TreeCadastre}.
+     * @throws IllegalArgumentException If the queryIndex is not valid.
+     * @Precondition: The param {@link TreeCadastre} is not null and the queryIndex is either {@link TreeCadastreQueryController#INDEX_FIND_MOST_COMMON_GENUS} or {@link TreeCadastreQueryController#INDEX_FIND_MOST_COMMON_DISTRICT}.
+     * @Postcondition: The most common district or genus depending on the queryIndex is returned and no exceptions will be thrown.
+     * @Summary: Find and return either the most common district or genus within the {@link TreeCadastre} depending on the queryIndex.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    public static String findMostCommonGenusOrDistrict(@NotNull TreeCadastre treeCadastre, int queryIndex)
     {
-        HashMap<Integer, Tree> baeume = treeCadastre.getTreeHashMap();
         HashMap<String, Integer> hashMap = new HashMap<>();
         
-        String attribut = new String();
-        
-        for (Tree tree : baeume.values())
+        for (Tree tree : treeCadastre.getTreeHashMap().values())
         {
-            if (fragenIndex == TreeCadastreQueryController.INDEX_HAEUFIGSTE_GATTUNG_ZAEHLEN)
+            String string;
+            if (queryIndex == TreeCadastreQueryController.INDEX_FIND_MOST_COMMON_GENUS)
             {
-                attribut = tree.getTaxonomy().getGenusBotanical();
+                string = tree.getTaxonomy().getGenusBotanical();
             }
-            else if (fragenIndex == TreeCadastreQueryController.INDEX_HAEUFIGSTEN_BEZIRK_ZAEHLEN)
+            else if (queryIndex == TreeCadastreQueryController.INDEX_FIND_MOST_COMMON_DISTRICT)
             {
-                attribut = tree.getOrt().getBezirk();
+                string = tree.getSite().district();
             }
             else
             {
                 throw new IllegalArgumentException();
             }
             
-            if (attribut == Strings.UNBEKANNT)
-            {
-                continue;
-            }
-            
+            int count;
             
             try
             {
-                hashMap.put(attribut, (hashMap.get(attribut) + Constants.EINS));
+                count=hashMap.get(string);
             }
             catch (NullPointerException e)
             {
-                hashMap.put(attribut, Constants.EINS);
+                count=0;
             }
+            count++;
+            
+            hashMap.put(string, count);
         }
         
-        Set<String> keySet = hashMap.keySet();
-        
-        for (String key : keySet)
-        {
-            if (attribut == Strings.UNBEKANNT)
-            {
-                attribut = key;
-            }
-            else if (hashMap.get(key) > hashMap.get(attribut))
-            {
-                attribut = key;
-            }
-        }
+        hashMap.remove(Strings.UNBEKANNT);
         
         
         return Collections.max(hashMap.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
     
     
-    public static String bezirkMitMeistenBaumArtenFinden(TreeCadastre treeCadastre)
+    /**
+     * @param treeCadastre The {@link TreeCadastre} to perform the query on.
+     * @return The {@link Site#}.
+     * @throws IllegalArgumentException If the queryIndex is not valid.
+     * @Precondition: The param {@link TreeCadastre} is not null and the queryIndex is either {@link TreeCadastreQueryController#INDEX_FIND_MOST_COMMON_GENUS} or {@link TreeCadastreQueryController#INDEX_FIND_MOST_COMMON_DISTRICT}.
+     * @Postcondition: The most common district or genus depending on the queryIndex is returned and no exceptions will be thrown.
+     * @Summary: Find and return either the most common district or genus within the {@link TreeCadastre} depending on the queryIndex.
+     * @Author: Finn Lindig
+     * @Since: 26.02.2024
+     */
+    public static String findDistrictWithMostDifferentiableTreeSpecies(TreeCadastre treeCadastre)
     {
         HashMap<String, HashSet<String>> hashMap = new HashMap<>();
         
         for (Tree tree : treeCadastre.getTreeHashMap().values())
         {
-            String bezirk = tree.getOrt().getBezirk();
+            String bezirk = tree.getSite().district();
             
             HashSet<String> baumArten = hashMap.get(bezirk);
             
@@ -148,11 +157,11 @@ public class KatasterServices
             int counter = 0;
             
             Metric metric = tree.getMetric();
-            if (attribut == TreeCadastreQueryController.INDEX_WELCHE_GATTUNG_GROESZTER_UMFANG)
+            if (attribut == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_CIRCUMFERENCE)
             {
                 wert = metric.getCircumferenceCentimeters();
             }
-            else if (attribut == TreeCadastreQueryController.INDEX_WELCHE_GATTUNG_WAECHST_AM_HOECHSTEN)
+            else if (attribut == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_HIGHEST_AVERAGE_HEIGHT)
             {
                 wert = metric.getHeightMeters();
             }
@@ -161,7 +170,7 @@ public class KatasterServices
                 throw new IllegalArgumentException();
             }
             
-            if (wert == treeCadastre.getUnknown())
+            if (wert == treeCadastre.UNKNOWN())
             {
                 continue;
             }
@@ -180,10 +189,7 @@ public class KatasterServices
             counters.put(gattung, counter);
         }
         
-        for (String key : averages.keySet())
-        {
-            averages.put(key, averages.get(key) / counters.get(key));
-        }
+        averages.replaceAll((k, v) -> averages.get(k) / counters.get(k));
         
         averages.remove(Strings.UNBEKANNT);
         
@@ -215,11 +221,11 @@ public class KatasterServices
         for (Tree tree : robusterTreeCadastre.getTreeHashMap().values())
         {
             String key;
-            if (fragenIndex == TreeCadastreQueryController.INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_BEZIRK)
+            if (fragenIndex == TreeCadastreQueryController.INDEX_FIND_DISTRICT_OF_GREATEST_CARBON_RETENTION)
             {
-                key = tree.getOrt().getBezirk();
+                key = tree.getSite().district();
             }
-            else if (fragenIndex == TreeCadastreQueryController.INDEX_KOHLENSTOFF_SPEICHERUNG_NACH_GATTUNG)
+            else if (fragenIndex == TreeCadastreQueryController.INDEX_FIND_GENUS_OF_GREATEST_CARBON_RETENTION)
             {
                 key = tree.getTaxonomy().getGenusBotanical();
             }
@@ -247,16 +253,16 @@ public class KatasterServices
     
     public static String findCorrespondingGermanGenus(String botanicalGenus, TreeCadastre treeCadastre)
     {
-        String germanGenus=Strings.UNBEKANNT;
+        String germanGenus = Strings.UNBEKANNT;
         for (Tree tree : treeCadastre.getTreeHashMap().values())
         {
             if (tree.getTaxonomy().getGenusBotanical().equals(botanicalGenus))
             {
-                 germanGenus= tree.getTaxonomy().getGenusGerman();
-                 if (germanGenus != null&!germanGenus.equals( Strings.UNBEKANNT))
-                 {
-                     return germanGenus;
-                 }
+                germanGenus = tree.getTaxonomy().getGenusGerman();
+                if (germanGenus != null & !germanGenus.equals(Strings.UNBEKANNT))
+                {
+                    return germanGenus;
+                }
             }
         }
         

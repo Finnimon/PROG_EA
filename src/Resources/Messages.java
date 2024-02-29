@@ -1,4 +1,4 @@
-package resources;
+package Resources;
 
 
 /**
@@ -45,7 +45,7 @@ public interface Messages
             "[4]\t\tWelcher Baum ist der älteste?",
             "[5]\t\tWie viele Baumarten gibt es?",
             "[6]\t\tWie viele Gattungen gibt es?",
-            "[6]\t\tWelche Gattung kommt am häufigsten vor?",
+            "[7]\t\tWelche Gattung kommt am häufigsten vor?",
             "[8]\t\tWelcher Bezirk hat die meisten Bäume?",
             "[9]\t\tIn welchem Bezirk stehen die meisten Baumarten?",
             "[10]\tWelche Gattung wächst am höchsten?",
@@ -75,7 +75,7 @@ public interface Messages
     };
     
     
-    String OBJEKT_ID = "ObjektID:";
+    String OBJEKT_ID = "ObjektID:\t";
     
     
     String OBJEKTNAME = "Objektname:";

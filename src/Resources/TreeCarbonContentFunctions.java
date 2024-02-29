@@ -1,6 +1,6 @@
-package resources;
+package Resources;
 
-import model.LinearFunction;
+import Model.LinearFunction;
 
 
 public interface TreeCarbonContentFunctions

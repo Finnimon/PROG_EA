@@ -7,7 +7,7 @@
 //    String bezirk();
 //
 //
-//    public Ort(String objektName, String bezirk)
+//    public Site(String objektName, String bezirk)
 //    {
 //        this.objektName = objektName;
 //        this.bezirk = bezirk;

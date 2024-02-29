@@ -1,40 +1,26 @@
-package utility;
+package Utility;
 
-import model.LinearFunction;
+import Model.LinearFunction;
 
 import java.util.ArrayList;
 
-public class LinearerRegressor
+public class LinearRegressor
 {
     
-    
-    //region [Attribut]
     
     private final int basisIndex;
     
     
-    //endregion
-    //region [Konstruktor]
-    
-    
-    public LinearerRegressor(int basisIndex)
+    public LinearRegressor(int basisIndex)
     {
         this.basisIndex = basisIndex;
     }
-    
-    
-    //endregion
-    //region [Get]
     
     
     public int getBasisIndex()
     {
         return basisIndex;
     }
-    
-    
-    //endregion
-    //region [Methoden]
     
     
     public ArrayList<LinearFunction> alleRegressierenZurBasis(ArrayList<ArrayList<Float>> regressierbare)
@@ -87,7 +73,7 @@ public class LinearerRegressor
     }
     
     
-    private LinearFunction regressieren(ArrayList<Float> x, ArrayList<Float> y)
+    public LinearFunction regressieren(ArrayList<Float> x, ArrayList<Float> y)
     {
         int anzahlRegressierterElemente = x.size();
         

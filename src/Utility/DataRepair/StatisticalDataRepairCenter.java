@@ -1,8 +1,8 @@
-package control;
+package Utility.DataRepair;
 
-import logic.StatisticalDataRepairLogic;
 import org.jetbrains.annotations.NotNull;
-import utility.iRepairableStatistic;
+import Resources.Constants;
+
 import java.util.ArrayList;
 
 
@@ -18,11 +18,11 @@ public class StatisticalDataRepairCenter
     
     
     /**
-     * @Summary: The index of the regression basis.
+     * @Summary: The index for other values to be regressed to.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
-    private final int INDEX_REGRESSION_BASIS = 3;
+    private final int INDEX_REGRESSION_BASIS = Constants.REGRESSION_BASE;
     
     
     /**
@@ -92,7 +92,7 @@ public class StatisticalDataRepairCenter
         }
         else if (getIsDeepRepaired())
         {
-            throw new RuntimeException();//todo message
+            throw new RuntimeException();
         }
         
         
@@ -275,7 +275,7 @@ public class StatisticalDataRepairCenter
      * @Summary: Insures that {@link #shallowRepair()} has been called before it applies {@link StatisticalDataRepairLogic#setEntirelyUnknownsToAverages(iRepairableStatistic, ArrayList)} and {@link StatisticalDataRepairLogic#ascribeValuesToUnknownsUsingRegressions(iRepairableStatistic, int)} to {@link #repairableStatistic}.
      * This results in {@link #repairableStatistic} being unpresentable and unsuitable for further queries regarding extremes, whilst being particularly statistically robust and having no remaining unknown values.
      * @Precondition: This {@link StatisticalDataRepairCenter} has been initialized correctly. The Preconditions of {@link #setRepairableStatistic(iRepairableStatistic)} are met.
-     * @Postcondition: The {@link #repairableStatistic} has been repaired with statistical usage in mind. None of its values exceed {@link iRepairableStatistic#getPermissibleMaxima()}. None of its values are {@link iRepairableStatistic#getUnknown()}.
+     * @Postcondition: The {@link #repairableStatistic} has been repaired with statistical usage in mind. None of its values exceed {@link iRepairableStatistic#getPermissibleMaxima()}. None of its values are {@link iRepairableStatistic#UNKNOWN()}.
      * @Author: Finn Lindig
      * @Since: 26.02.2024
      */
@@ -283,6 +283,7 @@ public class StatisticalDataRepairCenter
     {
         if (!getIsShallowRepaired())
         {
+            System.out.println("shallowRepair() must be called before deepRepair()");
             shallowRepair();
         }
         else if (getIsDeepRepaired())
@@ -291,7 +292,7 @@ public class StatisticalDataRepairCenter
         }
         
         iRepairableStatistic repairableStatistic = getRepairableStatistic();
-        StatisticalDataRepairLogic.setEntirelyUnknownsToAverages(repairableStatistic, StatisticalDataRepairLogic.findAvarages(repairableStatistic));
+        StatisticalDataRepairLogic.setEntirelyUnknownsToAverages(repairableStatistic, StatisticalDataRepairLogic.findAverages(repairableStatistic));
         StatisticalDataRepairLogic.ascribeValuesToUnknownsUsingRegressions(repairableStatistic, getINDEX_REGRESSION_BASIS());
         
         

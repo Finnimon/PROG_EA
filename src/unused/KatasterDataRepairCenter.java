@@ -2,8 +2,8 @@
 //
 //import model.Tree;
 //import model.TreeCadastre;
-//import utility.BaumComparator;
-//import utility.BaumKatasterEntryComparator;
+//import utility.TreeComparator;
+//import utility.TreeCadastreEntryComparator;
 //
 //import java.util.ArrayList;
 //import java.util.HashMap;
@@ -153,9 +153,9 @@
 //    {
 //        ArrayList<Map.Entry<Integer, Tree>> sortierterBaumKataster = new ArrayList<>(getBaumKataster().getBaumKataster().entrySet());
 //
-//        for (Integer baumComparatorErlaubterAttributIndex : BaumComparator.getErlaubteAttributIndize())
+//        for (Integer baumComparatorErlaubterAttributIndex : TreeComparator.getErlaubteAttributIndize())
 //        {
-//            BaumKatasterEntryComparator baumKatasterEntryComparator = new BaumKatasterEntryComparator(baumComparatorErlaubterAttributIndex);
+//            TreeCadastreEntryComparator baumKatasterEntryComparator = new TreeCadastreEntryComparator(baumComparatorErlaubterAttributIndex);
 //
 //            sortierterBaumKataster.sort(baumKatasterEntryComparator);
 //
